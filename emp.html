@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="mn">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Цалин Систем - Ажилтан</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f6f8fb;
+      --card: #ffffff;
+      --line: #e7ebf1;
+      --text: #0f172a;
+      --muted: #6b7b92;
+      --blue: #2563eb;
+      --blue-soft: #eef4ff;
+      --green: #0ea56b;
+      --green-soft: #dcfce7;
+      --red: #ef4444;
+      --violet: #7c3aed;
+      --shadow: 0 1px 2px rgba(15,23,42,.06), 0 10px 24px rgba(15,23,42,.03);
+      --radius: 18px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: "Inter", sans-serif; background: var(--bg); color: var(--text); }
+
+    .app { display: flex; min-height: 100vh; }
+
+    .sidebar {
+      width: 260px;
+      background: #fff;
+      border-right: 1px solid var(--line);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .sidebar-top { padding: 24px 16px 16px; }
+
+    .brand {
+      padding: 0 8px 22px 8px;
+      border-bottom: 1px solid var(--line);
+      margin: 0 -16px 16px;
+      padding-left: 24px;
+    }
+
+    .brand h2 { font-size: 18px; font-weight: 800; color: #0b1b45; margin-bottom: 6px; }
+    .brand p { font-size: 13px; color: #5f6f86; font-weight: 500; }
+
+    .nav {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      padding: 0 8px;
+    }
+
+    .nav button {
+      width: 100%;
+      border: none;
+      background: transparent;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 14px;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 600;
+      color: #26354d;
+      cursor: pointer;
+      text-align: left;
+    }
+
+    .nav button.active {
+      background: var(--blue-soft);
+      color: var(--blue);
+    }
+
+    .nav button:hover { background: #f8fafc; }
+    .nav button.active:hover { background: var(--blue-soft); }
+
+    .icon {
+      width: 17px;
+      height: 17px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2;
+      flex-shrink: 0;
+    }
+
+    .sidebar-bottom { border-top: 1px solid var(--line); padding: 14px 18px 20px; }
+
+    .logout {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      color: #ef4444;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 600;
+      padding: 10px 12px;
+      border-radius: 10px;
+    }
+
+    .content { flex: 1; padding: 28px 24px 32px; }
+    .page { display: none; }
+    .page.active { display: block; }
+
+    .page-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 16px;
+      margin-bottom: 22px;
+    }
+
+    .page-title { font-size: 26px; line-height: 1.2; font-weight: 800; color: #0b1b45; margin-bottom: 4px; }
+    .page-subtitle { font-size: 15px; color: var(--muted); font-weight: 500; }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .hero {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 20px;
+      margin-bottom: 22px;
+    }
+
+    .name-block h1 {
+      font-size: 26px;
+      font-weight: 800;
+      color: #0b1b45;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 6px;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      background: #e9efff;
+      color: #2563eb;
+    }
+
+    .pay-cards {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+      margin-bottom: 26px;
+    }
+
+    .pay-card {
+      padding: 22px 20px;
+      color: white;
+      border-radius: 18px;
+      box-shadow: 0 10px 24px rgba(37,99,235,.12);
+      min-height: 118px;
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: flex-start;
+    }
+
+    .pay-card.blue { background: #2563eb; }
+    .pay-card.green { background: #0ea56b; }
+
+    .pay-card h4 { font-size: 14px; font-weight: 700; margin-bottom: 10px; opacity: .95; }
+    .pay-card .big { font-size: 26px; font-weight: 800; margin-bottom: 10px; }
+    .pay-card small { font-size: 12px; opacity: .92; }
+    .pay-card svg { width: 34px; height: 34px; opacity: .35; }
+
+    .grid-main {
+      display: grid;
+      grid-template-columns: 310px 1fr;
+      gap: 18px;
+      margin-bottom: 26px;
+    }
+
+    .panel { padding: 18px 18px 18px; }
+    .panel-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 16px;
+      font-weight: 800;
+      color: #0f172a;
+      margin-bottom: 18px;
+    }
+
+    .stats-box {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .mini-stat {
+      border: 1px solid var(--line);
+      background: #fafbfc;
+      border-radius: 12px;
+      padding: 12px 12px;
+      min-height: 56px;
+    }
+
+    .mini-stat small {
+      display: block;
+      font-size: 11px;
+      color: #94a3b8;
+      font-weight: 700;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+
+    .mini-stat strong { font-size: 14px; font-weight: 800; color: #0f172a; }
+    .mini-stat strong.blue { color: #2563eb; }
+
+    .breakdown {
+      padding: 18px 20px;
+    }
+
+    .breakdown h3 {
+      font-size: 16px;
+      font-weight: 800;
+      margin-bottom: 18px;
+      color: #0f172a;
+    }
+
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-bottom: 16px;
+    }
+
+    .line-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      font-size: 14px;
+      color: #475569;
+    }
+
+    .row strong { color: #0f172a; font-weight: 800; }
+    .row strong.blue { color: #2563eb; }
+    .row strong.red { color: #ff3b30; }
+
+    .divider { height: 1px; background: var(--line); margin: 16px 0; }
+
+    .net-box {
+      margin-top: 14px;
+      background: #eef9f3;
+      border-radius: 12px;
+      padding: 14px 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 16px;
+      font-weight: 800;
+      color: #0f172a;
+    }
+
+    .net-box span:last-child { color: #0b8a59; font-size: 18px; }
+
+    .history-title {
+      font-size: 17px;
+      font-weight: 800;
+      color: #0f172a;
+      margin-bottom: 14px;
+    }
+
+    .table-wrap { overflow: auto; }
+    table { width: 100%; border-collapse: collapse; min-width: 860px; }
+    th, td { padding: 12px 14px; border-bottom: 1px solid var(--line); font-size: 14px; text-align: left; }
+    th { color: #64748b; font-size: 12px; font-weight: 800; text-transform: uppercase; }
+    td strong { font-weight: 800; }
+
+    .pill-green {
+      display: inline-flex;
+      align-items: center;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: #dcfce7;
+      color: #16a34a;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .history-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+
+    .filters {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .filter-btn {
+      border: 1px solid var(--line);
+      background: white;
+      color: #111827;
+      border-radius: 10px;
+      padding: 8px 14px;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .stats-4 {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+
+    .small-card {
+      padding: 18px 18px;
+      min-height: 126px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .small-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+    }
+
+    .icon-box {
+      width: 34px;
+      height: 34px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .icon-blue { background: #eef4ff; color: #2563eb; }
+    .icon-green { background: #ecfdf5; color: #16a34a; }
+    .icon-red { background: #fef2f2; color: #ef4444; }
+    .icon-violet { background: #f5f3ff; color: #2563eb; }
+
+    .small-card h4 { font-size: 13px; color: #64748b; font-weight: 600; margin-bottom: 6px; }
+    .small-card .big { font-size: 18px; font-weight: 800; color: #0f172a; margin-bottom: 4px; }
+    .small-card small { font-size: 12px; color: #94a3b8; font-weight: 500; }
+
+    .chart-layout {
+      display: grid;
+      grid-template-columns: 1fr 310px;
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+
+    .chart-card, .summary-card { padding: 18px 18px; }
+
+    .chart-title, .summary-title, .detail-title {
+      font-size: 16px;
+      font-weight: 800;
+      color: #0f172a;
+      margin-bottom: 14px;
+    }
+
+    .chart-area {
+      height: 250px;
+      position: relative;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .chart-area svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .summary-section {
+      margin-bottom: 14px;
+    }
+
+    .summary-section h5 {
+      font-size: 12px;
+      font-weight: 800;
+      margin-bottom: 10px;
+      text-transform: uppercase;
+    }
+
+    .summary-section h5.blue { color: #2563eb; }
+    .summary-section h5.red { color: #ef4444; }
+
+    .download-link {
+      color: #2563eb;
+      font-size: 14px;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+    }
+
+    @media (max-width: 1200px) {
+      .grid-main, .chart-layout, .pay-cards { grid-template-columns: 1fr; }
+      .stats-4 { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 900px) {
+      .app { flex-direction: column; }
+      .sidebar { width: 100%; }
+      .content { padding: 20px 16px 24px; }
+      .stats-4 { grid-template-columns: 1fr; }
+      .hero, .history-header, .page-header { flex-direction: column; }
+      .two-col { grid-template-columns: 1fr; }
+      .stats-box { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="sidebar-top">
+        <div class="brand">
+          <h2>Цалин Систем</h2>
+          <p>Ажилтан</p>
+        </div>
+
+        <div class="nav">
+          <button class="nav-link active" data-page="profile">
+            <svg class="icon" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"></rect><rect x="14" y="3" width="7" height="7" rx="1"></rect><rect x="3" y="14" width="7" height="7" rx="1"></rect><rect x="14" y="14" width="7" height="7" rx="1"></rect></svg>
+            Миний мэдээлэл
+          </button>
+          <button class="nav-link" data-page="salary-history">
+            <svg class="icon" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 9-9"></path><path d="M12 7v5l3 2"></path></svg>
+            Цалингийн түүх
+          </button>
+        </div>
+      </div>
+
+      <div class="sidebar-bottom">
+        <a href="#" class="logout">
+          <svg class="icon" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><path d="M16 17l5-5-5-5"></path><path d="M21 12H9"></path></svg>
+          Гарах
+        </a>
+      </div>
+    </aside>
+
+    <main class="content">
+      <section class="page active" id="profile">
+        <div class="hero">
+          <div class="name-block">
+            <h1>Батбаяр Болд <span class="tag">IT хэлтэс</span></h1>
+            <div class="page-subtitle">Программ хангамжийн инженер</div>
+          </div>
+        </div>
+
+        <div class="pay-cards">
+          <div class="pay-card blue">
+            <div>
+              <h4>Урьдчилгаа цалин</h4>
+              <div class="big">500,000 ₮</div>
+              <small>2026-03-20-нд авсан</small>
+            </div>
+            <svg viewBox="0 0 24 24"><path d="M21 7V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-1"></path><path d="M18 12h.01"></path><path d="M21 12v-2a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2v-2z"></path></svg>
+          </div>
+          <div class="pay-card green">
+            <div>
+              <h4>Сүүлийн цалин (Гарт олгох)</h4>
+              <div class="big">1,835,000 ₮</div>
+              <small>2026-04-05-нд олгосон</small>
+            </div>
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="m12 8 4 4-4 4"></path><path d="M8 12h8"></path></svg>
+          </div>
+        </div>
+
+        <div class="grid-main">
+          <div class="card panel">
+            <div class="panel-title">
+              <svg class="icon" viewBox="0 0 24 24" style="color:#2563eb;"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg>
+              Цаг бүртгэлийн мэдээлэл
+            </div>
+            <div class="stats-box">
+              <div class="mini-stat"><small>Ажиллах ёстой хоног</small><strong>22 <span style="font-weight:600;color:#64748b;">хоног</span></strong></div>
+              <div class="mini-stat"><small>Ажиллах ёстой цаг</small><strong>176 <span style="font-weight:600;color:#64748b;">ц</span></strong></div>
+              <div class="mini-stat"><small>Ажилласан хоног</small><strong>21 <span style="font-weight:600;color:#64748b;">хоног</span></strong></div>
+              <div class="mini-stat"><small>Ажилласан цаг</small><strong>168 <span style="font-weight:600;color:#64748b;">ц</span></strong></div>
+              <div class="mini-stat"><small>Илүү цаг</small><strong class="blue">4 <span style="font-weight:600;color:#64748b;">ц</span></strong></div>
+              <div class="mini-stat"><small>Чөлөө</small><strong>1 <span style="font-weight:600;color:#64748b;">хоног</span></strong></div>
+            </div>
+          </div>
+
+          <div class="card breakdown">
+            <h3>3-р сарын цалингийн задаргаа</h3>
+            <div class="two-col">
+              <div class="line-list">
+                <div class="row"><span>Үндсэн цалин</span><strong>2,500,000 ₮</strong></div>
+                <div class="row"><span>Үр чадвар</span><strong>200,000 ₮</strong></div>
+              </div>
+              <div class="line-list">
+                <div class="row"><span>Удаан жилийн</span><strong>150,000 ₮</strong></div>
+                <div class="row"><span>Нийт нэмэгдэл</span><strong>350,000 ₮</strong></div>
+              </div>
+            </div>
+            <div class="divider"></div>
+            <div class="two-col">
+              <div class="line-list">
+                <div class="row"><span>Олговол зохих</span><strong class="blue">2,850,000 ₮</strong></div>
+                <div class="row"><span>НДШ</span><strong class="red">285,000 ₮</strong></div>
+                <div class="row"><span>Нийт суутгал</span><strong class="red">1,015,000 ₮</strong></div>
+              </div>
+              <div class="line-list">
+                <div class="row"><span>Урьдчилгаа</span><strong class="red">500,000 ₮</strong></div>
+                <div class="row"><span>ХХОАТ</span><strong class="red">230,000 ₮</strong></div>
+              </div>
+            </div>
+            <div class="net-box"><span>ГАРТ ОЛГОХ</span><span>1,835,000 ₮</span></div>
+          </div>
+        </div>
+
+        <div class="history-title">Өмнөх саруудын цалингийн түүх</div>
+        <div class="card table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Сар</th>
+                <th>Ажилласан цаг</th>
+                <th>Нэмэгдэл</th>
+                <th>Суутгал</th>
+                <th>Гарт олгосон</th>
+                <th>Төлөв</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td><strong>2026 он 2-р сар</strong></td><td>168ц</td><td>+350,000 ₮</td><td style="color:#ff3b30;">-1,015,000 ₮</td><td><strong>1,835,000 ₮</strong></td><td><span class="pill-green">Шилжүүлсэн</span></td></tr>
+              <tr><td><strong>2026 он 1-р сар</strong></td><td>168ц</td><td>+350,000 ₮</td><td style="color:#ff3b30;">-1,015,000 ₮</td><td><strong>1,835,000 ₮</strong></td><td><span class="pill-green">Шилжүүлсэн</span></td></tr>
+              <tr><td><strong>2026 он 0-р сар</strong></td><td>168ц</td><td>+350,000 ₮</td><td style="color:#ff3b30;">-1,015,000 ₮</td><td><strong>1,835,000 ₮</strong></td><td><span class="pill-green">Шилжүүлсэн</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="page" id="salary-history">
+        <div class="history-header">
+          <div>
+            <h1 class="page-title">Цалингийн түүх</h1>
+            <p class="page-subtitle">Болд Баар • EMP001</p>
+          </div>
+          <div class="filters">
+            <button class="filter-btn">Улирал</button>
+            <button class="filter-btn">Жил</button>
+            <button class="filter-btn">2026</button>
+          </div>
+        </div>
+
+        <div class="stats-4">
+          <div class="card small-card">
+            <div class="small-top">
+              <div class="icon-box icon-blue"><svg class="icon" viewBox="0 0 24 24"><path d="M14 3h-4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V9z"></path><path d="M14 3v6h6"></path></svg></div>
+            </div>
+            <div><h4>Нийт цалин</h4><div class="big">7,250,000₮</div><small>3 сар</small></div>
+          </div>
+
+          <div class="card small-card">
+            <div class="small-top">
+              <div class="icon-box icon-green"><svg class="icon" viewBox="0 0 24 24"><path d="M4 14l4-4 4 4 8-8"></path><path d="M20 10v6h-6"></path></svg></div>
+            </div>
+            <div><h4>Дундаж цалин</h4><div class="big">2,416,666₮</div><small>Сарын дундаж</small></div>
+          </div>
+
+          <div class="card small-card">
+            <div class="small-top">
+              <div class="icon-box icon-red"><svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg></div>
+            </div>
+            <div><h4>Нийт суутгал</h4><div class="big">2,355,682₮</div><small>НДШ + ХХОАТ</small></div>
+          </div>
+
+          <div class="card small-card">
+            <div class="small-top">
+              <div class="icon-box icon-violet"><svg class="icon" viewBox="0 0 24 24"><path d="M4 14l4-4 4 4 8-8"></path><path d="M20 10v6h-6"></path></svg></div>
+              <span class="tag" style="padding:3px 8px; font-size:11px;">↑ Өссөн</span>
+            </div>
+            <div><h4>Өөрчлөлт</h4><div class="big">+2.9%</div><small>Сүүлийн 2 сар</small></div>
+          </div>
+        </div>
+
+        <div class="chart-layout">
+          <div class="card chart-card">
+            <div class="chart-title">Цалингийн график</div>
+            <div class="chart-area">
+              <svg viewBox="0 0 700 250" preserveAspectRatio="none">
+                <line x1="20" y1="50" x2="680" y2="50" stroke="#e5e7eb" stroke-dasharray="3 4"/>
+                <line x1="20" y1="120" x2="680" y2="120" stroke="#e5e7eb" stroke-dasharray="3 4"/>
+                <line x1="20" y1="190" x2="680" y2="190" stroke="#e5e7eb" stroke-dasharray="3 4"/>
+                <path d="M25 145 C180 160, 280 175, 350 170 S560 145, 675 125" fill="none" stroke="#2563eb" stroke-width="3"/>
+                <circle cx="25" cy="145" r="5" fill="#2563eb"/>
+                <circle cx="350" cy="170" r="5" fill="#2563eb"/>
+                <circle cx="675" cy="125" r="5" fill="#2563eb"/>
+                <text x="330" y="232" font-size="12" fill="#94a3b8">02/26</text>
+                <text x="650" y="232" font-size="12" fill="#94a3b8">03/26</text>
+              </svg>
+            </div>
+          </div>
+
+          <div class="card summary-card">
+            <div class="summary-title">Сүүлийн 3 сарын дундаж задаргаа</div>
+            <div class="summary-section">
+              <h5 class="blue">Орлого</h5>
+              <div class="row"><span>Үндсэн цалин</span><strong>2,500,000₮</strong></div>
+              <div class="row" style="margin-top:10px;"><span>Үр чадвар</span><strong>200,000₮</strong></div>
+              <div class="row" style="margin-top:10px;"><span>Илүү цаг (дундаж)</span><strong>205,227₮</strong></div>
+            </div>
+            <div class="divider"></div>
+            <div class="summary-section">
+              <h5 class="red">Суутгал</h5>
+              <div class="row"><span>НДШ (10%)</span><strong>-305,523₮</strong></div>
+              <div class="row" style="margin-top:10px;"><span>ХХОАТ (10%)</span><strong>-305,523₮</strong></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card" style="padding:18px 0 0; overflow:hidden;">
+          <div style="display:flex; justify-content:space-between; align-items:center; padding:0 18px 14px;">
+            <div class="detail-title" style="margin:0;">Дэлгэрэнгүй түүх</div>
+            <a href="#" class="download-link"><svg class="icon" viewBox="0 0 24 24"><path d="M12 3v12"></path><path d="m7 10 5 5 5-5"></path><path d="M5 21h14"></path></svg>Бүгдийг татах</a>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Огноо</th>
+                  <th>Үндсэн + нэмэгдэл</th>
+                  <th>Суутгал</th>
+                  <th>Гарт олгох</th>
+                  <th>Төлөв</th>
+                  <th>Үйлдэл</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td><strong>2026/03</strong></td><td>3,205,682₮</td><td style="color:#ff3b30;">-755,682₮</td><td><strong>2,450,000₮</strong></td><td><span class="pill-green">Төлөгдсөн</span></td><td style="color:#64748b;">📄 PDF</td></tr>
+                <tr><td><strong>2026/02</strong></td><td>3,180,000₮</td><td style="color:#ff3b30;">-800,000₮</td><td><strong>2,380,000₮</strong></td><td><span class="pill-green">Төлөгдсөн</span></td><td style="color:#64748b;">📄 PDF</td></tr>
+                <tr><td><strong>2026/01</strong></td><td>3,220,000₮</td><td style="color:#ff3b30;">-800,000₮</td><td><strong>2,420,000₮</strong></td><td><span class="pill-green">Төлөгдсөн</span></td><td style="color:#64748b;">📄 PDF</td></tr>
+                <tr><td><strong>Нийт</strong></td><td><strong>9,605,682₮</strong></td><td style="color:#ff3b30;"><strong>-2,355,682₮</strong></td><td style="color:#2563eb;"><strong>7,250,000₮</strong></td><td></td><td></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+    <script>window.APP_CONFIG = { fileName: "emp.html", defaultPage: "profile" };</script>
+  <script src="demo-users.js"></script>
+  <script src="app.js"></script>
+
+
+</body>
+</html>

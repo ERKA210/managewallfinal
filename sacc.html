@@ -1,0 +1,976 @@
+<!DOCTYPE html>
+<html lang="mn">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Цалин Систем</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f6f8fb;
+      --card: #ffffff;
+      --line: #e8edf3;
+      --text: #0f172a;
+      --muted: #7c8aa0;
+      --blue: #2563eb;
+      --navy: #071739;
+      --green: #0aa266;
+      --soft-blue: #eef4ff;
+      --soft-green: #ecfdf5;
+      --shadow: 0 1px 2px rgba(15, 23, 42, 0.05), 0 8px 24px rgba(15, 23, 42, 0.03);
+      --radius: 18px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: "Inter", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    .app {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    .sidebar {
+      width: 260px;
+      background: #fff;
+      border-right: 1px solid var(--line);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .sidebar-top {
+      padding: 24px 16px 16px;
+    }
+
+    .brand {
+      padding: 2px 8px 22px;
+      border-bottom: 1px solid var(--line);
+      margin: 0 -16px 16px;
+      padding-left: 24px;
+    }
+
+    .brand h2 {
+      font-size: 18px;
+      font-weight: 800;
+      margin-bottom: 6px;
+      color: #0d1b43;
+    }
+
+    .brand p {
+      font-size: 13px;
+      color: #5f6f86;
+      font-weight: 500;
+    }
+
+    .nav {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      padding: 0 8px;
+    }
+
+    .nav button {
+      width: 100%;
+      border: none;
+      background: transparent;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 14px;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 600;
+      color: #23334d;
+      cursor: pointer;
+      text-align: left;
+    }
+
+    .nav button.active {
+      background: var(--soft-blue);
+      color: var(--blue);
+    }
+
+    .nav button:hover { background: #f8fafc; }
+    .nav button.active:hover { background: var(--soft-blue); }
+
+    .icon {
+      width: 16px;
+      height: 16px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2;
+      flex-shrink: 0;
+    }
+
+    .sidebar-bottom {
+      border-top: 1px solid var(--line);
+      padding: 14px 18px 20px;
+    }
+
+    .logout {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      color: #ef4444;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 600;
+      padding: 10px 12px;
+      border-radius: 10px;
+    }
+
+    .content {
+      flex: 1;
+      padding: 28px 24px 32px;
+    }
+
+    .page { display: none; }
+    .page.active { display: block; }
+
+    .page-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 16px;
+      margin-bottom: 22px;
+    }
+
+    .page-title {
+      font-size: 26px;
+      line-height: 1.2;
+      font-weight: 800;
+      color: #0b1b45;
+      margin-bottom: 4px;
+    }
+
+    .page-subtitle {
+      font-size: 15px;
+      color: var(--muted);
+      font-weight: 500;
+    }
+
+    .badge {
+      white-space: nowrap;
+      border: 1px solid #a7f3d0;
+      background: #ecfdf5;
+      color: #15803d;
+      padding: 8px 14px;
+      font-size: 12px;
+      font-weight: 600;
+      border-radius: 10px;
+      margin-top: 8px;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+      margin-bottom: 24px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .stat-card {
+      padding: 18px 20px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      min-height: 96px;
+    }
+
+    .stat-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .blue-bg { background: #eef4ff; color: #2563eb; }
+    .orange-bg { background: #fff3e8; color: #f97316; }
+    .green-bg { background: #ecfdf5; color: #10b981; }
+    .violet-bg { background: #f3efff; color: #7c3aed; }
+    .pink-bg { background: #fff0f6; color: #e11d48; }
+
+    .stat-card small,
+    .report-card p,
+    .subtext {
+      color: #76859b;
+      font-size: 13px;
+      font-weight: 500;
+    }
+
+    .stat-card h3 {
+      font-size: 17px;
+      font-weight: 800;
+      margin: 5px 0 4px;
+      color: #071739;
+    }
+
+    .stat-card span {
+      font-size: 11px;
+      color: #95a2b6;
+      font-weight: 600;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1.02fr 1fr;
+      gap: 22px;
+    }
+
+    .panel {
+      padding: 20px;
+    }
+
+    .panel h3 {
+      font-size: 16px;
+      font-weight: 800;
+      margin-bottom: 22px;
+      color: #0f172a;
+    }
+
+    .department-list {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      margin-bottom: 24px;
+    }
+
+    .department-item {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .row-between {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .department-name, .amount {
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .amount { font-weight: 800; color: #020617; }
+
+    .bar {
+      width: 100%;
+      height: 7px;
+      background: #d6d9df;
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .bar > div {
+      height: 100%;
+      background: #020617;
+      border-radius: 999px;
+    }
+
+    .btn {
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 14px;
+      transition: .15s ease;
+    }
+
+    .btn:hover { transform: translateY(-1px); }
+
+    .btn-navy {
+      width: 100%;
+      background: var(--navy);
+      color: #fff;
+      height: 42px;
+    }
+
+    .approval-box {
+      background: #f7fffb;
+      border: 1px solid #b8edd2;
+    }
+
+    .approval-box h3 { color: #065f46; }
+
+    .note {
+      padding: 14px;
+      border: 1px solid #cdecd9;
+      border-radius: 14px;
+      color: #708096;
+      font-style: italic;
+      line-height: 1.55;
+      background: #fff;
+      margin-bottom: 20px;
+      font-size: 14px;
+    }
+
+    .summary {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .summary .label { color: #708096; font-size: 14px; }
+    .summary .value { font-weight: 800; }
+    .summary .value.big { font-size: 18px; }
+
+    .btn-green {
+      width: 100%;
+      height: 44px;
+      background: var(--green);
+      color: white;
+      font-size: 15px;
+      box-shadow: 0 10px 20px rgba(10, 162, 102, 0.18);
+    }
+
+    .back-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 22px;
+    }
+
+    .back-link {
+      color: #111827;
+      font-size: 14px;
+      font-weight: 600;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .approval-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 36px;
+    }
+
+    .approval-item {
+      display: grid;
+      grid-template-columns: 1fr auto auto auto;
+      gap: 18px;
+      align-items: center;
+      padding: 16px 14px;
+    }
+
+    .approval-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      min-width: 0;
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .dot-blue { background: #3b82f6; }
+    .dot-green { background: #10b981; }
+    .dot-violet { background: #6366f1; }
+    .dot-orange { background: #f97316; }
+    .dot-pink { background: #ec4899; }
+    .dot-gray { background: #64748b; }
+
+    .approval-name {
+      font-size: 15px;
+      font-weight: 800;
+      color: #0b1b45;
+      margin-bottom: 4px;
+    }
+
+    .approval-meta {
+      font-size: 12px;
+      color: #7c8aa0;
+      font-weight: 500;
+    }
+
+    .money {
+      font-size: 15px;
+      font-weight: 800;
+      color: #020617;
+      white-space: nowrap;
+    }
+
+    .btn-mini {
+      height: 32px;
+      padding: 0 14px;
+      background: white;
+      border: 1px solid #d8dee6;
+      color: #111827;
+      font-size: 13px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-approve {
+      height: 32px;
+      padding: 0 14px;
+      background: var(--green);
+      color: white;
+      font-size: 13px;
+    }
+
+    .bottom-action {
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .btn-large {
+      min-width: 224px;
+      height: 46px;
+      font-size: 16px;
+      background: var(--green);
+      color: white;
+      box-shadow: 0 10px 22px rgba(10, 162, 102, 0.22);
+    }
+
+    .top-controls {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 20px;
+      margin-bottom: 22px;
+    }
+
+    .month-tabs {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 6px;
+    }
+
+    .month-tabs button {
+      border: 1px solid #d8dee6;
+      background: white;
+      color: #111827;
+      padding: 8px 14px;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    .month-tabs button.active {
+      background: #020b2d;
+      color: white;
+      border-color: #020b2d;
+    }
+
+    .reports-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+      margin-bottom: 26px;
+    }
+
+    .report-card {
+      padding: 20px;
+      min-height: 130px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 14px;
+    }
+
+    .report-card h3 {
+      font-size: 15px;
+      font-weight: 800;
+      color: #0b1b45;
+      margin-bottom: 5px;
+    }
+
+    .info-bar {
+      border: 1px solid #d8e4f4;
+      background: #eef5ff;
+      color: #2d5eea;
+      border-radius: 14px;
+      padding: 14px 16px;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .info-bar .bullet {
+      color: #3b82f6;
+      font-weight: 700;
+      margin: 0 2px;
+    }
+
+    @media (max-width: 1200px) {
+      .stats, .reports-grid { grid-template-columns: 1fr; }
+      .grid-2 { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 900px) {
+      .app { flex-direction: column; }
+      .sidebar { width: 100%; }
+      .content { padding: 20px 16px 24px; }
+      .approval-item { grid-template-columns: 1fr; align-items: flex-start; }
+      .bottom-action { justify-content: stretch; }
+      .btn-large { width: 100%; min-width: 0; }
+      .top-controls, .page-header { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="sidebar-top">
+        <div class="brand">
+          <h2>Цалин Систем</h2>
+          <p>Гүйцэтгэх удирдлага</p>
+        </div>
+
+        <div class="nav">
+          <button class="nav-link active" data-page="manager-dashboard">
+            <svg class="icon" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"></rect><rect x="14" y="3" width="7" height="7" rx="1"></rect><rect x="3" y="14" width="7" height="7" rx="1"></rect><rect x="14" y="14" width="7" height="7" rx="1"></rect></svg>
+            Хяналтын самбар
+          </button>
+          <button class="nav-link" data-page="manager-payroll">
+            <svg class="icon" viewBox="0 0 24 24"><path d="M12 3l7 4v5c0 5-3.5 7.5-7 9-3.5-1.5-7-4-7-9V7l7-4z"></path><path d="M9.5 12.5l1.8 1.8 3.2-3.6"></path></svg>
+            Цалингийн баталгаажуулалт
+          </button>
+          <button class="nav-link" data-page="tax-config">
+            <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h.01A1.65 1.65 0 0 0 10 3.09V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51h.01a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v.01a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+            Татварын тохиргоо
+          </button>
+          <button class="nav-link" data-page="reports">
+            <svg class="icon" viewBox="0 0 24 24"><path d="M4 19h16"></path><path d="M7 16V8"></path><path d="M12 16V5"></path><path d="M17 16v-3"></path></svg>
+            Нэгтгэл тайлан
+          </button>
+          <button>
+            <svg class="icon" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 9-9"></path><path d="M3 3v6h6"></path><path d="M12 7v5l3 2"></path></svg>
+            Audit Log
+          </button>
+        </div>
+      </div>
+
+      <div class="sidebar-bottom">
+        <a class="logout" href="#">
+          <svg class="icon" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><path d="M16 17l5-5-5-5"></path><path d="M21 12H9"></path></svg>
+          Гарах
+        </a>
+      </div>
+    </aside>
+
+    <main class="content">
+      <!-- Manager Dashboard -->
+      <section class="page active" id="manager-dashboard">
+        <div class="page-header">
+          <div>
+            <h1 class="page-title">Ахлах нягтлан бодогчийн хяналт</h1>
+            <p class="page-subtitle">Цалин бодолтын эцсийн хяналт болон баталгаажуулалт</p>
+          </div>
+        </div>
+
+        <div class="stats">
+          <div class="card stat-card" style="border-left:4px solid #f2b100;">
+            <div style="flex:1;">
+              <small style="font-size:12px; letter-spacing:.3px; font-weight:700; color:#7c8aa0; text-transform:uppercase;">ХҮЛЭЭГДЭЖ БУЙ БОДОЛТ</small>
+              <h3 style="margin-top:10px; font-size:18px;">2 хэлтэс</h3>
+            </div>
+            <div class="stat-icon" style="background:#fef3c7; color:#d97706;">
+              <svg class="icon" viewBox="0 0 24 24"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+            </div>
+          </div>
+
+          <div class="card stat-card" style="border-left:4px solid #3b82f6;">
+            <div style="flex:1;">
+              <small style="font-size:12px; letter-spacing:.3px; font-weight:700; color:#7c8aa0; text-transform:uppercase;">ТАТВАРЫН ПАРАМЕТР</small>
+              <h3 style="margin-top:10px; font-size:18px; color:#2563eb;">Хүчин төгөлдөр</h3>
+              <span>Нийт 4 үзүүлэлт идэвхтэй</span>
+            </div>
+            <div class="stat-icon blue-bg">
+              <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h.01A1.65 1.65 0 0 0 10 3.09V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51h.01a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v.01a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+            </div>
+          </div>
+
+          <div class="card stat-card" style="border-left:4px solid #22c55e;">
+            <div style="flex:1;">
+              <small style="font-size:12px; letter-spacing:.3px; font-weight:700; color:#7c8aa0; text-transform:uppercase;">САРЫН ЗАРДЛЫН ХАРЬЦУУЛАЛТ</small>
+              <h3 style="margin-top:10px; font-size:18px; color:#16a34a;">+2.4%</h3>
+              <span>Өмнөх сартай харьцуулахад</span>
+            </div>
+            <div class="stat-icon green-bg">
+              <svg class="icon" viewBox="0 0 24 24"><path d="M4 14l4-4 4 4 8-8"></path><path d="M20 10v6h-6"></path></svg>
+            </div>
+          </div>
+        </div>
+
+        <div class="card panel" style="padding:0; overflow:hidden; margin-bottom:24px;">
+          <div style="padding:20px 20px 14px; display:flex; justify-content:space-between; align-items:center; gap:12px; border-bottom:1px solid var(--line);">
+            <h3 style="margin:0;">Хянах хүлээгдэж буй бодолтын жагсаалт</h3>
+            <div style="font-size:12px; font-weight:700; color:#3b82f6; border:1px solid #bfdbfe; background:#eff6ff; padding:6px 10px; border-radius:999px;">2026 оны 3-р сар</div>
+          </div>
+          <table style="width:100%; border-collapse:collapse; font-size:14px;">
+            <thead>
+              <tr style="text-align:left; color:#111827;">
+                <th style="padding:16px 18px; font-size:13px;">Хэлтэс</th>
+                <th style="padding:16px 18px; font-size:13px;">Ажилтны тоо</th>
+                <th style="padding:16px 18px; font-size:13px;">Нийт олгох цалин</th>
+                <th style="padding:16px 18px; font-size:13px;">Ирүүлсэн огноо</th>
+                <th style="padding:16px 18px; font-size:13px; text-align:right;">Үйлдэл</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr style="border-top:1px solid var(--line);">
+                <td style="padding:14px 18px;">Мэдээлэл Технологи</td>
+                <td style="padding:14px 18px;">12</td>
+                <td style="padding:14px 18px; font-weight:800;">45,200,000₮</td>
+                <td style="padding:14px 18px; color:#64748b;">2026/03/15</td>
+                <td style="padding:14px 18px; text-align:right;">
+                  <span style="color:#2563eb; font-weight:700; margin-right:16px;">Шалгах</span>
+                  <span style="color:#16a34a; font-weight:700; margin-right:16px;">Батлах</span>
+                  <span style="color:#ef4444; font-weight:700;">Буцаах</span>
+                </td>
+              </tr>
+              <tr style="border-top:1px solid var(--line);">
+                <td style="padding:14px 18px;">Маркетинг</td>
+                <td style="padding:14px 18px;">5</td>
+                <td style="padding:14px 18px; font-weight:800;">18,500,000₮</td>
+                <td style="padding:14px 18px; color:#64748b;">2026/03/14</td>
+                <td style="padding:14px 18px; text-align:right;">
+                  <span style="color:#2563eb; font-weight:700; margin-right:16px;">Шалгах</span>
+                  <span style="color:#16a34a; font-weight:700; margin-right:16px;">Батлах</span>
+                  <span style="color:#ef4444; font-weight:700;">Буцаах</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="card panel">
+          <h3 style="font-size:15px; margin-bottom:18px;">Audit Log (Сүүлийн өөрчлөлтүүд)</h3>
+          <div style="display:flex; flex-direction:column; gap:14px; font-size:14px;">
+            <div style="display:flex; gap:14px; padding-bottom:12px; border-bottom:1px solid var(--line); color:#64748b;">
+              <div style="min-width:78px;">14:20:05</div>
+              <div style="min-width:38px; font-size:10px; font-weight:800; color:#2563eb; background:#eff6ff; border-radius:4px; padding:4px 6px; height:max-content;">UPDATE</div>
+              <div><strong style="color:#0f172a;">Нягтлан А.Туяа</strong> Маркетинг хэлтсийн цалингийн бодолтыг илгээсэн.</div>
+            </div>
+            <div style="display:flex; gap:14px; color:#64748b;">
+              <div style="min-width:78px;">11:05:12</div>
+              <div style="min-width:38px; font-size:10px; font-weight:800; color:#ea580c; background:#fff7ed; border-radius:4px; padding:4px 6px; height:max-content;">CONFIG</div>
+              <div><strong style="color:#0f172a;">Систем</strong> <span style="color:#d97706; font-weight:700;">△ Татварын параметр (ХХОАТ) дуусах дөхөж байна! (2026/04/01)</span></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Payroll Approval -->
+      <section class="page" id="manager-payroll">
+        <div class="page-header">
+          <div>
+            <h1 class="page-title" style="display:flex; align-items:center; gap:10px;"><svg class="icon" viewBox="0 0 24 24" style="color:#2563eb; width:24px; height:24px;"><path d="M12 3l7 4v5c0 5-3.5 7.5-7 9-3.5-1.5-7-4-7-9V7l7-4z"></path><path d="M9.5 12.5l1.8 1.8 3.2-3.6"></path></svg>Цалингийн баталгаажуулалт</h1>
+            <p class="page-subtitle">Нягтлан бодогчоос ирүүлсэн цалингийн хүснэгтийг хянах</p>
+          </div>
+          <button class="btn btn-green" style="width:auto; padding:0 18px; height:42px;">Бүх хэлтсийг батлах</button>
+        </div>
+
+        <div class="reports-grid" style="grid-template-columns:repeat(3, 1fr); gap:18px;">
+          <div class="card approval-item" style="padding:18px 20px; border-left:3px solid #3b82f6;">
+            <div class="row-between" style="align-items:flex-start; margin-bottom:18px;"><div class="approval-name">Мэдээлэл Технологи</div><div class="approval-meta" style="font-size:11px; font-weight:700; color:#2563eb; background:#eff6ff; padding:4px 8px; border-radius:999px;">Хянагдаж буй</div></div>
+            <div class="row-between" style="margin-bottom:24px;"><div><div class="subtext" style="font-size:12px; text-transform:uppercase; font-weight:700;">Ажилтны тоо</div><div style="font-size:16px; font-weight:800; margin-top:6px;">8</div></div><div style="text-align:right;"><div class="subtext" style="font-size:12px; text-transform:uppercase; font-weight:700;">Гарт олгох</div><div style="font-size:16px; font-weight:800; margin-top:6px; color:#2563eb;">12,500,000₮</div></div></div>
+            <div style="display:grid; grid-template-columns:1fr 28px 28px; gap:8px;"><button class="btn btn-mini" style="justify-content:center; width:100%;">Дэлгэрэнгүй</button><button class="btn" style="height:28px; border:1px solid #bbf7d0; background:#f0fdf4; color:#16a34a; border-radius:8px;">○</button><button class="btn" style="height:28px; border:1px solid #fecaca; background:#fef2f2; color:#ef4444; border-radius:8px;">▢</button></div>
+          </div>
+          <div class="card approval-item" style="padding:18px 20px; border-left:3px solid #3b82f6;">
+            <div class="row-between" style="align-items:flex-start; margin-bottom:18px;"><div class="approval-name">Хүний нөөц</div><div class="approval-meta" style="font-size:11px; font-weight:700; color:#2563eb; background:#eff6ff; padding:4px 8px; border-radius:999px;">Хянагдаж буй</div></div>
+            <div class="row-between" style="margin-bottom:24px;"><div><div class="subtext" style="font-size:12px; text-transform:uppercase; font-weight:700;">Ажилтны тоо</div><div style="font-size:16px; font-weight:800; margin-top:6px;">2</div></div><div style="text-align:right;"><div class="subtext" style="font-size:12px; text-transform:uppercase; font-weight:700;">Гарт олгох</div><div style="font-size:16px; font-weight:800; margin-top:6px; color:#2563eb;">4,800,000₮</div></div></div>
+            <div style="display:grid; grid-template-columns:1fr 28px 28px; gap:8px;"><button class="btn btn-mini" style="justify-content:center; width:100%;">Дэлгэрэнгүй</button><button class="btn" style="height:28px; border:1px solid #bbf7d0; background:#f0fdf4; color:#16a34a; border-radius:8px;">○</button><button class="btn" style="height:28px; border:1px solid #fecaca; background:#fef2f2; color:#ef4444; border-radius:8px;">▢</button></div>
+          </div>
+          <div class="card approval-item" style="padding:18px 20px; border-left:3px solid #3b82f6;">
+            <div class="row-between" style="align-items:flex-start; margin-bottom:18px;"><div class="approval-name">Санхүү бүртгэл</div><div class="approval-meta" style="font-size:11px; font-weight:700; color:#2563eb; background:#eff6ff; padding:4px 8px; border-radius:999px;">Хянагдаж буй</div></div>
+            <div class="row-between" style="margin-bottom:24px;"><div><div class="subtext" style="font-size:12px; text-transform:uppercase; font-weight:700;">Ажилтны тоо</div><div style="font-size:16px; font-weight:800; margin-top:6px;">5</div></div><div style="text-align:right;"><div class="subtext" style="font-size:12px; text-transform:uppercase; font-weight:700;">Гарт олгох</div><div style="font-size:16px; font-weight:800; margin-top:6px; color:#2563eb;">12,800,000₮</div></div></div>
+            <div style="display:grid; grid-template-columns:1fr 28px 28px; gap:8px;"><button class="btn btn-mini" style="justify-content:center; width:100%;">Дэлгэрэнгүй</button><button class="btn" style="height:28px; border:1px solid #bbf7d0; background:#f0fdf4; color:#16a34a; border-radius:8px;">○</button><button class="btn" style="height:28px; border:1px solid #fecaca; background:#fef2f2; color:#ef4444; border-radius:8px;">▢</button></div>
+          </div>
+          <div class="card approval-item" style="padding:18px 20px; border-left:3px solid #3b82f6;">
+            <div class="row-between" style="align-items:flex-start; margin-bottom:18px;"><div class="approval-name">Борлуулалт, Маркетинг</div><div class="approval-meta" style="font-size:11px; font-weight:700; color:#2563eb; background:#eff6ff; padding:4px 8px; border-radius:999px;">Хянагдаж буй</div></div>
+            <div class="row-between" style="margin-bottom:24px;"><div><div class="subtext" style="font-size:12px; text-transform:uppercase; font-weight:700;">Ажилтны тоо</div><div style="font-size:16px; font-weight:800; margin-top:6px;">12</div></div><div style="text-align:right;"><div class="subtext" style="font-size:12px; text-transform:uppercase; font-weight:700;">Гарт олгох</div><div style="font-size:16px; font-weight:800; margin-top:6px; color:#2563eb;">28,400,000₮</div></div></div>
+            <div style="display:grid; grid-template-columns:1fr 28px 28px; gap:8px;"><button class="btn btn-mini" style="justify-content:center; width:100%;">Дэлгэрэнгүй</button><button class="btn" style="height:28px; border:1px solid #bbf7d0; background:#f0fdf4; color:#16a34a; border-radius:8px;">○</button><button class="btn" style="height:28px; border:1px solid #fecaca; background:#fef2f2; color:#ef4444; border-radius:8px;">▢</button></div>
+          </div>
+          <div class="card approval-item" style="padding:18px 20px; border-left:3px solid #3b82f6;">
+            <div class="row-between" style="align-items:flex-start; margin-bottom:18px;"><div class="approval-name">Захиргаа, Аж ахуй</div><div class="approval-meta" style="font-size:11px; font-weight:700; color:#2563eb; background:#eff6ff; padding:4px 8px; border-radius:999px;">Хянагдаж буй</div></div>
+            <div class="row-between" style="margin-bottom:24px;"><div><div class="subtext" style="font-size:12px; text-transform:uppercase; font-weight:700;">Ажилтны тоо</div><div style="font-size:16px; font-weight:800; margin-top:6px;">4</div></div><div style="text-align:right;"><div class="subtext" style="font-size:12px; text-transform:uppercase; font-weight:700;">Гарт олгох</div><div style="font-size:16px; font-weight:800; margin-top:6px; color:#2563eb;">6,400,000₮</div></div></div>
+            <div style="display:grid; grid-template-columns:1fr 28px 28px; gap:8px;"><button class="btn btn-mini" style="justify-content:center; width:100%;">Дэлгэрэнгүй</button><button class="btn" style="height:28px; border:1px solid #bbf7d0; background:#f0fdf4; color:#16a34a; border-radius:8px;">○</button><button class="btn" style="height:28px; border:1px solid #fecaca; background:#fef2f2; color:#ef4444; border-radius:8px;">▢</button></div>
+          </div>
+          <div class="card approval-item" style="padding:18px 20px; border-left:3px solid #3b82f6;">
+            <div class="row-between" style="align-items:flex-start; margin-bottom:18px;"><div class="approval-name">Үйл ажиллагаа</div><div class="approval-meta" style="font-size:11px; font-weight:700; color:#2563eb; background:#eff6ff; padding:4px 8px; border-radius:999px;">Хянагдаж буй</div></div>
+            <div class="row-between" style="margin-bottom:24px;"><div><div class="subtext" style="font-size:12px; text-transform:uppercase; font-weight:700;">Ажилтны тоо</div><div style="font-size:16px; font-weight:800; margin-top:6px;">15</div></div><div style="text-align:right;"><div class="subtext" style="font-size:12px; text-transform:uppercase; font-weight:700;">Гарт олгох</div><div style="font-size:16px; font-weight:800; margin-top:6px; color:#2563eb;">32,000,000₮</div></div></div>
+            <div style="display:grid; grid-template-columns:1fr 28px 28px; gap:8px;"><button class="btn btn-mini" style="justify-content:center; width:100%;">Дэлгэрэнгүй</button><button class="btn" style="height:28px; border:1px solid #bbf7d0; background:#f0fdf4; color:#16a34a; border-radius:8px;">○</button><button class="btn" style="height:28px; border:1px solid #fecaca; background:#fef2f2; color:#ef4444; border-radius:8px;">▢</button></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Tax Config -->
+      <section class="page" id="tax-config">
+        <div class="page-header">
+          <div>
+            <h1 class="page-title">TaxConfig удирдлага</h1>
+            <p class="page-subtitle">Татварын параметрүүдийг удирдах</p>
+          </div>
+          <button class="btn" style="background:#2563eb; color:#fff; height:42px; padding:0 16px;">+ Шинэ параметр нэмэх</button>
+        </div>
+
+        <div class="card" style="padding:14px 16px; border:1px solid #fecaca; background:#fef2f2; color:#dc2626; margin-bottom:24px;">
+          <div style="font-size:14px; font-weight:700; margin-bottom:6px;">Анхааруулга</div>
+          <div style="font-size:14px;">Татварын параметр өөрчлөх нь бүх цалингийн тооцоолод нөлөөлнө. Өөрчлөлт оруулахаасаа өмнө Засгийн газрын шийдвэрийг анхааралтай шалгана уу.</div>
+        </div>
+
+        <div style="display:flex; align-items:center; gap:10px; margin-bottom:20px; font-size:15px; font-weight:700;">
+          <span style="font-size:18px; color:#0f172a;">Идэвхтэй параметр</span>
+          <span style="font-size:12px; font-weight:700; color:#15803d; background:#dcfce7; border:1px solid #bbf7d0; padding:4px 10px; border-radius:999px;">TAX-2026-001</span>
+          <span style="color:#64748b;">🗓️</span>
+        </div>
+
+        <div class="reports-grid" style="grid-template-columns:repeat(4, 1fr); gap:18px; margin-bottom:18px;">
+          <div class="card" style="overflow:hidden;"><div style="background:#10b981; color:#fff; padding:14px 16px; font-size:14px; font-weight:800;">НДШ (АЖИЛТАН)</div><div style="padding:34px 16px 18px; text-align:center; font-size:28px; font-weight:800; color:#059669;">10%</div></div>
+          <div class="card" style="overflow:hidden;"><div style="background:#10b981; color:#fff; padding:14px 16px; font-size:14px; font-weight:800;">НДШ (АЖИЛ ОЛГОГЧ)</div><div style="padding:34px 16px 18px; text-align:center; font-size:28px; font-weight:800; color:#059669;">12.5%</div></div>
+          <div class="card" style="overflow:hidden;"><div style="background:#10b981; color:#fff; padding:14px 16px; font-size:14px; font-weight:800;">ХХОАТ</div><div style="padding:34px 16px 18px; text-align:center; font-size:28px; font-weight:800; color:#059669;">10%</div></div>
+          <div class="card" style="overflow:hidden;"><div style="background:#10b981; color:#fff; padding:14px 16px; font-size:14px; font-weight:800;">ХХОАТ ХӨНГӨЛӨЛТ</div><div style="padding:34px 16px 18px; text-align:center; font-size:28px; font-weight:800; color:#059669;">0-20'000₮</div></div>
+          <div class="card" style="overflow:hidden;"><div style="background:#10b981; color:#fff; padding:14px 16px; font-size:14px; font-weight:800;">БНДШ</div><div style="padding:34px 16px 18px; text-align:center; font-size:28px; font-weight:800; color:#059669;">1%</div></div>
+          <div class="card" style="overflow:hidden;"><div style="background:#10b981; color:#fff; padding:14px 16px; font-size:14px; font-weight:800;">ИЛҮҮ ЦАГ</div><div style="padding:34px 16px 18px; text-align:center; font-size:28px; font-weight:800; color:#059669;">1.5x</div></div>
+          <div class="card" style="overflow:hidden;"><div style="background:#10b981; color:#fff; padding:14px 16px; font-size:14px; font-weight:800;">ДООД ХӨЛС</div><div style="padding:34px 16px 18px; text-align:center; font-size:28px; font-weight:800; color:#059669;">792,000₮</div></div>
+        </div>
+
+        <div class="card" style="padding:16px 18px; border-style:dashed; display:flex; justify-content:space-between; gap:20px; color:#64748b; font-size:14px;">
+          <div style="display:flex; gap:18px; flex-wrap:wrap;"><span>👤 Үүсгэсэн: <strong style="color:#0f172a;">Б.Наран</strong></span><span>📅 Огноо: <strong style="color:#0f172a;">2024-12-15</strong></span></div>
+          <div>ⓘ Сүүлийн шинэчлэлийг системд амжилттай бүртгэгдсэн</div>
+        </div>
+      </section>
+
+      <!-- Reports -->
+      <section class="page" id="reports">
+        <div class="top-controls">
+          <div>
+            <h1 class="page-title">Тайлангууд</h1>
+            <p class="page-subtitle">Цалингийн тайлан, татварын тайлан</p>
+          </div>
+          <div class="month-tabs">
+            <button class="active">2026/03</button>
+            <button>2026/02</button>
+            <button>2026/01</button>
+          </div>
+        </div>
+
+        <div class="reports-grid">
+          <div class="card report-card">
+            <div class="stat-icon blue-bg">
+              <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l4 0"></path></svg>
+            </div>
+            <div>
+              <h3>Хэлтсийн цалингийн харьцуулалт</h3>
+              <p>Алба бүрийн цалингийн зардлын дэлгэрэнгүй</p>
+            </div>
+          </div>
+
+          <div class="card report-card">
+            <div class="stat-icon green-bg">
+              <svg class="icon" viewBox="0 0 24 24"><path d="M4 19h16"></path><path d="M7 16V8"></path><path d="M12 16V5"></path><path d="M17 16v-3"></path></svg>
+            </div>
+            <div>
+              <h3 style="color:#2563eb;">Сарын нийт зардлын тайлан</h3>
+              <p>Тухайн сарын нийт цалингийн зардал</p>
+            </div>
+          </div>
+
+          <div class="card report-card">
+            <div class="stat-icon violet-bg">
+              <svg class="icon" viewBox="0 0 24 24"><path d="M12 3l7 4v5c0 5-3.5 7.5-7 9-3.5-1.5-7-4-7-9V7l7-4z"></path><path d="M9.5 12.5l1.8 1.8 3.2-3.6"></path></svg>
+            </div>
+            <div>
+              <h3>НДШ тайлан</h3>
+              <p>Нийгмийн даатгалын шимтгэлийн тайлан</p>
+            </div>
+          </div>
+
+          <div class="card report-card">
+            <div class="stat-icon orange-bg">
+              <svg class="icon" viewBox="0 0 24 24"><path d="M14 3h-4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V9z"></path><path d="M14 3v6h6"></path><path d="M16 13H10"></path></svg>
+            </div>
+            <div>
+              <h3>ХХОАТ тайлан</h3>
+              <p>Хувь хүний орлогын албан татварын тайлан</p>
+            </div>
+          </div>
+
+          <div class="card report-card">
+            <div class="stat-icon pink-bg">
+              <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg>
+            </div>
+            <div>
+              <h3>Илүү цагийн тайлан</h3>
+              <p>Ажилтнуудын илүү цагийн дэлгэрэнгүй</p>
+            </div>
+          </div>
+
+          <div class="card report-card">
+            <div class="stat-icon violet-bg">
+              <svg class="icon" viewBox="0 0 24 24"><path d="M4 14l4-4 4 4 8-8"></path><path d="M20 10v6h-6"></path></svg>
+            </div>
+            <div>
+              <h3>Байгууллагын төлсөн нийт татвар</h3>
+              <p>НДШ, ХХОАТ болон бусад татваруудын нэгтгэл</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="info-bar">
+          <svg class="icon" viewBox="0 0 24 24" style="color:#2563eb;"><circle cx="12" cy="12" r="9"></circle><path d="M12 8h.01"></path><path d="M11 12h1v4h1"></path></svg>
+          <span>Бүх тайлан &lt;30 секундэд үүсгэгдэнэ</span>
+          <span class="bullet">•</span>
+          <span>Тайланг PDF форматаар татах боломжтой</span>
+          <span class="bullet">•</span>
+          <span>Өмнөх саруудын түүхийг харах боломжтой</span>
+        </div>
+      </section>
+    </main>
+
+    <script>window.APP_CONFIG = { fileName: "sacc.html", defaultPage: "manager-dashboard" };</script>
+  <script src="demo-users.js"></script>
+  <script src="app.js"></script>
+
+    <!-- New Parameter Modal -->
+    <div id="newParamModal" style="display:none; position:fixed; inset:0; background:rgba(10,20,50,.44); backdrop-filter:blur(3px); z-index:1000; align-items:center; justify-content:center;">
+      <div style="background:#fff; border-radius:22px; padding:28px 24px 22px; width:100%; max-width:560px; max-height:90vh; overflow-y:auto; box-shadow:0 30px 60px rgba(10,20,50,.18); position:relative;">
+        <button onclick="document.getElementById('newParamModal').style.display='none'" style="position:absolute;top:14px;right:16px;background:#f1f5f9;border:none;border-radius:50%;width:30px;height:30px;cursor:pointer;font-size:16px;color:#64748b;display:flex;align-items:center;justify-content:center;">✕</button>
+        <h2 style="font-size:18px;font-weight:800;margin-bottom:4px;color:#0b1b45;">Шинэ татварын параметр нэмэх</h2>
+        <p style="font-size:13px;color:#64748b;margin-bottom:20px;">Шинэ параметрийн утгуудыг оруулна уу. Идэвхжүүлснээр одоогийн параметр солигдоно.</p>
+        <div style="background:#fef2f2;border:1px solid #fecaca;border-radius:12px;padding:12px 14px;margin-bottom:20px;font-size:13px;color:#dc2626;">
+          ⚠️ Параметр өөрчлөлт нь бүх цалингийн тооцоолод нөлөөлнө. Анхааралтай шалгана уу.
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+          <div style="display:flex;flex-direction:column;gap:6px;">
+            <label style="font-size:13px;font-weight:700;color:#374151;">Параметрийн ID</label>
+            <input id="paramId" type="text" placeholder="TAX-2026-002" style="height:40px;border:1px solid #e5e7eb;border-radius:10px;padding:0 12px;font-size:14px;background:#f8fafc;outline:none;" />
+          </div>
+          <div style="display:flex;flex-direction:column;gap:6px;">
+            <label style="font-size:13px;font-weight:700;color:#374151;">Хүчинтэй огноо</label>
+            <input id="paramDate" type="date" style="height:40px;border:1px solid #e5e7eb;border-radius:10px;padding:0 12px;font-size:14px;background:#f8fafc;outline:none;" />
+          </div>
+          <div style="display:flex;flex-direction:column;gap:6px;">
+            <label style="font-size:13px;font-weight:700;color:#374151;">НДШ (Ажилтан) %</label>
+            <input id="paramNdshEmp" type="number" step="0.1" placeholder="10" style="height:40px;border:1px solid #e5e7eb;border-radius:10px;padding:0 12px;font-size:14px;background:#f8fafc;outline:none;" />
+          </div>
+          <div style="display:flex;flex-direction:column;gap:6px;">
+            <label style="font-size:13px;font-weight:700;color:#374151;">НДШ (Ажил олгогч) %</label>
+            <input id="paramNdshEr" type="number" step="0.1" placeholder="12.5" style="height:40px;border:1px solid #e5e7eb;border-radius:10px;padding:0 12px;font-size:14px;background:#f8fafc;outline:none;" />
+          </div>
+          <div style="display:flex;flex-direction:column;gap:6px;">
+            <label style="font-size:13px;font-weight:700;color:#374151;">ХХОАТ %</label>
+            <input id="paramHhoat" type="number" step="0.1" placeholder="10" style="height:40px;border:1px solid #e5e7eb;border-radius:10px;padding:0 12px;font-size:14px;background:#f8fafc;outline:none;" />
+          </div>
+          <div style="display:flex;flex-direction:column;gap:6px;">
+            <label style="font-size:13px;font-weight:700;color:#374151;">ХХОАТ хөнгөлөлт (₮)</label>
+            <input id="paramHhoatDiscount" type="number" placeholder="20000" style="height:40px;border:1px solid #e5e7eb;border-radius:10px;padding:0 12px;font-size:14px;background:#f8fafc;outline:none;" />
+          </div>
+          <div style="display:flex;flex-direction:column;gap:6px;">
+            <label style="font-size:13px;font-weight:700;color:#374151;">БНДШ %</label>
+            <input id="paramBndsh" type="number" step="0.1" placeholder="1" style="height:40px;border:1px solid #e5e7eb;border-radius:10px;padding:0 12px;font-size:14px;background:#f8fafc;outline:none;" />
+          </div>
+          <div style="display:flex;flex-direction:column;gap:6px;">
+            <label style="font-size:13px;font-weight:700;color:#374151;">Илүү цагийн коэффициент</label>
+            <input id="paramOt" type="number" step="0.1" placeholder="1.5" style="height:40px;border:1px solid #e5e7eb;border-radius:10px;padding:0 12px;font-size:14px;background:#f8fafc;outline:none;" />
+          </div>
+          <div style="display:flex;flex-direction:column;gap:6px;grid-column:1/-1;">
+            <label style="font-size:13px;font-weight:700;color:#374151;">Доод хөлс (₮)</label>
+            <input id="paramMinWage" type="number" placeholder="792000" style="height:40px;border:1px solid #e5e7eb;border-radius:10px;padding:0 12px;font-size:14px;background:#f8fafc;outline:none;" />
+          </div>
+        </div>
+        <div style="display:flex;gap:10px;margin-top:20px;">
+          <button onclick="document.getElementById('newParamModal').style.display='none'" style="flex:1;height:40px;background:#f1f5f9;color:#374151;border:none;border-radius:10px;font-weight:700;cursor:pointer;">Цуцлах</button>
+          <button id="saveParamBtn" style="flex:2;height:40px;background:#2563eb;color:white;border:none;border-radius:10px;font-weight:700;cursor:pointer;font-size:14px;">Хадгалах</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toast -->
+    <div id="saccToast" style="display:none;position:fixed;bottom:26px;right:26px;z-index:2000;background:#0f172a;color:#fff;border-radius:13px;padding:13px 18px;font-size:14px;font-weight:600;box-shadow:0 10px 28px rgba(10,20,50,.2);align-items:center;gap:10px;">
+      <svg style="width:16px;height:16px;stroke:#4ade80;fill:none;stroke-width:2;" viewBox="0 0 24 24"><path d="M20 6l-11 11L4 12"></path></svg>
+      <span id="saccToastMsg">Амжилттай!</span>
+    </div>
+
+  <script>
+  (function() {
+    function showToast(msg) {
+      const t = document.getElementById('saccToast');
+      document.getElementById('saccToastMsg').textContent = msg;
+      t.style.display = 'flex';
+      setTimeout(() => t.style.display = 'none', 3000);
+    }
+
+    // Open modal on "Шинэ параметр нэмэх" click
+    document.addEventListener('click', function(e) {
+      if (e.target.textContent.includes('Шинэ параметр нэмэх')) {
+        document.getElementById('newParamModal').style.display = 'flex';
+      }
+    });
+
+    // Save parameter
+    document.getElementById('saveParamBtn').onclick = function() {
+      const id = document.getElementById('paramId').value.trim() || 'TAX-2026-002';
+      const ndshEmp = document.getElementById('paramNdshEmp').value || '10';
+      const ndshEr = document.getElementById('paramNdshEr').value || '12.5';
+      const hhoat = document.getElementById('paramHhoat').value || '10';
+      const hhoatD = document.getElementById('paramHhoatDiscount').value || '20000';
+      const bndsh = document.getElementById('paramBndsh').value || '1';
+      const ot = document.getElementById('paramOt').value || '1.5';
+      const minW = document.getElementById('paramMinWage').value || '792000';
+      const date = document.getElementById('paramDate').value || new Date().toISOString().slice(0,10);
+
+      // Update the active parameter display
+      const badge = document.querySelector('#tax-config span[style*="TAX"]') || document.querySelector('#tax-config .badge');
+      // Update the 7 param cards
+      const paramCards = document.querySelectorAll('#tax-config .reports-grid .card');
+      const vals = [ndshEmp+'%', ndshEr+'%', hhoat+'%', '0-'+Number(hhoatD).toLocaleString()+'₮', bndsh+'%', ot+'x', Number(minW).toLocaleString()+'₮'];
+      paramCards.forEach((card, i) => {
+        if (i < vals.length) {
+          const valEl = card.querySelector('div:last-child');
+          if (valEl) valEl.textContent = vals[i];
+        }
+      });
+      // Update ID badge
+      const idBadge = document.querySelector('#tax-config span[style*="dcfce7"]');
+      if (idBadge) idBadge.textContent = id;
+      // Update footer date
+      const footerDate = document.querySelector('#tax-config .card[style*="dashed"] strong:nth-child(2)');
+
+      document.getElementById('newParamModal').style.display = 'none';
+      showToast('✓ ' + id + ' параметр амжилттай хадгалагдлаа!');
+    };
+
+    // Close modal on overlay click
+    document.getElementById('newParamModal').addEventListener('click', function(e) {
+      if (e.target === this) this.style.display = 'none';
+    });
+  })();
+  </script>
+
+
+</body>
+</html>

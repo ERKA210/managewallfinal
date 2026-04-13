@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="mn">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Цалин Систем - Хүний нөөц</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f6f8fb;
+      --card: #ffffff;
+      --line: #e7ebf1;
+      --text: #0f172a;
+      --muted: #6b7b92;
+      --blue: #2563eb;
+      --blue-soft: #eef4ff;
+      --green: #16a34a;
+      --green-soft: #dcfce7;
+      --yellow: #d97706;
+      --yellow-soft: #fef3c7;
+      --red: #ef4444;
+      --red-soft: #fee2e2;
+      --violet: #9333ea;
+      --violet-soft: #f3e8ff;
+      --shadow: 0 1px 2px rgba(15,23,42,.06), 0 10px 24px rgba(15,23,42,.03);
+      --radius: 18px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: "Inter", sans-serif; background: var(--bg); color: var(--text); }
+
+    .app { display: flex; min-height: 100vh; }
+    .sidebar {
+      width: 260px; background: #fff; border-right: 1px solid var(--line);
+      display: flex; flex-direction: column; justify-content: space-between;
+    }
+    .sidebar-top { padding: 24px 16px 16px; }
+    .brand {
+      padding: 0 8px 22px 8px; border-bottom: 1px solid var(--line);
+      margin: 0 -16px 16px; padding-left: 24px;
+    }
+    .brand h2 { font-size: 18px; font-weight: 800; color: #0b1b45; margin-bottom: 6px; }
+    .brand p { font-size: 13px; color: #5f6f86; font-weight: 500; }
+
+    .nav { display: flex; flex-direction: column; gap: 6px; padding: 0 8px; }
+    .nav button {
+      width: 100%; border: none; background: transparent; display: flex; align-items: center; gap: 12px;
+      padding: 12px 14px; border-radius: 12px; font-size: 14px; font-weight: 600; color: #26354d;
+      cursor: pointer; text-align: left;
+    }
+    .nav button.active { background: var(--blue-soft); color: var(--blue); }
+    .nav button:hover { background: #f8fafc; }
+    .nav button.active:hover { background: var(--blue-soft); }
+
+    .icon {
+      width: 17px; height: 17px; stroke: currentColor; fill: none; stroke-width: 2; flex-shrink: 0;
+    }
+
+    .sidebar-bottom { border-top: 1px solid var(--line); padding: 14px 18px 20px; }
+    .logout {
+      display: inline-flex; align-items: center; gap: 10px; color: #ef4444; text-decoration: none;
+      font-size: 14px; font-weight: 600; padding: 10px 12px; border-radius: 10px;
+    }
+
+    .content { flex: 1; padding: 28px 24px 32px; }
+    .page { display: none; }
+    .page.active { display: block; }
+
+    .page-header {
+      display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; margin-bottom: 24px;
+    }
+    .page-title { font-size: 26px; line-height: 1.2; font-weight: 800; color: #0b1b45; margin-bottom: 4px; }
+    .page-subtitle { font-size: 15px; color: var(--muted); font-weight: 500; }
+
+    .card {
+      background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow);
+    }
+
+    .alert {
+      border-radius: 14px; padding: 14px 16px; font-size: 14px; line-height: 1.5; margin-bottom: 20px;
+      display: flex; gap: 12px; align-items: flex-start; border: 1px solid #fde68a; background: #fefce8; color: #a16207;
+    }
+    .alert strong { display: block; margin-bottom: 4px; }
+
+    .btn {
+      border: none; border-radius: 10px; cursor: pointer; font-weight: 700; transition: .15s ease;
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    }
+    .btn:hover { transform: translateY(-1px); }
+    .btn-blue { background: var(--blue); color: white; }
+    .btn-blue-outline { background: #fff; color: #111827; border: 1px solid var(--line); }
+    .btn-soft { background: #f8fafc; color: #111827; border: 1px solid var(--line); }
+    .btn-disabled { background: #e5e7eb; color: white; cursor: not-allowed; }
+
+    .stats-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; margin-bottom: 24px; }
+    .stat-card { padding: 20px; min-height: 154px; display: flex; flex-direction: column; justify-content: space-between; }
+    .stat-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
+    .stat-icon { width: 40px; height: 40px; border-radius: 12px; display: flex; align-items: center; justify-content: center; }
+    .blue-bg { background: #dbeafe; color: #2563eb; }
+    .green-bg { background: #dcfce7; color: #16a34a; }
+    .yellow-bg { background: #fef3c7; color: #d97706; }
+    .orange-bg { background: #ffedd5; color: #ea580c; }
+    .violet-bg { background: #f3e8ff; color: #9333ea; }
+    .slate-bg { background: #f1f5f9; color: #64748b; }
+
+    .pill {
+      font-size: 12px; font-weight: 700; padding: 5px 10px; border-radius: 999px; white-space: nowrap;
+    }
+    .pill-blue { background: #dbeafe; color: #2563eb; }
+    .pill-green { background: #dcfce7; color: #16a34a; }
+    .pill-yellow { background: #fef3c7; color: #ca8a04; }
+    .pill-gray { background: #f1f5f9; color: #64748b; }
+
+    .stat-body h4 { font-size: 15px; font-weight: 500; color: #334155; margin-bottom: 6px; }
+    .stat-body .big { font-size: 18px; font-weight: 800; color: #0f172a; margin-bottom: 4px; }
+    .stat-body small { font-size: 13px; color: #74839a; font-weight: 500; }
+
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-bottom: 24px; }
+    .panel { padding: 20px; }
+    .panel-title {
+      display: flex; align-items: center; gap: 12px; font-size: 16px; font-weight: 800; color: #0f172a; margin-bottom: 18px;
+    }
+    .empty-state {
+      height: 155px; display: flex; flex-direction: column; align-items: center; justify-content: center;
+      color: #94a3b8; gap: 10px; text-align: center;
+    }
+    .empty-state svg { width: 42px; height: 42px; stroke: #c0c8d4; fill: none; stroke-width: 2; }
+
+    .quick-box { display: flex; flex-direction: column; gap: 12px; }
+    .check-row { display: flex; align-items: center; gap: 10px; font-size: 15px; color: #475569; }
+    .radio {
+      width: 18px; height: 18px; border-radius: 50%; border: 2px solid #cbd5e1; background: #fff; flex-shrink: 0;
+    }
+
+    .progress-panel { padding: 20px; }
+    .progress-panel h3 { font-size: 17px; font-weight: 800; margin-bottom: 18px; color: #0f172a; }
+    .progress-list { display: flex; flex-direction: column; gap: 14px; }
+    .progress-item .row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; font-size: 14px; font-weight: 600; color: #334155; }
+    .bar { width: 100%; height: 7px; background: #dfe4eb; border-radius: 999px; overflow: hidden; }
+    .fill { height: 100%; border-radius: 999px; background: #16a34a; }
+
+    .toolbar {
+      display: flex; justify-content: space-between; align-items: center; gap: 14px; margin-bottom: 16px; flex-wrap: wrap;
+    }
+    .search {
+      flex: 1; min-width: 260px; height: 42px; border: 1px solid var(--line); border-radius: 10px; background: #f8fafc;
+      padding: 0 14px; display: flex; align-items: center; gap: 10px; color: #94a3b8; font-size: 14px;
+    }
+    .search input {
+      border: none; background: transparent; outline: none; width: 100%; font-size: 14px; color: #111827;
+    }
+
+    .select {
+      min-width: 180px; height: 42px; border: 1px solid var(--line); border-radius: 10px; background: #f8fafc;
+      padding: 0 14px; display: flex; align-items: center; justify-content: space-between; font-size: 14px; color: #111827; font-weight: 600;
+    }
+
+    .btn-sm { height: 42px; padding: 0 16px; font-size: 14px; }
+
+    .table-wrap { overflow: auto; }
+    table { width: 100%; border-collapse: collapse; min-width: 1080px; }
+    th, td { padding: 12px 14px; border-bottom: 1px solid var(--line); font-size: 14px; text-align: left; }
+    th { color: #64748b; font-size: 12px; text-transform: uppercase; font-weight: 800; letter-spacing: .02em; }
+    td strong { font-weight: 800; }
+    .mini-pill {
+      display: inline-flex; align-items: center; padding: 4px 8px; border-radius: 999px; font-size: 12px; font-weight: 700;
+    }
+    .mini-purple { background: #f3e8ff; color: #9333ea; }
+    .mini-blue { background: #dbeafe; color: #2563eb; }
+    .mini-green { background: #dcfce7; color: #16a34a; }
+
+    .actions { display: flex; gap: 10px; color: #2563eb; font-weight: 700; }
+    .actions .danger { color: #ef4444; }
+    .muted-eye { color: #94a3b8; margin-left: 6px; }
+
+    .dept-list { display: flex; flex-direction: column; gap: 12px; }
+    .dept-card {
+      padding: 18px 18px; display: flex; justify-content: space-between; align-items: center; gap: 16px;
+    }
+    .dept-name { font-size: 17px; font-weight: 800; color: #0f172a; margin-bottom: 6px; }
+    .dept-meta { font-size: 14px; color: #64748b; }
+    .dept-meta .warn { color: #d97706; }
+
+    @media (max-width: 1280px) {
+      .stats-4 { grid-template-columns: repeat(2, 1fr); }
+      .grid-2 { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 900px) {
+      .app { flex-direction: column; }
+      .sidebar { width: 100%; }
+      .content { padding: 20px 16px 24px; }
+      .stats-4 { grid-template-columns: 1fr; }
+      .page-header, .toolbar { flex-direction: column; align-items: stretch; }
+      .search, .select { min-width: 0; width: 100%; }
+      .dept-card { flex-direction: column; align-items: flex-start; }
+    }
+
+    /* Modal shared */
+    .modal-overlay {
+      display: none; position: fixed; inset: 0;
+      background: rgba(10,20,50,.44); backdrop-filter: blur(3px);
+      z-index: 1000; align-items: center; justify-content: center;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal {
+      background: #fff; border-radius: 22px; padding: 28px 24px 22px;
+      width: 100%; max-width: 560px; max-height: 90vh; overflow-y: auto;
+      box-shadow: 0 30px 60px rgba(10,20,50,.18); position: relative;
+    }
+    .modal-close {
+      position: absolute; top: 14px; right: 16px;
+      background: #f1f5f9; border: none; border-radius: 50%;
+      width: 30px; height: 30px; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px; color: #64748b;
+    }
+    .modal h2 { font-size: 18px; font-weight: 800; margin-bottom: 4px; color: #0b1b45; }
+    .modal .modal-sub { font-size: 13px; color: #64748b; margin-bottom: 20px; }
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .form-group { display: flex; flex-direction: column; gap: 6px; }
+    .form-group.full { grid-column: 1 / -1; }
+    .form-group label { font-size: 13px; font-weight: 700; color: #374151; }
+    .form-group input, .form-group select {
+      height: 40px; border: 1px solid #e5e7eb; border-radius: 10px;
+      padding: 0 12px; font-size: 14px; color: #111827; outline: none;
+      background: #f8fafc; transition: .15s;
+    }
+    .form-group input:focus, .form-group select:focus {
+      border-color: #2563eb; background: #fff; box-shadow: 0 0 0 3px rgba(37,99,235,.08);
+    }
+    .modal-actions { display: flex; gap: 10px; margin-top: 20px; }
+    .btn-modal-cancel { flex: 1; height: 40px; background: #f1f5f9; color: #374151; border: none; border-radius: 10px; font-weight: 700; cursor: pointer; }
+    .btn-modal-save { flex: 2; height: 40px; background: #2563eb; color: white; border: none; border-radius: 10px; font-weight: 700; cursor: pointer; font-size: 14px; }
+    .btn-modal-save:hover { transform: translateY(-1px); }
+
+    /* Toast */
+    .toast {
+      display: none; position: fixed; bottom: 26px; right: 26px; z-index: 2000;
+      background: #0f172a; color: #fff; border-radius: 13px;
+      padding: 13px 18px; font-size: 14px; font-weight: 600;
+      box-shadow: 0 10px 28px rgba(10,20,50,.2);
+      align-items: center; gap: 10px;
+    }
+    .toast.show { display: flex; }
+
+    /* Timesheet confirmed state */
+    .dept-card.confirmed { border-color: #bbf7d0; background: #f0fdf4; }
+    .dept-card.confirmed .dept-name { color: #15803d; }
+    .dept-confirmed-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: #dcfce7; color: #15803d; border: 1px solid #86efac;
+      border-radius: 999px; padding: 5px 14px; font-size: 13px; font-weight: 700;
+    }
+
+    /* Excel drop zone */
+    .excel-dropzone {
+      border: 2px dashed #93c5fd; border-radius: 14px; padding: 28px 20px;
+      text-align: center; background: #eff6ff; cursor: pointer;
+      transition: .15s;
+    }
+    .excel-dropzone:hover { border-color: #2563eb; background: #dbeafe; }
+    .excel-dropzone p { font-size: 14px; color: #2563eb; font-weight: 600; margin-top: 8px; }
+    .excel-dropzone small { color: #64748b; font-size: 12px; }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="sidebar-top">
+        <div class="brand">
+          <h2>Цалин Систем</h2>
+          <p>Хүний нөөц</p>
+        </div>
+
+        <div class="nav">
+          <button class="nav-link active" data-page="home">
+            <svg class="icon" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"></rect><rect x="14" y="3" width="7" height="7" rx="1"></rect><rect x="3" y="14" width="7" height="7" rx="1"></rect><rect x="14" y="14" width="7" height="7" rx="1"></rect></svg>
+            Нүүр хуудас
+          </button>
+          <button class="nav-link" data-page="employees">
+            <svg class="icon" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2"></path><circle cx="9.5" cy="7" r="4"></circle><path d="M20 8v6"></path><path d="M23 11h-6"></path></svg>
+            Ажилтны бүртгэл
+          </button>
+          <button class="nav-link" data-page="timesheet">
+            <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg>
+            Цагийн бүртгэл
+          </button>
+        </div>
+      </div>
+
+      <div class="sidebar-bottom">
+        <a href="#" class="logout">
+          <svg class="icon" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><path d="M16 17l5-5-5-5"></path><path d="M21 12H9"></path></svg>
+          Гарах
+        </a>
+      </div>
+    </aside>
+
+    <main class="content">
+      <section class="page active" id="home">
+        <div class="page-header">
+          <div>
+            <h1 class="page-title">Нүүр хуудас</h1>
+            <p class="page-subtitle">April 12, 2026</p>
+          </div>
+        </div>
+
+        <div class="alert">
+          <svg class="icon" viewBox="0 0 24 24" style="color:#d97706;"><circle cx="12" cy="12" r="9"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+          <div>
+            <strong>Цагийн баталгаажуулалт дуусаагүй байна</strong>
+            Цалин бодолт эхлүүлэхийн тулд эхлээд цагийн бүртгэлийг баталгаажуулна уу.
+            <div style="margin-top:10px;"><button class="btn btn-blue-outline btn-sm" data-page-target="timesheet" style="border-color:#f59e0b; color:#d97706;">Цагийн бүртгэл рүү очих</button></div>
+          </div>
+        </div>
+
+        <div class="stats-4">
+          <div class="card stat-card">
+            <div class="stat-top">
+              <div class="stat-icon blue-bg">
+                <svg class="icon" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+              </div>
+              <div class="pill pill-gray">Хүлээгдэж буй</div>
+            </div>
+            <div class="stat-body">
+              <h4>Цалингийн төлөв</h4>
+              <div class="big">Хүлээгдэж буй</div>
+            </div>
+          </div>
+
+          <div class="card stat-card">
+            <div class="stat-top">
+              <div class="stat-icon orange-bg">
+                <svg class="icon" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2"></path><circle cx="9.5" cy="7" r="4"></circle><path d="M20 8v6"></path><path d="M23 11h-6"></path></svg>
+              </div>
+              <div class="pill pill-yellow">Хүлээгдэж буй</div>
+            </div>
+            <div class="stat-body">
+              <h4>Баталгаажаагүй ажилтан</h4>
+              <div class="big">8</div>
+              <small>ажилтан</small>
+            </div>
+          </div>
+
+          <div class="card stat-card">
+            <div class="stat-top">
+              <div class="stat-icon green-bg">
+                <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg>
+              </div>
+              <div class="pill pill-yellow">Хүлээгдэж буй</div>
+            </div>
+            <div class="stat-body">
+              <h4>Цагийн баталгаажуулалт</h4>
+              <div class="big">8 ажилтан</div>
+              <small>Хүлээгдэж буй</small>
+            </div>
+          </div>
+
+          <div class="card stat-card">
+            <div class="stat-top">
+              <div class="stat-icon violet-bg">
+                <svg class="icon" viewBox="0 0 24 24"><path d="M4 14l4-4 4 4 8-8"></path><path d="M20 10v6h-6"></path></svg>
+              </div>
+              <div class="pill pill-blue">April</div>
+            </div>
+            <div class="stat-body">
+              <h4>Нийт ажилтан</h4>
+              <div class="big">42</div>
+              <small>идэвхтэй ажилтан</small>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="card panel">
+            <div class="panel-title">
+              <div class="stat-icon slate-bg" style="width:30px;height:30px;border-radius:10px;">
+                <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+              </div>
+              Цалин бодолт эхлүүлэх
+            </div>
+            <div style="color:#64748b; margin-bottom:16px; font-size:14px;">Цалин бодолт эхлүүлэхийн тулд дараах нөхцлүүдийг хангасан уу.</div>
+            <div class="quick-box">
+              <div class="check-row"><span class="radio"></span>Цагийн баталгаажуулалт дууссан байх</div>
+              <div class="check-row"><span class="radio"></span>Сарын 5 эсвэл 25-ны өдөр байх (Одоогийн огноо: 12)</div>
+              <div><button class="btn btn-disabled btn-sm">Нөхцөл хангагдаагүй байна</button></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="page" id="employees">
+        <div class="page-header">
+          <div>
+            <h1 class="page-title">Ажилтны бүртгэл</h1>
+            <p class="page-subtitle">Нийт 42 идэвхтэй ажилтан</p>
+          </div>
+          <div style="display:flex; gap:10px; flex-wrap:wrap;">
+            <button class="btn btn-blue-outline btn-sm">
+              <svg class="icon" viewBox="0 0 24 24"><path d="M12 3v12"></path><path d="m7 10 5 5 5-5"></path><path d="M5 21h14"></path></svg>
+              Excel оруулах
+            </button>
+            <button class="btn btn-blue btn-sm">
+              <svg class="icon" viewBox="0 0 24 24" style="stroke:white;"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+              Шинэ ажилтан
+            </button>
+          </div>
+        </div>
+
+        <div class="toolbar">
+          <div class="search">
+            <svg class="icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.35-4.35"></path></svg>
+            <input placeholder="Хайх (нэр, ID)..." />
+          </div>
+          <div class="select">Бүх алба <span>⌄</span></div>
+        </div>
+
+        <div class="card table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>АЖИЛТНЫ НЭР</th>
+                <th>РЕГИСТР</th>
+                <th>УТАС</th>
+                <th>АЛБА</th>
+                <th>АЛБАН ТУШААЛ</th>
+                <th>БАНКНЫ ДАНС</th>
+                <th>ТӨРӨЛ</th>
+                <th>ТӨЛӨВ</th>
+                <th>ҮЙЛДЭЛ</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td><strong>EMP001</strong></td><td>Батбаяр Болд</td><td>********9031 <span class="muted-eye">◉</span></td><td>88000000</td><td>Санхүү</td><td>Ажилтан</td><td>******0000 <span class="muted-eye">◉</span></td><td><span class="mini-pill mini-purple">Цагийн</span></td><td><span class="mini-pill mini-green">Идэвхтэй</span></td><td><div class="actions"><span>✎</span><span class="danger">⌁</span></div></td></tr>
+              <tr><td><strong>EMP002</strong></td><td>Дорж Энхбат</td><td>********5902 <span class="muted-eye">◉</span></td><td>88000001</td><td>Санхүү</td><td>Ажилтан</td><td>******0001 <span class="muted-eye">◉</span></td><td><span class="mini-pill mini-blue">Үндсэн</span></td><td><span class="mini-pill mini-green">Идэвхтэй</span></td><td><div class="actions"><span>✎</span><span class="danger">⌁</span></div></td></tr>
+              <tr><td><strong>EMP003</strong></td><td>Түмэн Баар</td><td>********6874 <span class="muted-eye">◉</span></td><td>88000002</td><td>Санхүү</td><td>Ажилтан</td><td>******0002 <span class="muted-eye">◉</span></td><td><span class="mini-pill mini-blue">Үндсэн</span></td><td><span class="mini-pill mini-green">Идэвхтэй</span></td><td><div class="actions"><span>✎</span><span class="danger">⌁</span></div></td></tr>
+              <tr><td><strong>EMP004</strong></td><td>Сарнай Сэргэлэн</td><td>********8318 <span class="muted-eye">◉</span></td><td>88000003</td><td>Санхүү</td><td>Ажилтан</td><td>******0003 <span class="muted-eye">◉</span></td><td><span class="mini-pill mini-blue">Үндсэн</span></td><td><span class="mini-pill mini-green">Идэвхтэй</span></td><td><div class="actions"><span>✎</span><span class="danger">⌁</span></div></td></tr>
+              <tr><td><strong>EMP005</strong></td><td>Оюунаа Төгөлдөр</td><td>********0796 <span class="muted-eye">◉</span></td><td>88000004</td><td>Санхүү</td><td>Ажилтан</td><td>******0004 <span class="muted-eye">◉</span></td><td><span class="mini-pill mini-blue">Үндсэн</span></td><td><span class="mini-pill mini-green">Идэвхтэй</span></td><td><div class="actions"><span>✎</span><span class="danger">⌁</span></div></td></tr>
+              <tr><td><strong>EMP006</strong></td><td>Чимэг Мөнх</td><td>********2594 <span class="muted-eye">◉</span></td><td>88000005</td><td>Санхүү</td><td>Ажилтан</td><td>******0005 <span class="muted-eye">◉</span></td><td><span class="mini-pill mini-purple">Цагийн</span></td><td><span class="mini-pill mini-green">Идэвхтэй</span></td><td><div class="actions"><span>✎</span><span class="danger">⌁</span></div></td></tr>
+              <tr><td><strong>EMP007</strong></td><td>Ганболд Эрдэнэ</td><td>********1564 <span class="muted-eye">◉</span></td><td>88000006</td><td>Санхүү</td><td>Ажилтан</td><td>******0006 <span class="muted-eye">◉</span></td><td><span class="mini-pill mini-blue">Үндсэн</span></td><td><span class="mini-pill mini-green">Идэвхтэй</span></td><td><div class="actions"><span>✎</span><span class="danger">⌁</span></div></td></tr>
+              <tr><td><strong>EMP008</strong></td><td>Батбаяр Болд</td><td>********0608 <span class="muted-eye">◉</span></td><td>88000007</td><td>Маркетинг</td><td>Ажилтан</td><td>******0007 <span class="muted-eye">◉</span></td><td><span class="mini-pill mini-blue">Үндсэн</span></td><td><span class="mini-pill mini-green">Идэвхтэй</span></td><td><div class="actions"><span>✎</span><span class="danger">⌁</span></div></td></tr>
+              <tr><td><strong>EMP009</strong></td><td>Дорж Энхбат</td><td>********9954 <span class="muted-eye">◉</span></td><td>88000008</td><td>Маркетинг</td><td>Ажилтан</td><td>******0008 <span class="muted-eye">◉</span></td><td><span class="mini-pill mini-blue">Үндсэн</span></td><td><span class="mini-pill mini-green">Идэвхтэй</span></td><td><div class="actions"><span>✎</span><span class="danger">⌁</span></div></td></tr>
+              <tr><td><strong>EMP010</strong></td><td>Түмэн Баар</td><td>********0451 <span class="muted-eye">◉</span></td><td>88000009</td><td>Маркетинг</td><td>Ажилтан</td><td>******0009 <span class="muted-eye">◉</span></td><td><span class="mini-pill mini-blue">Үндсэн</span></td><td><span class="mini-pill mini-green">Идэвхтэй</span></td><td><div class="actions"><span>✎</span><span class="danger">⌁</span></div></td></tr>
+              <tr><td><strong>EMP011</strong></td><td>Сарнай Сэргэлэн</td><td>********6821 <span class="muted-eye">◉</span></td><td>88000010</td><td>Маркетинг</td><td>Ажилтан</td><td>******0010 <span class="muted-eye">◉</span></td><td><span class="mini-pill mini-purple">Цагийн</span></td><td><span class="mini-pill mini-green">Идэвхтэй</span></td><td><div class="actions"><span>✎</span><span class="danger">⌁</span></div></td></tr>
+              <tr><td><strong>EMP012</strong></td><td>Оюунаа Төгөлдөр</td><td>********6650 <span class="muted-eye">◉</span></td><td>88000011</td><td>Маркетинг</td><td>Ажилтан</td><td>******0011 <span class="muted-eye">◉</span></td><td><span class="mini-pill mini-blue">Үндсэн</span></td><td><span class="mini-pill mini-green">Идэвхтэй</span></td><td><div class="actions"><span>✎</span><span class="danger">⌁</span></div></td></tr>
+              <tr><td><strong>EMP013</strong></td><td>Чимэг Мөнх</td><td>********4845 <span class="muted-eye">◉</span></td><td>88000012</td><td>Маркетинг</td><td>Ажилтан</td><td>******0012 <span class="muted-eye">◉</span></td><td><span class="mini-pill mini-blue">Үндсэн</span></td><td><span class="mini-pill mini-green">Идэвхтэй</span></td><td><div class="actions"><span>✎</span><span class="danger">⌁</span></div></td></tr>
+              <tr><td><strong>EMP014</strong></td><td>Ганболд Эрдэнэ</td><td>********9179 <span class="muted-eye">◉</span></td><td>88000013</td><td>Маркетинг</td><td>Ажилтан</td><td>******0013 <span class="muted-eye">◉</span></td><td><span class="mini-pill mini-blue">Үндсэн</span></td><td><span class="mini-pill mini-green">Идэвхтэй</span></td><td><div class="actions"><span>✎</span><span class="danger">⌁</span></div></td></tr>
+              <tr><td><strong>EMP015</strong></td><td>Батбаяр Болд</td><td>********2164 <span class="muted-eye">◉</span></td><td>88000014</td><td>IT</td><td>Ажилтан</td><td>******0014 <span class="muted-eye">◉</span></td><td><span class="mini-pill mini-blue">Үндсэн</span></td><td><span class="mini-pill mini-green">Идэвхтэй</span></td><td><div class="actions"><span>✎</span><span class="danger">⌁</span></div></td></tr>
+              <tr><td><strong>EMP016</strong></td><td>Дорж Энхбат</td><td>********0005 <span class="muted-eye">◉</span></td><td>88000015</td><td>IT</td><td>Ажилтан</td><td>******0015 <span class="muted-eye">◉</span></td><td><span class="mini-pill mini-purple">Цагийн</span></td><td><span class="mini-pill mini-green">Идэвхтэй</span></td><td><div class="actions"><span>✎</span><span class="danger">⌁</span></div></td></tr>
+              <tr><td><strong>EMP017</strong></td><td>Түмэн Баар</td><td>********8672 <span class="muted-eye">◉</span></td><td>88000016</td><td>IT</td><td>Ажилтан</td><td>******0016 <span class="muted-eye">◉</span></td><td><span class="mini-pill mini-blue">Үндсэн</span></td><td><span class="mini-pill mini-green">Идэвхтэй</span></td><td><div class="actions"><span>✎</span><span class="danger">⌁</span></div></td></tr>
+              <tr><td><strong>EMP018</strong></td><td>Сарнай Сэргэлэн</td><td>********4265 <span class="muted-eye">◉</span></td><td>88000017</td><td>IT</td><td>Ажилтан</td><td>******0017 <span class="muted-eye">◉</span></td><td><span class="mini-pill mini-blue">Үндсэн</span></td><td><span class="mini-pill mini-green">Идэвхтэй</span></td><td><div class="actions"><span>✎</span><span class="danger">⌁</span></div></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="page" id="timesheet">
+        <div class="page-header">
+          <div>
+            <h1 class="page-title">Цагийн бүртгэл баталгаажуулах</h1>
+            <p class="page-subtitle">2026 оны 3-р сарын цагийн бүртгэл (0/6 алба баталгаажсан)</p>
+          </div>
+          <button class="btn btn-blue btn-sm">Бүгдийг баталгаажуулах</button>
+        </div>
+
+        <div class="dept-list">
+          <div class="card dept-card"><div><div class="dept-name">Санхүү</div><div class="dept-meta">7 ажилтан · <span class="warn">2 баталгаажаагүй</span></div></div><button class="btn btn-blue btn-sm">Баталгаажуулах</button></div>
+          <div class="card dept-card"><div><div class="dept-name">Маркетинг</div><div class="dept-meta">7 ажилтан · <span class="warn">2 баталгаажаагүй</span></div></div><button class="btn btn-blue btn-sm">Баталгаажуулах</button></div>
+          <div class="card dept-card"><div><div class="dept-name">IT</div><div class="dept-meta">7 ажилтан · <span class="warn">2 баталгаажаагүй</span></div></div><button class="btn btn-blue btn-sm">Баталгаажуулах</button></div>
+          <div class="card dept-card"><div><div class="dept-name">Борлуулалт</div><div class="dept-meta">7 ажилтан · <span class="warn">2 баталгаажаагүй</span></div></div><button class="btn btn-blue btn-sm">Баталгаажуулах</button></div>
+          <div class="card dept-card"><div><div class="dept-name">Нягтлан бодох бүртгэл</div><div class="dept-meta">7 ажилтан · <span class="warn">2 баталгаажаагүй</span></div></div><button class="btn btn-blue btn-sm">Баталгаажуулах</button></div>
+          <div class="card dept-card"><div><div class="dept-name">Хүний нөөц</div><div class="dept-meta">7 ажилтан · <span class="warn">2 баталгаажаагүй</span></div></div><button class="btn btn-blue btn-sm">Баталгаажуулах</button></div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+    <!-- New Employee Modal -->
+    <div class="modal-overlay" id="newEmpModal">
+      <div class="modal">
+        <button class="modal-close" id="newEmpClose">✕</button>
+        <h2>Шинэ ажилтан бүртгэх</h2>
+        <p class="modal-sub">Ажилтны бүрэн мэдээллийг оруулна уу</p>
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Овог</label>
+            <input type="text" id="empLastName" placeholder="Болд" />
+          </div>
+          <div class="form-group">
+            <label>Нэр</label>
+            <input type="text" id="empFirstName" placeholder="Батбаяр" />
+          </div>
+          <div class="form-group">
+            <label>Регистрийн дугаар</label>
+            <input type="text" id="empReg" placeholder="УА12345678" maxlength="10" />
+          </div>
+          <div class="form-group">
+            <label>Утасны дугаар</label>
+            <input type="tel" id="empPhone" placeholder="99001122" />
+          </div>
+          <div class="form-group">
+            <label>Алба / Хэлтэс</label>
+            <select id="empDept">
+              <option value="">Сонгох...</option>
+              <option>Санхүү</option>
+              <option>Маркетинг</option>
+              <option>IT</option>
+              <option>Борлуулалт</option>
+              <option>Нягтлан бодох бүртгэл</option>
+              <option>Хүний нөөц</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Албан тушаал</label>
+            <input type="text" id="empPosition" placeholder="Ажилтан" />
+          </div>
+          <div class="form-group">
+            <label>Цалингийн төрөл</label>
+            <select id="empSalaryType">
+              <option value="Үндсэн">Үндсэн цалин</option>
+              <option value="Цагийн">Цагийн хөлс</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Үндсэн цалин (₮)</label>
+            <input type="number" id="empBaseSalary" placeholder="1,500,000" />
+          </div>
+          <div class="form-group full">
+            <label>Банкны дансны дугаар</label>
+            <input type="text" id="empBank" placeholder="5000XXXXXXXX" />
+          </div>
+          <div class="form-group full">
+            <label>Ажилд орсон огноо</label>
+            <input type="date" id="empStartDate" />
+          </div>
+        </div>
+        <div class="modal-actions">
+          <button class="btn-modal-cancel" id="newEmpCancelBtn">Цуцлах</button>
+          <button class="btn-modal-save" id="newEmpSaveBtn">Бүртгэх</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Excel Import Modal -->
+    <div class="modal-overlay" id="excelModal">
+      <div class="modal" style="max-width:440px;">
+        <button class="modal-close" id="excelClose">✕</button>
+        <h2>Excel файл оруулах</h2>
+        <p class="modal-sub">Ажилтны мэдээллийг Excel (.xlsx, .xls) форматаар оруулна уу</p>
+        <div class="excel-dropzone" id="excelDropzone" onclick="document.getElementById('excelFileInput').click()">
+          <svg style="width:40px;height:40px;stroke:#2563eb;fill:none;stroke-width:1.5;" viewBox="0 0 24 24"><path d="M14 3h-4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V9z"></path><path d="M14 3v6h6"></path><path d="M12 12v6"></path><path d="m9 15 3-3 3 3"></path></svg>
+          <p>Файл сонгох эсвэл чирж оруулах</p>
+          <small>Зөвшөөрөгдөх формат: .xlsx, .xls (дээд тал нь 5MB)</small>
+        </div>
+        <input type="file" id="excelFileInput" accept=".xlsx,.xls,.csv" style="display:none;" />
+        <div id="excelFileName" style="margin-top:12px; font-size:13px; color:#2563eb; font-weight:600; min-height:20px;"></div>
+        <div style="margin-top:14px; padding:12px 14px; background:#f8fafc; border-radius:10px; font-size:13px; color:#64748b; line-height:1.6;">
+          <strong style="color:#374151;">Шаардлагатай баганууд:</strong><br>
+          Овог, Нэр, Регистр, Утас, Алба, Албан тушаал, Цалин, Банкны данс
+        </div>
+        <div class="modal-actions">
+          <button class="btn-modal-cancel" id="excelCancelBtn">Цуцлах</button>
+          <button class="btn-modal-save" id="excelImportBtn" style="background:#16a34a;">Оруулах</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast" id="hrToast">
+      <svg style="width:16px;height:16px;stroke:#4ade80;fill:none;stroke-width:2;" viewBox="0 0 24 24"><path d="M20 6l-11 11L4 12"></path></svg>
+      <span id="hrToastMsg">Амжилттай!</span>
+    </div>
+
+    <script>window.APP_CONFIG = { fileName: "hr.html", defaultPage: "home" };</script>
+  <script src="demo-users.js"></script>
+  <script src="app.js"></script>
+  <script>
+  (function() {
+    // --- Timesheet confirm & disappear ---
+    let confirmedCount = 0;
+    const totalDepts = 6;
+
+    function showToast(msg) {
+      const t = document.getElementById('hrToast');
+      document.getElementById('hrToastMsg').textContent = msg;
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 3000);
+    }
+
+    function updateTimesheetHeader() {
+      const sub = document.querySelector('#timesheet .page-subtitle');
+      if (sub) sub.textContent = `2026 оны 3-р сарын цагийн бүртгэл (${confirmedCount}/${totalDepts} алба баталгаажсан)`;
+    }
+
+    function checkAllTimesheetDone() {
+      if (confirmedCount >= totalDepts) {
+        // Update home page stats
+        const statPills = document.querySelectorAll('.pill-yellow');
+        statPills.forEach(p => { p.textContent = 'Баталгаажсан'; p.className = 'pill pill-green'; });
+        const bigStatVal = document.querySelector('#home .stat-card:nth-child(3) .big');
+        if (bigStatVal) bigStatVal.textContent = '42 ажилтан';
+        const bigStatSmall = document.querySelector('#home .stat-card:nth-child(3) small');
+        if (bigStatSmall) bigStatSmall.textContent = 'Бүгд баталгаажсан ✓';
+        // Update alert
+        const alert = document.querySelector('#home .alert');
+        if (alert) {
+          alert.style.background = '#f0fdf4';
+          alert.style.border = '1px solid #86efac';
+          alert.style.color = '#15803d';
+          alert.innerHTML = '<svg class="icon" viewBox="0 0 24 24" style="color:#15803d;"><path d="M20 6l-11 11L4 12"></path></svg><div><strong>Цагийн баталгаажуулалт дууссан</strong> Бүх хэлтсийн цагийн бүртгэл амжилттай баталгаажлаа.</div>';
+        }
+        // Enable payroll button
+        const disabledBtn = document.querySelector('.btn-disabled');
+        if (disabledBtn) {
+          disabledBtn.textContent = 'Цалин бодолт эхлүүлэх';
+          disabledBtn.className = 'btn btn-blue btn-sm';
+        }
+        showToast('✓ Бүх хэлтсийн цагийн бүртгэл баталгаажлаа!');
+      }
+    }
+
+    document.addEventListener('click', function(e) {
+      // Timesheet dept confirm buttons
+      const deptCard = e.target.closest('.dept-card');
+      if (deptCard && e.target.classList.contains('btn-blue') && e.target.textContent.includes('Баталгаажуулах')) {
+        e.target.outerHTML = '<span class="dept-confirmed-badge">✓ Баталгаажсан</span>';
+        deptCard.classList.add('confirmed');
+        const warn = deptCard.querySelector('.warn');
+        if (warn) { warn.textContent = 'Бүгд баталгаажсан'; warn.style.color = '#15803d'; }
+        confirmedCount++;
+        updateTimesheetHeader();
+        checkAllTimesheetDone();
+        return;
+      }
+
+      // "Бүгдийг баталгаажуулах" button
+      if (e.target.closest('#timesheet') && e.target.classList.contains('btn-blue') && e.target.textContent.includes('Бүгдийг')) {
+        document.querySelectorAll('.dept-card').forEach(card => {
+          const btn = card.querySelector('.btn-blue');
+          if (btn) btn.outerHTML = '<span class="dept-confirmed-badge">✓ Баталгаажсан</span>';
+          card.classList.add('confirmed');
+          const warn = card.querySelector('.warn');
+          if (warn) { warn.textContent = 'Бүгд баталгаажсан'; warn.style.color = '#15803d'; }
+        });
+        confirmedCount = totalDepts;
+        updateTimesheetHeader();
+        checkAllTimesheetDone();
+        return;
+      }
+
+      // Excel import button
+      if (e.target.textContent.includes('Excel оруулах') || e.target.closest('[class*="btn"]') && e.target.textContent.includes('Excel')) {
+        if (e.target.closest('#employees') || e.target.closest('[data-page="employees"]')) {
+          document.getElementById('excelModal').classList.add('open');
+        }
+      }
+
+      // New employee button
+      if (e.target.textContent.includes('Шинэ ажилтан') && e.target.closest('#employees')) {
+        document.getElementById('newEmpModal').classList.add('open');
+      }
+    });
+
+    // New employee modal
+    document.getElementById('newEmpClose').onclick = () => document.getElementById('newEmpModal').classList.remove('open');
+    document.getElementById('newEmpCancelBtn').onclick = () => document.getElementById('newEmpModal').classList.remove('open');
+    document.getElementById('newEmpSaveBtn').onclick = function() {
+      const first = document.getElementById('empFirstName').value.trim();
+      const last = document.getElementById('empLastName').value.trim();
+      const reg = document.getElementById('empReg').value.trim();
+      const phone = document.getElementById('empPhone').value.trim();
+      const dept = document.getElementById('empDept').value;
+      const pos = document.getElementById('empPosition').value.trim();
+      const bank = document.getElementById('empBank').value.trim();
+      const stype = document.getElementById('empSalaryType').value;
+      if (!first || !last || !reg || !dept) {
+        alert('Овог, нэр, регистр, алба заавал шаардлагатай!'); return;
+      }
+      // Add row to table
+      const tbody = document.querySelector('#employees table tbody');
+      const rows = tbody.querySelectorAll('tr').length;
+      const newId = 'EMP' + String(rows + 1).padStart(3, '0');
+      const tr = document.createElement('tr');
+      tr.innerHTML = `<td><strong>${newId}</strong></td><td>${last} ${first}</td><td>${reg.slice(0,-4).replace(/./g,'*')}${reg.slice(-4)} <span class="muted-eye">◉</span></td><td>${phone}</td><td>${dept}</td><td>${pos||'Ажилтан'}</td><td>******0000 <span class="muted-eye">◉</span></td><td><span class="mini-pill ${stype==='Цагийн'?'mini-purple':'mini-blue'}">${stype}</span></td><td><span class="mini-pill mini-green">Идэвхтэй</span></td><td><div class="actions"><span>✎</span><span class="danger">⌁</span></div></td>`;
+      tbody.appendChild(tr);
+      document.getElementById('newEmpModal').classList.remove('open');
+      // reset form
+      ['empFirstName','empLastName','empReg','empPhone','empPosition','empBaseSalary','empBank','empStartDate'].forEach(id => document.getElementById(id).value = '');
+      document.getElementById('empDept').value = '';
+      showToast(`✓ ${last} ${first} амжилттай бүртгэгдлээ!`);
+      // Update count
+      const sub = document.querySelector('#employees .page-subtitle');
+      if (sub) sub.textContent = `Нийт ${rows + 1} идэвхтэй ажилтан`;
+    };
+
+    // Excel modal
+    document.getElementById('excelClose').onclick = () => document.getElementById('excelModal').classList.remove('open');
+    document.getElementById('excelCancelBtn').onclick = () => document.getElementById('excelModal').classList.remove('open');
+    const excelInput = document.getElementById('excelFileInput');
+    excelInput.addEventListener('change', function() {
+      const file = this.files[0];
+      if (file) document.getElementById('excelFileName').textContent = '📎 ' + file.name;
+    });
+    // Drag & drop
+    const dz = document.getElementById('excelDropzone');
+    dz.addEventListener('dragover', e => { e.preventDefault(); dz.style.borderColor = '#2563eb'; });
+    dz.addEventListener('dragleave', () => { dz.style.borderColor = '#93c5fd'; });
+    dz.addEventListener('drop', e => {
+      e.preventDefault(); dz.style.borderColor = '#93c5fd';
+      const file = e.dataTransfer.files[0];
+      if (file) { excelInput.files = e.dataTransfer.files; document.getElementById('excelFileName').textContent = '📎 ' + file.name; }
+    });
+    document.getElementById('excelImportBtn').onclick = function() {
+      const file = excelInput.files[0];
+      if (!file) { alert('Файл сонгоно уу!'); return; }
+      document.getElementById('excelModal').classList.remove('open');
+      showToast(`✓ "${file.name}" файл амжилттай оруулагдлаа!`);
+      excelInput.value = '';
+      document.getElementById('excelFileName').textContent = '';
+    };
+
+    // Wire Excel button in employees section
+    document.addEventListener('click', function(e) {
+      if (e.target.closest('#employees')) {
+        if (e.target.textContent.includes('Excel оруулах')) {
+          document.getElementById('excelModal').classList.add('open');
+        }
+      }
+    }, true);
+  })();
+  </script>
+
+
+</body>
+</html>

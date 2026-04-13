@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="mn">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Цалин тооцоолох систем</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: "Inter", sans-serif; }
+    body {
+      min-height: 100vh;
+      background: radial-gradient(circle at top left, #f5f8ff 0%, #e8edf7 42%, #dde6f5 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+      color: #0f172a;
+    }
+    body::before, body::after {
+      content: "";
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(6px);
+      opacity: .75;
+      pointer-events: none;
+    }
+    body::before { width: 320px; height: 320px; background: #dbeafe; top: -90px; left: -90px; }
+    body::after { width: 260px; height: 260px; background: #e9d5ff; bottom: -90px; right: -60px; }
+    .page {
+      width: 100%;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 30px 16px;
+      position: relative;
+      z-index: 1;
+    }
+    .login-card {
+      width: 100%;
+      max-width: 460px;
+      background: rgba(255,255,255,.92);
+      backdrop-filter: blur(10px);
+      border-radius: 22px;
+      padding: 30px 28px 24px;
+      box-shadow: 0 24px 60px rgba(30, 64, 175, 0.10), 0 8px 18px rgba(15, 23, 42, 0.06);
+      border: 1px solid rgba(255,255,255,0.72);
+    }
+    .icon-wrap {
+      width: 58px; height: 58px; border-radius: 50%;
+      background: linear-gradient(180deg, #2d6bff, #1f5be8);
+      margin: 0 auto 18px; display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 8px 20px rgba(37, 99, 235, 0.28);
+    }
+    .icon-wrap svg { width: 28px; height: 28px; stroke: #fff; stroke-width: 2; fill: none; }
+    .title { text-align: center; font-size: 22px; font-weight: 800; color: #0f172a; margin-bottom: 4px; }
+    .subtitle { text-align: center; font-size: 13px; letter-spacing: 1.1px; text-transform: uppercase; color: #7c8799; margin-bottom: 10px; font-weight: 600; }
+    .desc { text-align: center; font-size: 13px; color: #667085; line-height: 1.55; margin-bottom: 24px; }
+    form { margin-bottom: 18px; }
+    .form-group { margin-bottom: 14px; }
+    .form-group label { display: block; font-size: 13px; color: #374151; margin-bottom: 7px; font-weight: 600; }
+    .input-wrap { position: relative; }
+    .input-wrap svg { position: absolute; left: 13px; top: 50%; transform: translateY(-50%); width: 18px; height: 18px; stroke: #9ca3af; stroke-width: 2; fill: none; }
+    .input-wrap input {
+      width: 100%; height: 42px; border: 1px solid #e5e7eb; background: #f8fafc; border-radius: 12px;
+      padding: 0 14px 0 40px; font-size: 14px; color: #4b5563; outline: none; transition: 0.2s;
+    }
+    .input-wrap input:focus { border-color: #2563eb; background: #fff; box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.08); }
+    .hint-row { display: flex; justify-content: space-between; gap: 12px; align-items: center; margin: 6px 0 16px; }
+    .hint-row small { color: #64748b; font-size: 12px; }
+    .login-btn {
+      width: 100%; height: 42px; border: none; border-radius: 12px; background: linear-gradient(180deg, #2e6bff, #1f5be8);
+      color: white; font-size: 15px; font-weight: 700; cursor: pointer; box-shadow: 0 10px 24px rgba(37, 99, 235, 0.22); transition: 0.2s;
+    }
+    .login-btn:hover { transform: translateY(-1px); box-shadow: 0 14px 28px rgba(37, 99, 235, 0.28); }
+    .error-msg, .success-msg {
+      display: none; margin-bottom: 14px; padding: 11px 13px; border-radius: 12px; font-size: 13px; line-height: 1.5;
+    }
+    .error-msg { background: #fef2f2; border: 1px solid #fecaca; color: #dc2626; }
+    .success-msg { background: #eff6ff; border: 1px solid #bfdbfe; color: #1d4ed8; }
+    .divider { height: 1px; background: #eceff5; margin: 22px 0 16px; }
+    .section-label { font-size: 12px; color: #64748b; margin-bottom: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; }
+    .accounts-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .account-box {
+      background: #f7f8fb; border: 1px solid #edf0f5; border-radius: 14px; padding: 11px 12px; min-height: 70px; cursor: pointer; transition: .18s ease;
+    }
+    .account-box:hover { border-color: #bfd3ff; transform: translateY(-1px); background: #fbfdff; }
+    .account-title { display: flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 700; margin-bottom: 6px; }
+    .dot { width: 6px; height: 6px; border-radius: 50%; display: inline-block; flex-shrink: 0; }
+    .blue { background: #3b82f6; } .orange { background: #f97316; } .gray { background: #6b7280; } .green { background: #10b981; } .indigo { background: #6366f1; }
+    .blue-text { color: #2563eb; } .orange-text { color: #ea580c; } .gray-text { color: #4b5563; } .green-text { color: #059669; } .indigo-text { color: #4f46e5; }
+    .account-cred { font-size: 10px; color: #6b7280; line-height: 1.4; word-break: break-word; }
+    .employee-box {
+      margin-top: 10px; background: #f7f8fb; border: 1px solid #edf0f5; border-radius: 14px; text-align: center; padding: 12px; font-size: 11px; color: #6b7280; cursor: pointer; transition: .18s ease;
+    }
+    .employee-box:hover { border-color: #bfd3ff; background: #fbfdff; }
+    .employee-box strong { color: #111827; margin-right: 6px; }
+    .footer { margin-top: 18px; font-size: 12px; color: #8b97aa; letter-spacing: 1px; font-style: italic; text-align: center; }
+    @media (max-width: 500px) {
+      .login-card { padding: 24px 18px 20px; }
+      .accounts-grid { grid-template-columns: 1fr; }
+      .title { font-size: 18px; }
+      .hint-row { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="login-card">
+      <div class="icon-wrap">
+        <svg viewBox="0 0 24 24">
+          <rect x="5" y="11" width="14" height="9" rx="2"></rect>
+          <path d="M8 11V8a4 4 0 1 1 8 0v3"></path>
+        </svg>
+      </div>
+
+      <h1 class="title">Цалин тооцоолох систем</h1>
+      <p class="subtitle">НЭВТРЭХ ХЭСЭГ</p>
+      <p class="desc">Backend холболтгүй demo хувилбар. Доорх эрхүүдийн аль нэгээр нэвтэрч role бүрийн дэлгэцийг шалгаж болно.</p>
+
+      <div id="successMsg" class="success-msg"></div>
+      <div id="errorMsg" class="error-msg"></div>
+
+      <form id="loginForm">
+        <div class="form-group">
+          <label for="userId">Хэрэглэгчийн нэр</label>
+          <div class="input-wrap">
+            <svg viewBox="0 0 24 24">
+              <path d="M20 21a8 8 0 0 0-16 0"></path>
+              <circle cx="12" cy="7" r="4"></circle>
+            </svg>
+            <input id="userId" type="text" placeholder="admin эсвэл senior_acc" autocomplete="username" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="password">Нууц үг</label>
+          <div class="input-wrap">
+            <svg viewBox="0 0 24 24">
+              <rect x="5" y="11" width="14" height="9" rx="2"></rect>
+              <path d="M8 11V8a4 4 0 1 1 8 0v3"></path>
+            </svg>
+            <input id="password" type="password" placeholder="••••••••" autocomplete="current-password" />
+          </div>
+        </div>
+
+        <div class="hint-row">
+          <small>Жишээ: <strong>admin</strong> / <strong>admin123</strong></small>
+          <small>Session нь browser дээр хадгалагдана</small>
+        </div>
+
+        <button class="login-btn" type="submit">Нэвтрэх</button>
+      </form>
+
+      <div class="divider"></div>
+      <div class="section-label">Туршилтын эрхүүд</div>
+
+      <div class="accounts-grid">
+        <button class="account-box" type="button" data-user="admin" data-pass="admin123">
+          <div class="account-title blue-text"><span class="dot blue"></span>Гүйцэтгэх удирдлага</div>
+          <div class="account-cred">admin / admin123</div>
+        </button>
+        <button class="account-box" type="button" data-user="senior_acc" data-pass="senior123">
+          <div class="account-title orange-text"><span class="dot orange"></span>Ахлах нягтлан</div>
+          <div class="account-cred">senior_acc / senior123</div>
+        </button>
+        <button class="account-box" type="button" data-user="accountant" data-pass="acc123">
+          <div class="account-title gray-text"><span class="dot gray"></span>Нягтлан</div>
+          <div class="account-cred">accountant / acc123</div>
+        </button>
+        <button class="account-box" type="button" data-user="hr_admin" data-pass="hr123">
+          <div class="account-title green-text"><span class="dot green"></span>Хүний нөөц</div>
+          <div class="account-cred">hr_admin / hr123</div>
+        </button>
+      </div>
+
+      <button class="employee-box" type="button" data-user="employee" data-pass="emp123">
+        <strong>Ажилтан:</strong> employee / emp123
+      </button>
+
+      <div class="footer">Demo Front-end Only</div>
+    </div>
+  </div>
+
+    <script src="demo-users.js"></script>
+  <script src="login.js"></script>
+
+</body>
+</html>
