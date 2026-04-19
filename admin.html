@@ -214,6 +214,10 @@
       font-weight: 500;
     }
 
+    .modal-body {
+      overflow-x: scroll;
+
+    }
     .stat-card h3 {
       font-size: 17px;
       font-weight: 800;
@@ -853,7 +857,7 @@
         </div>
 
         <div class="reports-grid">
-          <div class="card report-card">
+          <div class="card report-card" data-report="dept-compare" style="cursor:pointer;">
             <div class="stat-icon blue-bg">
               <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l4 0"></path></svg>
             </div>
@@ -863,7 +867,7 @@
             </div>
           </div>
 
-          <div class="card report-card">
+          <div class="card report-card" data-report="monthly-total" style="cursor:pointer;">
             <div class="stat-icon green-bg">
               <svg class="icon" viewBox="0 0 24 24"><path d="M4 19h16"></path><path d="M7 16V8"></path><path d="M12 16V5"></path><path d="M17 16v-3"></path></svg>
             </div>
@@ -873,7 +877,7 @@
             </div>
           </div>
 
-          <div class="card report-card">
+          <div class="card report-card" data-report="ndsh" style="cursor:pointer;">
             <div class="stat-icon violet-bg">
               <svg class="icon" viewBox="0 0 24 24"><path d="M12 3l7 4v5c0 5-3.5 7.5-7 9-3.5-1.5-7-4-7-9V7l7-4z"></path><path d="M9.5 12.5l1.8 1.8 3.2-3.6"></path></svg>
             </div>
@@ -883,7 +887,7 @@
             </div>
           </div>
 
-          <div class="card report-card">
+          <div class="card report-card" data-report="hhoat" style="cursor:pointer;">
             <div class="stat-icon orange-bg">
               <svg class="icon" viewBox="0 0 24 24"><path d="M14 3h-4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V9z"></path><path d="M14 3v6h6"></path><path d="M16 13H10"></path></svg>
             </div>
@@ -893,7 +897,7 @@
             </div>
           </div>
 
-          <div class="card report-card">
+          <div class="card report-card" data-report="overtime" style="cursor:pointer;">
             <div class="stat-icon pink-bg">
               <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg>
             </div>
@@ -903,7 +907,7 @@
             </div>
           </div>
 
-          <div class="card report-card">
+          <div class="card report-card" data-report="total-tax" style="cursor:pointer;">
             <div class="stat-icon violet-bg">
               <svg class="icon" viewBox="0 0 24 24"><path d="M4 14l4-4 4 4 8-8"></path><path d="M20 10v6h-6"></path></svg>
             </div>
@@ -923,8 +927,190 @@
           <span>Өмнөх саруудын түүхийг харах боломжтой</span>
         </div>
       </section>
+
+      <!-- REPORT DETAIL PAGES -->
+      <section class="page" id="report-dept-compare">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:22px;">
+          <div style="display:flex;align-items:center;gap:14px;">
+            <button class="btn back-report-btn" style="background:#f1f5f9;border:1px solid #e2e8f0;color:#374151;height:34px;padding:0 14px;font-size:13px;">← Буцах</button>
+            <div><h1 class="page-title" style="font-size:20px;margin-bottom:2px;">Хэлтсийн цалингийн харьцуулалт</h1><p class="page-subtitle">2026/03</p></div>
+          </div>
+          <button class="btn" style="background:#0aa266;color:#fff;height:38px;padding:0 16px;font-size:13px;">PDF татах</button>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-bottom:22px;">
+          <div class="card" style="padding:20px;"><div style="font-size:12px;font-weight:700;color:#7c8aa0;text-transform:uppercase;margin-bottom:8px;">Борлуулалтын алба</div><div style="font-size:11px;color:#94a3b8;margin-bottom:10px;">25 ажилтан</div><div style="font-size:22px;font-weight:800;color:#071739;margin-bottom:4px;">68,500,000₮</div><div style="font-size:12px;color:#22c55e;font-weight:700;">+5.2% нийт зардлаас 21.5%</div></div>
+          <div class="card" style="padding:20px;"><div style="font-size:12px;font-weight:700;color:#7c8aa0;text-transform:uppercase;margin-bottom:8px;">Үйлдвэрлэлийн алба</div><div style="font-size:11px;color:#94a3b8;margin-bottom:10px;">48 ажилтан</div><div style="font-size:22px;font-weight:800;color:#071739;margin-bottom:4px;">92,400,000₮</div><div style="font-size:12px;color:#22c55e;font-weight:700;">+3.8% нийт зардлаас 29.0%</div></div>
+          <div class="card" style="padding:20px;"><div style="font-size:12px;font-weight:700;color:#7c8aa0;text-transform:uppercase;margin-bottom:8px;">Техникийн алба</div><div style="font-size:11px;color:#94a3b8;margin-bottom:10px;">18 ажилтан</div><div style="font-size:22px;font-weight:800;color:#071739;margin-bottom:4px;">54,200,000₮</div><div style="font-size:12px;color:#22c55e;font-weight:700;">+7.1% нийт зардлаас 17.0%</div></div>
+          <div class="card" style="padding:20px;"><div style="font-size:12px;font-weight:700;color:#7c8aa0;text-transform:uppercase;margin-bottom:8px;">Захиргааны алба</div><div style="font-size:11px;color:#94a3b8;margin-bottom:10px;">12 ажилтан</div><div style="font-size:22px;font-weight:800;color:#071739;margin-bottom:4px;">32,800,000₮</div><div style="font-size:12px;color:#f59e0b;font-weight:700;">-2.5% нийт зардлаас 10.3%</div></div>
+          <div class="card" style="padding:20px;"><div style="font-size:12px;font-weight:700;color:#7c8aa0;text-transform:uppercase;margin-bottom:8px;">Маркетингийн алба</div><div style="font-size:11px;color:#94a3b8;margin-bottom:10px;">15 ажилтан</div><div style="font-size:22px;font-weight:800;color:#071739;margin-bottom:4px;">42,300,000₮</div><div style="font-size:12px;color:#22c55e;font-weight:700;">+6.4% нийт зардлаас 13.3%</div></div>
+          <div class="card" style="padding:20px;"><div style="font-size:12px;font-weight:700;color:#7c8aa0;text-transform:uppercase;margin-bottom:8px;">Санхүүгийн алба</div><div style="font-size:11px;color:#94a3b8;margin-bottom:10px;">8 ажилтан</div><div style="font-size:22px;font-weight:800;color:#071739;margin-bottom:4px;">28,900,000₮</div><div style="font-size:12px;color:#22c55e;font-weight:700;">+4.2% нийт зардлаас 9.1%</div></div>
+        </div>
+        <div class="card" style="padding:20px;display:flex;align-items:center;gap:16px;background:#071739;"><div style="color:#94a3b8;font-size:14px;font-weight:600;">Нийт зардал</div><div style="font-size:28px;font-weight:800;color:#fff;">319,100,000₮</div></div>
+      </section>
+
+      <section class="page" id="report-monthly-total">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:22px;">
+          <div style="display:flex;align-items:center;gap:14px;">
+            <button class="btn back-report-btn" style="background:#f1f5f9;border:1px solid #e2e8f0;color:#374151;height:34px;padding:0 14px;font-size:13px;">← Буцах</button>
+            <div><h1 class="page-title" style="font-size:20px;margin-bottom:2px;">Сарын нийт зардлын тайлан</h1><p class="page-subtitle">2026/03</p></div>
+          </div>
+          <button class="btn" style="background:#0aa266;color:#fff;height:38px;padding:0 16px;font-size:13px;">PDF татах</button>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-bottom:22px;">
+          <div class="card" style="padding:20px;border-top:3px solid #2563eb;"><div style="font-size:11px;font-weight:700;color:#2563eb;text-transform:uppercase;margin-bottom:8px;">Үндсэн цалин + нэмэгдэл</div><div style="font-size:26px;font-weight:800;color:#2563eb;">319,100,000₮</div></div>
+          <div class="card" style="padding:20px;border-top:3px solid #ef4444;"><div style="font-size:11px;font-weight:700;color:#ef4444;text-transform:uppercase;margin-bottom:8px;">Нийт суутгал</div><div style="font-size:26px;font-weight:800;color:#ef4444;">63,820,000₮</div></div>
+          <div class="card" style="padding:20px;border-top:3px solid #22c55e;"><div style="font-size:11px;font-weight:700;color:#22c55e;text-transform:uppercase;margin-bottom:8px;">Гарт олгох</div><div style="font-size:26px;font-weight:800;color:#22c55e;">255,280,000₮</div></div>
+        </div>
+        <div class="card" style="padding:24px;">
+          <h3 style="font-size:16px;font-weight:800;margin-bottom:20px;">Зардлын задаргаа</h3>
+          <div style="display:flex;flex-direction:column;gap:16px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;padding-bottom:14px;border-bottom:1px solid #f1f5f9;"><span style="color:#374151;font-weight:500;">Үндсэн цалин</span><span style="font-weight:800;">250,000,000₮</span></div>
+            <div style="display:flex;justify-content:space-between;align-items:center;padding-bottom:14px;border-bottom:1px solid #f1f5f9;"><span style="color:#374151;font-weight:500;">Ур чадварын нэмэгдэл</span><span style="font-weight:800;">35,000,000₮</span></div>
+            <div style="display:flex;justify-content:space-between;align-items:center;padding-bottom:14px;border-bottom:1px solid #f1f5f9;"><span style="color:#374151;font-weight:500;">Жилийн нэмэгдэл</span><span style="font-weight:800;">18,500,000₮</span></div>
+            <div style="display:flex;justify-content:space-between;align-items:center;padding-bottom:14px;border-bottom:1px solid #f1f5f9;"><span style="color:#374151;font-weight:500;">Бонус</span><span style="font-weight:800;">8,200,000₮</span></div>
+            <div style="display:flex;justify-content:space-between;align-items:center;"><span style="color:#374151;font-weight:500;">Илүү цагийн төлбөр</span><span style="font-weight:800;">7,400,000₮</span></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="page" id="report-ndsh">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:22px;">
+          <div style="display:flex;align-items:center;gap:14px;">
+            <button class="btn back-report-btn" style="background:#f1f5f9;border:1px solid #e2e8f0;color:#374151;height:34px;padding:0 14px;font-size:13px;">← Буцах</button>
+            <div><h1 class="page-title" style="font-size:20px;margin-bottom:2px;">НДШ тайлан</h1><p class="page-subtitle">2026/03</p></div>
+          </div>
+          <button class="btn" style="background:#0aa266;color:#fff;height:38px;padding:0 16px;font-size:13px;">PDF татах</button>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-bottom:22px;">
+          <div class="card" style="padding:20px;border-top:3px solid #2563eb;"><div style="font-size:11px;font-weight:700;color:#2563eb;text-transform:uppercase;margin-bottom:8px;">Ажилтны хувь (10%)</div><div style="font-size:26px;font-weight:800;color:#2563eb;">31,910,000₮</div></div>
+          <div class="card" style="padding:20px;border-top:3px solid #2563eb;"><div style="font-size:11px;font-weight:700;color:#2563eb;text-transform:uppercase;margin-bottom:8px;">Ажил олгогчийн хувь (12.5%)</div><div style="font-size:26px;font-weight:800;color:#2563eb;">39,887,500₮</div></div>
+          <div class="card" style="padding:20px;border-top:3px solid #22c55e;"><div style="font-size:11px;font-weight:700;color:#22c55e;text-transform:uppercase;margin-bottom:8px;">Нийт төлбөр</div><div style="font-size:26px;font-weight:800;color:#22c55e;">71,797,500₮</div></div>
+        </div>
+        <div class="card" style="padding:0;overflow:hidden;">
+          <table style="width:100%;border-collapse:collapse;font-size:14px;">
+            <thead><tr style="background:#f8fafc;border-bottom:1px solid #e8edf3;"><th style="text-align:left;padding:14px 18px;font-weight:700;color:#374151;">Хэлтэс</th><th style="text-align:right;padding:14px 18px;font-weight:700;color:#374151;">Ажилтан</th><th style="text-align:right;padding:14px 18px;font-weight:700;color:#374151;">Үндсэн цалин</th><th style="text-align:right;padding:14px 18px;font-weight:700;color:#374151;">Ажилтны (10%)</th><th style="text-align:right;padding:14px 18px;font-weight:700;color:#374151;">Ажил олгогч</th><th style="text-align:right;padding:14px 18px;font-weight:700;color:#374151;">Нийт</th></tr></thead>
+            <tbody>
+              <tr style="border-bottom:1px solid #f1f5f9;"><td style="padding:13px 18px;">Борлуулалтын алба</td><td style="text-align:right;padding:13px 18px;">25</td><td style="text-align:right;padding:13px 18px;">68,500,000₮</td><td style="text-align:right;padding:13px 18px;color:#2563eb;">6,850,000₮</td><td style="text-align:right;padding:13px 18px;color:#2563eb;">8,562,500₮</td><td style="text-align:right;padding:13px 18px;font-weight:800;">15,412,500₮</td></tr>
+              <tr style="border-bottom:1px solid #f1f5f9;"><td style="padding:13px 18px;">Үйлдвэрлэлийн алба</td><td style="text-align:right;padding:13px 18px;">48</td><td style="text-align:right;padding:13px 18px;">92,400,000₮</td><td style="text-align:right;padding:13px 18px;color:#2563eb;">9,240,000₮</td><td style="text-align:right;padding:13px 18px;color:#2563eb;">11,550,000₮</td><td style="text-align:right;padding:13px 18px;font-weight:800;">20,790,000₮</td></tr>
+              <tr style="border-bottom:1px solid #f1f5f9;"><td style="padding:13px 18px;">Техникийн алба</td><td style="text-align:right;padding:13px 18px;">18</td><td style="text-align:right;padding:13px 18px;">54,200,000₮</td><td style="text-align:right;padding:13px 18px;color:#2563eb;">5,420,000₮</td><td style="text-align:right;padding:13px 18px;color:#2563eb;">6,775,000₮</td><td style="text-align:right;padding:13px 18px;font-weight:800;">12,195,000₮</td></tr>
+              <tr style="border-bottom:1px solid #f1f5f9;"><td style="padding:13px 18px;">Захиргааны алба</td><td style="text-align:right;padding:13px 18px;">12</td><td style="text-align:right;padding:13px 18px;">32,800,000₮</td><td style="text-align:right;padding:13px 18px;color:#2563eb;">3,280,000₮</td><td style="text-align:right;padding:13px 18px;color:#2563eb;">4,100,000₮</td><td style="text-align:right;padding:13px 18px;font-weight:800;">7,380,000₮</td></tr>
+              <tr style="border-bottom:1px solid #f1f5f9;"><td style="padding:13px 18px;">Маркетингийн алба</td><td style="text-align:right;padding:13px 18px;">15</td><td style="text-align:right;padding:13px 18px;">42,300,000₮</td><td style="text-align:right;padding:13px 18px;color:#2563eb;">4,230,000₮</td><td style="text-align:right;padding:13px 18px;color:#2563eb;">5,287,500₮</td><td style="text-align:right;padding:13px 18px;font-weight:800;">9,517,500₮</td></tr>
+              <tr><td style="padding:13px 18px;">Санхүүгийн алба</td><td style="text-align:right;padding:13px 18px;">8</td><td style="text-align:right;padding:13px 18px;">28,900,000₮</td><td style="text-align:right;padding:13px 18px;color:#2563eb;">2,890,000₮</td><td style="text-align:right;padding:13px 18px;color:#2563eb;">3,612,500₮</td><td style="text-align:right;padding:13px 18px;font-weight:800;">6,502,500₮</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="page" id="report-hhoat">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:22px;">
+          <div style="display:flex;align-items:center;gap:14px;">
+            <button class="btn back-report-btn" style="background:#f1f5f9;border:1px solid #e2e8f0;color:#374151;height:34px;padding:0 14px;font-size:13px;">← Буцах</button>
+            <div><h1 class="page-title" style="font-size:20px;margin-bottom:2px;">ХХОАТ тайлан</h1><p class="page-subtitle">2026/03</p></div>
+          </div>
+          <button class="btn" style="background:#0aa266;color:#fff;height:38px;padding:0 16px;font-size:13px;">PDF татах</button>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:18px;margin-bottom:22px;">
+          <div class="card" style="padding:20px;border-top:3px solid #2563eb;"><div style="font-size:11px;font-weight:700;color:#2563eb;text-transform:uppercase;margin-bottom:8px;">Ажилтны хувь (10%)</div><div style="font-size:26px;font-weight:800;color:#2563eb;">31,910,000₮</div></div>
+          <div class="card" style="padding:20px;border-top:3px solid #22c55e;"><div style="font-size:11px;font-weight:700;color:#22c55e;text-transform:uppercase;margin-bottom:8px;">Нийт төлбөр</div><div style="font-size:26px;font-weight:800;color:#22c55e;">31,910,000₮</div></div>
+        </div>
+        <div class="card" style="padding:0;overflow:hidden;">
+          <table style="width:100%;border-collapse:collapse;font-size:14px;">
+            <thead><tr style="background:#f8fafc;border-bottom:1px solid #e8edf3;"><th style="text-align:left;padding:14px 18px;font-weight:700;">Хэлтэс</th><th style="text-align:right;padding:14px 18px;font-weight:700;">Ажилтан</th><th style="text-align:right;padding:14px 18px;font-weight:700;">Үндсэн цалин</th><th style="text-align:right;padding:14px 18px;font-weight:700;">Ажилтны хувь (10%)</th><th style="text-align:right;padding:14px 18px;font-weight:700;">Нийт</th></tr></thead>
+            <tbody>
+              <tr style="border-bottom:1px solid #f1f5f9;"><td style="padding:13px 18px;">Борлуулалтын алба</td><td style="text-align:right;padding:13px 18px;">25</td><td style="text-align:right;padding:13px 18px;">68,500,000₮</td><td style="text-align:right;padding:13px 18px;color:#2563eb;">6,850,000₮</td><td style="text-align:right;padding:13px 18px;font-weight:800;">6,850,000₮</td></tr>
+              <tr style="border-bottom:1px solid #f1f5f9;"><td style="padding:13px 18px;">Үйлдвэрлэлийн алба</td><td style="text-align:right;padding:13px 18px;">48</td><td style="text-align:right;padding:13px 18px;">92,400,000₮</td><td style="text-align:right;padding:13px 18px;color:#2563eb;">9,240,000₮</td><td style="text-align:right;padding:13px 18px;font-weight:800;">9,240,000₮</td></tr>
+              <tr style="border-bottom:1px solid #f1f5f9;"><td style="padding:13px 18px;">Техникийн алба</td><td style="text-align:right;padding:13px 18px;">18</td><td style="text-align:right;padding:13px 18px;">54,200,000₮</td><td style="text-align:right;padding:13px 18px;color:#2563eb;">5,420,000₮</td><td style="text-align:right;padding:13px 18px;font-weight:800;">5,420,000₮</td></tr>
+              <tr style="border-bottom:1px solid #f1f5f9;"><td style="padding:13px 18px;">Захиргааны алба</td><td style="text-align:right;padding:13px 18px;">12</td><td style="text-align:right;padding:13px 18px;">32,800,000₮</td><td style="text-align:right;padding:13px 18px;color:#2563eb;">3,280,000₮</td><td style="text-align:right;padding:13px 18px;font-weight:800;">3,280,000₮</td></tr>
+              <tr style="border-bottom:1px solid #f1f5f9;"><td style="padding:13px 18px;">Маркетингийн алба</td><td style="text-align:right;padding:13px 18px;">15</td><td style="text-align:right;padding:13px 18px;">42,300,000₮</td><td style="text-align:right;padding:13px 18px;color:#2563eb;">4,230,000₮</td><td style="text-align:right;padding:13px 18px;font-weight:800;">4,230,000₮</td></tr>
+              <tr><td style="padding:13px 18px;">Санхүүгийн алба</td><td style="text-align:right;padding:13px 18px;">8</td><td style="text-align:right;padding:13px 18px;">28,900,000₮</td><td style="text-align:right;padding:13px 18px;color:#2563eb;">2,890,000₮</td><td style="text-align:right;padding:13px 18px;font-weight:800;">2,890,000₮</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="page" id="report-overtime">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:22px;">
+          <div style="display:flex;align-items:center;gap:14px;">
+            <button class="btn back-report-btn" style="background:#f1f5f9;border:1px solid #e2e8f0;color:#374151;height:34px;padding:0 14px;font-size:13px;">← Буцах</button>
+            <div><h1 class="page-title" style="font-size:20px;margin-bottom:2px;">Илүү цагийн тайлан</h1><p class="page-subtitle">2026/03</p></div>
+          </div>
+          <button class="btn" style="background:#0aa266;color:#fff;height:38px;padding:0 16px;font-size:13px;">PDF татах</button>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-bottom:22px;">
+          <div class="card" style="padding:20px;border-top:3px solid #2563eb;"><div style="font-size:11px;font-weight:700;color:#2563eb;text-transform:uppercase;margin-bottom:8px;">Нийт илүү цаг</div><div style="font-size:26px;font-weight:800;color:#2563eb;">250 цаг</div></div>
+          <div class="card" style="padding:20px;border-top:3px solid #f97316;"><div style="font-size:11px;font-weight:700;color:#f97316;text-transform:uppercase;margin-bottom:8px;">Коэффициент</div><div style="font-size:26px;font-weight:800;color:#f97316;">1.5x</div></div>
+          <div class="card" style="padding:20px;border-top:3px solid #22c55e;"><div style="font-size:11px;font-weight:700;color:#22c55e;text-transform:uppercase;margin-bottom:8px;">Нийт төлбөр</div><div style="font-size:26px;font-weight:800;color:#22c55e;">7,400,000₮</div></div>
+        </div>
+        <div class="card" style="padding:0;overflow:hidden;">
+          <table style="width:100%;border-collapse:collapse;font-size:14px;">
+            <thead><tr style="background:#f8fafc;border-bottom:1px solid #e8edf3;"><th style="text-align:left;padding:14px 18px;font-weight:700;">Хэлтэс</th><th style="text-align:right;padding:14px 18px;font-weight:700;">Ажилтан</th><th style="text-align:right;padding:14px 18px;font-weight:700;">Нийт илүү цаг</th><th style="text-align:right;padding:14px 18px;font-weight:700;">Дундаж цаг/ажилтан</th><th style="text-align:right;padding:14px 18px;font-weight:700;">Төлбөр</th></tr></thead>
+            <tbody>
+              <tr style="border-bottom:1px solid #f1f5f9;"><td style="padding:13px 18px;">Борлуулалтын алба</td><td style="text-align:right;padding:13px 18px;">25</td><td style="text-align:right;padding:13px 18px;">45 цаг</td><td style="text-align:right;padding:13px 18px;">1.8 цаг</td><td style="text-align:right;padding:13px 18px;font-weight:800;">1,350,000₮</td></tr>
+              <tr><td style="padding:13px 18px;">Үйлдвэрлэлийн алба</td><td style="text-align:right;padding:13px 18px;">48</td><td style="text-align:right;padding:13px 18px;">120 цаг</td><td style="text-align:right;padding:13px 18px;">2.5 цаг</td><td style="text-align:right;padding:13px 18px;font-weight:800;">2,880,000₮</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="page" id="report-total-tax">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:22px;">
+          <div style="display:flex;align-items:center;gap:14px;">
+            <button class="btn back-report-btn" style="background:#f1f5f9;border:1px solid #e2e8f0;color:#374151;height:34px;padding:0 14px;font-size:13px;">← Буцах</button>
+            <div><h1 class="page-title" style="font-size:20px;margin-bottom:2px;">Байгууллагын төлсөн нийт татвар</h1><p class="page-subtitle">2026/03</p></div>
+          </div>
+          <button class="btn" style="background:#0aa266;color:#fff;height:38px;padding:0 16px;font-size:13px;">PDF татах</button>
+        </div>
+        <div class="card" style="padding:24px;background:#0aa266;margin-bottom:20px;">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+            <div><div style="font-size:13px;color:rgba(255,255,255,0.8);font-weight:600;margin-bottom:6px;">Нийт татварын зардал</div><div style="font-size:36px;font-weight:800;color:#fff;">106,898,500₮</div></div>
+            <div style="background:rgba(255,255,255,0.2);border-radius:8px;padding:6px 12px;font-size:13px;font-weight:700;color:#fff;">+3.2%</div>
+          </div>
+          <div style="margin-top:8px;font-size:13px;color:rgba(255,255,255,0.7);">Өмнөх сар: 103,583,818₮</div>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-bottom:22px;">
+          <div class="card" style="padding:20px;"><div style="font-size:11px;font-weight:700;color:#7c3aed;text-transform:uppercase;margin-bottom:8px;">НДШ (Нийгмийн даатгал)</div><div style="font-size:22px;font-weight:800;color:#0f172a;margin-bottom:10px;">71,797,500₮</div><div style="font-size:12px;color:#64748b;">Ажилтны (10%): 31,910,000₮</div><div style="font-size:12px;color:#64748b;">Ажил олгогч (12.5%): 39,887,500₮</div></div>
+          <div class="card" style="padding:20px;"><div style="font-size:11px;font-weight:700;color:#f97316;text-transform:uppercase;margin-bottom:8px;">ХХОАТ (Орлого)</div><div style="font-size:22px;font-weight:800;color:#0f172a;margin-bottom:10px;">31,910,000₮</div><div style="font-size:12px;color:#64748b;">Ажилтны (10%): 31,910,000₮</div></div>
+          <div class="card" style="padding:20px;"><div style="font-size:11px;font-weight:700;color:#7c3aed;text-transform:uppercase;margin-bottom:8px;">БНДШ (Байгууллага)</div><div style="font-size:22px;font-weight:800;color:#0f172a;margin-bottom:10px;">3,191,000₮</div><div style="font-size:12px;color:#64748b;">Байгуулагын (1%): 3,191,000₮</div></div>
+        </div>
+        <div class="card" style="padding:0;overflow:hidden;">
+          <div style="padding:16px 18px;font-size:15px;font-weight:800;border-bottom:1px solid #e8edf3;">Хэлтсээр татварын задаргаа</div>
+          <table style="width:100%;border-collapse:collapse;font-size:14px;">
+            <thead><tr style="background:#f8fafc;border-bottom:1px solid #e8edf3;"><th style="text-align:left;padding:12px 18px;font-weight:700;">Хэлтэс</th><th style="text-align:right;padding:12px 18px;font-weight:700;">НДШ (аж)</th><th style="text-align:right;padding:12px 18px;font-weight:700;">НДШ (бг)</th><th style="text-align:right;padding:12px 18px;font-weight:700;">ХХОАТ</th><th style="text-align:right;padding:12px 18px;font-weight:700;">Нийт</th></tr></thead>
+            <tbody>
+              <tr style="border-bottom:1px solid #f1f5f9;"><td style="padding:12px 18px;">Борлуулалтын алба</td><td style="text-align:right;padding:12px 18px;">6,850,000₮</td><td style="text-align:right;padding:12px 18px;">8,562,500₮</td><td style="text-align:right;padding:12px 18px;">6,850,000₮</td><td style="text-align:right;padding:12px 18px;font-weight:800;color:#0aa266;">22,262,500₮</td></tr>
+              <tr style="border-bottom:1px solid #f1f5f9;"><td style="padding:12px 18px;">Үйлдвэрлэлийн алба</td><td style="text-align:right;padding:12px 18px;">9,240,000₮</td><td style="text-align:right;padding:12px 18px;">11,550,000₮</td><td style="text-align:right;padding:12px 18px;">9,240,000₮</td><td style="text-align:right;padding:12px 18px;font-weight:800;color:#0aa266;">30,030,000₮</td></tr>
+              <tr style="border-bottom:1px solid #f1f5f9;"><td style="padding:12px 18px;">Техникийн алба</td><td style="text-align:right;padding:12px 18px;">5,420,000₮</td><td style="text-align:right;padding:12px 18px;">6,775,000₮</td><td style="text-align:right;padding:12px 18px;">5,420,000₮</td><td style="text-align:right;padding:12px 18px;font-weight:800;color:#0aa266;">17,615,000₮</td></tr>
+              <tr style="border-bottom:1px solid #f1f5f9;"><td style="padding:12px 18px;">Захиргааны алба</td><td style="text-align:right;padding:12px 18px;">3,280,000₮</td><td style="text-align:right;padding:12px 18px;">4,100,000₮</td><td style="text-align:right;padding:12px 18px;">3,280,000₮</td><td style="text-align:right;padding:12px 18px;font-weight:800;color:#0aa266;">10,660,000₮</td></tr>
+              <tr style="border-bottom:1px solid #f1f5f9;"><td style="padding:12px 18px;">Маркетингийн алба</td><td style="text-align:right;padding:12px 18px;">4,230,000₮</td><td style="text-align:right;padding:12px 18px;">5,287,500₮</td><td style="text-align:right;padding:12px 18px;">4,230,000₮</td><td style="text-align:right;padding:12px 18px;font-weight:800;color:#0aa266;">13,747,500₮</td></tr>
+              <tr><td style="padding:12px 18px;">Санхүүгийн алба</td><td style="text-align:right;padding:12px 18px;">2,890,000₮</td><td style="text-align:right;padding:12px 18px;">3,612,500₮</td><td style="text-align:right;padding:12px 18px;">2,890,000₮</td><td style="text-align:right;padding:12px 18px;font-weight:800;color:#0aa266;">9,392,500₮</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
     </main>
   </div>
+
+    <!-- Employee Detail Modal -->
+    <div id="employeeModal" style="display:none;position:fixed;inset:0;background:rgba(10,20,50,.45);backdrop-filter:blur(3px);z-index:1001;align-items:center;justify-content:center;">
+      <div style="background:#fff;border-radius:22px;padding:28px 24px 22px;width:100%;max-width:650px;max-height:88vh;overflow-y:auto;box-shadow:0 30px 60px rgba(10,20,50,.18);position:relative;">
+        <button id="empModalClose" style="position:absolute;top:14px;right:16px;background:#f1f5f9;border:none;border-radius:50%;width:32px;height:32px;cursor:pointer;font-size:18px;color:#64748b;display:flex;align-items:center;justify-content:center;">✕</button>
+        <h2 id="empModalTitle" style="font-size:17px;font-weight:800;margin-bottom:4px;color:#071739;"></h2>
+        <p style="font-size:13px;color:#64748b;margin-bottom:18px;">Ажилтнуудын задаргаа</p>
+        <div class="modal-body" style="overflow:hidden;border-radius:14px;border:1px solid #e8edf3;">
+          <table id="empModalTable" style="width:100%;border-collapse:collapse;font-size:14px;">
+            <thead><tr style="background:#f8fafc;border-bottom:1px solid #e8edf3;">
+              <th style="text-align:left;padding:12px 16px;font-weight:700;color:#374151;">Ажилтан</th>
+              <th style="text-align:left;padding:12px 16px;font-weight:700;color:#374151;">Албан тушаал</th>
+              <th style="text-align:right;padding:12px 16px;font-weight:700;color:#374151;">Бодогдсон</th>
+              <th style="text-align:right;padding:12px 16px;font-weight:700;color:#374151;">Суутгал</th>
+              <th style="text-align:right;padding:12px 16px;font-weight:700;color:#374151;">Гарт олгох</th>
+            </tr></thead>
+            <tbody id="empModalBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
 
     <!-- Approval confirmation modal -->
     <div class="modal-overlay" id="approvalModal">
@@ -1066,6 +1252,93 @@
   })();
   </script>
 
+  <script>
+  // Report navigation
+  (function() {
+    function showReportPage(reportId) {
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      const target = document.getElementById('report-' + reportId);
+      if (target) target.classList.add('active');
+    }
+    document.addEventListener('click', function(e) {
+      const card = e.target.closest('[data-report]');
+      if (card) { showReportPage(card.dataset.report); return; }
+      if (e.target.classList.contains('back-report-btn') || e.target.closest('.back-report-btn')) {
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.getElementById('reports').classList.add('active');
+        document.querySelectorAll('.nav button').forEach(b => b.classList.remove('active'));
+        const reportsBtn = document.querySelector('.nav button[data-page="reports"]');
+        if (reportsBtn) reportsBtn.classList.add('active');
+      }
+    });
+  })();
+
+  // Employee modal
+  (function() {
+    const deptEmployees = {
+      'Үйл ажиллагаа (Үйлдвэрлэл)': [
+        { name: 'Б.Бат-Эрдэнэ', title: 'Ахлах инженер', gross: '4,500,000₮', tax: '900,000₮', net: '3,600,000₮' },
+        { name: 'С.Саруул', title: 'Мэргэжилтэн', gross: '2,800,000₮', tax: '560,000₮', net: '2,240,000₮' },
+        { name: 'Д.Мөнхтулга', title: 'Техникч', gross: '2,200,000₮', tax: '440,000₮', net: '1,760,000₮' },
+        { name: 'Н.Батзул', title: 'Ажилтан', gross: '1,800,000₮', tax: '360,000₮', net: '1,440,000₮' },
+      ],
+      'Борлуулалтын алба': [
+        { name: 'Э.Баярсайхан', title: 'Борлуулалтын менежер', gross: '3,800,000₮', tax: '760,000₮', net: '3,040,000₮' },
+        { name: 'О.Энхцэцэг', title: 'Ахлах борлуулагч', gross: '2,600,000₮', tax: '520,000₮', net: '2,080,000₮' },
+        { name: 'Г.Дорж', title: 'Борлуулагч', gross: '2,100,000₮', tax: '420,000₮', net: '1,680,000₮' },
+      ],
+      'Техникийн алба': [
+        { name: 'Т.Гантулга', title: 'Ахлах техникч', gross: '4,200,000₮', tax: '840,000₮', net: '3,360,000₮' },
+        { name: 'Б.Нарантуяа', title: 'Системийн инженер', gross: '3,500,000₮', tax: '700,000₮', net: '2,800,000₮' },
+      ],
+      'Захиргааны алба': [
+        { name: 'Д.Сүрэнжав', title: 'Захирлын туслах', gross: '3,000,000₮', tax: '600,000₮', net: '2,400,000₮' },
+        { name: 'Х.Уянга', title: 'Бичиг хэргийн ажилтан', gross: '2,000,000₮', tax: '400,000₮', net: '1,600,000₮' },
+      ],
+      'Маркетингийн алба': [
+        { name: 'Э.Болормаа', title: 'Маркетингийн менежер', gross: '3,600,000₮', tax: '720,000₮', net: '2,880,000₮' },
+        { name: 'Ч.Анхбаяр', title: 'Дизайнер', gross: '2,400,000₮', tax: '480,000₮', net: '1,920,000₮' },
+      ],
+      'Санхүүгийн алба': [
+        { name: 'Б.Дулгэр', title: 'Ахлах нягтлан бодогч', gross: '4,800,000₮', tax: '960,000₮', net: '3,840,000₮' },
+        { name: 'Н.Цэрэнпунцаг', title: 'Нягтлан бодогч', gross: '2,900,000₮', tax: '580,000₮', net: '2,320,000₮' },
+      ],
+    };
+
+    const modal = document.getElementById('employeeModal');
+    const closeBtn = document.getElementById('empModalClose');
+    const titleEl = document.getElementById('empModalTitle');
+    const tbody = document.getElementById('empModalBody');
+
+    function openEmpModal(deptName) {
+      titleEl.textContent = deptName + ' — Ажилтнуудын задаргаа';
+      const emps = deptEmployees[deptName] || [];
+      tbody.innerHTML = emps.map((e, i) =>
+        `<tr style="border-bottom:${i < emps.length-1 ? '1px solid #f1f5f9' : 'none'};">
+          <td style="padding:12px 16px;font-weight:700;">${e.name}</td>
+          <td style="padding:12px 16px;color:#64748b;">${e.title}</td>
+          <td style="text-align:right;padding:12px 16px;">${e.gross}</td>
+          <td style="text-align:right;padding:12px 16px;color:#ef4444;">${e.tax}</td>
+          <td style="text-align:right;padding:12px 16px;font-weight:800;color:#0aa266;">${e.net}</td>
+        </tr>`
+      ).join('');
+      modal.style.display = 'flex';
+    }
+
+    closeBtn.addEventListener('click', () => modal.style.display = 'none');
+    modal.addEventListener('click', e => { if (e.target === modal) modal.style.display = 'none'; });
+
+    document.addEventListener('click', function(e) {
+      const miniBtn = e.target.closest('.btn-mini');
+      if (miniBtn) {
+        const item = miniBtn.closest('.approval-item');
+        if (item) {
+          const name = item.querySelector('.approval-name')?.textContent?.trim();
+          if (name) openEmpModal(name);
+        }
+      }
+    });
+  })();
+  </script>
 
 </body>
-</html>

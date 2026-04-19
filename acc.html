@@ -29,540 +29,237 @@
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
-
-    body {
-      font-family: "Inter", sans-serif;
-      background: var(--bg);
-      color: var(--text);
-    }
-
-    .app {
-      display: flex;
-      min-height: 100vh;
-    }
+    body { font-family: "Inter", sans-serif; background: var(--bg); color: var(--text); }
+    .app { display: flex; min-height: 100vh; }
 
     .sidebar {
-      width: 260px;
-      background: #fff;
-      border-right: 1px solid var(--line);
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
+      width: 260px; background: #fff; border-right: 1px solid var(--line);
+      display: flex; flex-direction: column; justify-content: space-between;
     }
+    .sidebar-top { padding: 24px 16px 16px; }
+    .brand { padding: 0 8px 22px 8px; border-bottom: 1px solid var(--line); margin: 0 -16px 16px; padding-left: 24px; }
+    .brand h2 { font-size: 18px; font-weight: 800; color: #0b1b45; margin-bottom: 6px; }
+    .brand p { font-size: 13px; color: #5f6f86; font-weight: 500; }
 
-    .sidebar-top {
-      padding: 24px 16px 16px;
-    }
-
-    .brand {
-      padding: 0 8px 22px 8px;
-      border-bottom: 1px solid var(--line);
-      margin: 0 -16px 16px;
-      padding-left: 24px;
-    }
-
-    .brand h2 {
-      font-size: 18px;
-      font-weight: 800;
-      color: #0b1b45;
-      margin-bottom: 6px;
-    }
-
-    .brand p {
-      font-size: 13px;
-      color: #5f6f86;
-      font-weight: 500;
-    }
-
-    .nav {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      padding: 0 8px;
-    }
-
+    .nav { display: flex; flex-direction: column; gap: 6px; padding: 0 8px; }
     .nav button {
-      width: 100%;
-      border: none;
-      background: transparent;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 12px 14px;
-      border-radius: 12px;
-      font-size: 14px;
-      font-weight: 600;
-      color: #26354d;
-      cursor: pointer;
-      text-align: left;
+      width: 100%; border: none; background: transparent; display: flex; align-items: center; gap: 12px;
+      padding: 12px 14px; border-radius: 12px; font-size: 14px; font-weight: 600; color: #26354d;
+      cursor: pointer; text-align: left;
     }
-
-    .nav button.active {
-      background: var(--soft-blue);
-      color: var(--blue);
-    }
-
+    .nav button.active { background: var(--soft-blue); color: var(--blue); }
     .nav button:hover { background: #f8fafc; }
     .nav button.active:hover { background: var(--soft-blue); }
 
-    .icon {
-      width: 17px;
-      height: 17px;
-      stroke: currentColor;
-      fill: none;
-      stroke-width: 2;
-      flex-shrink: 0;
-    }
+    .icon { width: 17px; height: 17px; stroke: currentColor; fill: none; stroke-width: 2; flex-shrink: 0; }
+    .sidebar-bottom { border-top: 1px solid var(--line); padding: 14px 18px 20px; }
+    .logout { display: inline-flex; align-items: center; gap: 10px; color: #ef4444; text-decoration: none; font-size: 14px; font-weight: 600; padding: 10px 12px; border-radius: 10px; }
 
-    .sidebar-bottom {
-      border-top: 1px solid var(--line);
-      padding: 14px 18px 20px;
-    }
-
-    .logout {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      color: #ef4444;
-      text-decoration: none;
-      font-size: 14px;
-      font-weight: 600;
-      padding: 10px 12px;
-      border-radius: 10px;
-    }
-
-    .content {
-      flex: 1;
-      padding: 28px 24px 32px;
-    }
-
+    .content { flex: 1; padding: 28px 24px 32px; overflow: auto; }
     .page { display: none; }
     .page.active { display: block; }
 
-    .page-header {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      gap: 16px;
-      margin-bottom: 24px;
-    }
+    .page-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; margin-bottom: 24px; }
+    .page-title { font-size: 26px; line-height: 1.2; font-weight: 800; color: #0b1b45; margin-bottom: 4px; }
+    .page-subtitle { font-size: 15px; color: var(--muted); font-weight: 500; }
 
-    .page-title {
-      font-size: 26px;
-      line-height: 1.2;
-      font-weight: 800;
-      color: #0b1b45;
-      margin-bottom: 4px;
-    }
+    .card { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); }
 
-    .page-subtitle {
-      font-size: 15px;
-      color: var(--muted);
-      font-weight: 500;
-    }
-
-    .card {
-      background: var(--card);
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-    }
-
-    .stats-4 {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 18px;
-      margin-bottom: 24px;
-    }
-
-    .stat-card {
-      padding: 20px;
-      min-height: 150px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
-
-    .stat-top {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      gap: 12px;
-    }
-
-    .stat-icon {
-      width: 40px;
-      height: 40px;
-      border-radius: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
-
+    .stats-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; margin-bottom: 24px; }
+    .stat-card { padding: 20px; min-height: 150px; display: flex; flex-direction: column; justify-content: space-between; }
+    .stat-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
+    .stat-icon { width: 40px; height: 40px; border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
     .green-bg { background: #dcfce7; color: #16a34a; }
     .yellow-bg { background: #fef3c7; color: #d97706; }
     .red-bg { background: #fee2e2; color: #ef4444; }
     .blue-bg { background: #dbeafe; color: #2563eb; }
     .violet-bg { background: #f3e8ff; color: #9333ea; }
-    .soft-slate { background: #f8fafc; color: #64748b; }
 
-    .pill {
-      font-size: 12px;
-      font-weight: 700;
-      padding: 5px 10px;
-      border-radius: 999px;
-      white-space: nowrap;
-    }
-
+    .pill { font-size: 12px; font-weight: 700; padding: 5px 10px; border-radius: 999px; white-space: nowrap; }
     .pill-green { background: #dcfce7; color: #16a34a; }
     .pill-yellow { background: #fef3c7; color: #ca8a04; }
     .pill-red { background: #fee2e2; color: #ef4444; }
     .pill-blue { background: #dbeafe; color: #2563eb; }
 
-    .stat-body h4 {
-      font-size: 15px;
-      font-weight: 500;
-      color: #334155;
-      margin-bottom: 6px;
+    .stat-body h4 { font-size: 15px; font-weight: 500; color: #334155; margin-bottom: 6px; }
+    .stat-body .big { font-size: 18px; font-weight: 800; color: #0f172a; margin-bottom: 4px; }
+    .stat-body small { font-size: 13px; color: #74839a; font-weight: 500; }
+
+    .grid-home { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-bottom: 26px; }
+    .panel { padding: 20px; }
+    .panel-title { display: flex; align-items: center; gap: 12px; font-size: 16px; font-weight: 800; color: #0f172a; margin-bottom: 18px; }
+    .empty-state { height: 155px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #94a3b8; gap: 10px; text-align: center; }
+    .empty-state svg { width: 42px; height: 42px; stroke: #c0c8d4; fill: none; stroke-width: 2; }
+
+    .quick-actions { display: flex; flex-direction: column; gap: 10px; }
+    .action-btn { width: 100%; border: 1px solid var(--line); background: white; border-radius: 10px; height: 38px; display: flex; align-items: center; gap: 10px; padding: 0 12px; font-size: 14px; font-weight: 600; color: #0f172a; cursor: pointer; }
+    .action-btn.disabled { background: #e5e7eb; color: #9ca3af; border-color: #e5e7eb; cursor: not-allowed; }
+    .action-btn:not(.disabled):hover { background: #f8fafc; }
+
+    .warning-note { margin-top: 4px; border: 1px solid #fde68a; background: #fefce8; color: #a16207; border-radius: 10px; padding: 10px 12px; font-size: 12px; line-height: 1.5; }
+
+    .progress-panel { padding: 20px; }
+    .progress-panel h3 { font-size: 17px; font-weight: 800; margin-bottom: 18px; color: #0f172a; }
+    .progress-list { display: flex; flex-direction: column; gap: 14px; }
+    .progress-item .row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; font-size: 14px; font-weight: 600; color: #334155; }
+    .progress-item .bar { width: 100%; height: 7px; background: #dfe4eb; border-radius: 999px; overflow: hidden; }
+    .progress-item .fill { height: 100%; border-radius: 999px; background: #16a34a; }
+
+    .alert { border-radius: 14px; padding: 14px 16px; font-size: 14px; font-weight: 600; line-height: 1.5; margin-bottom: 20px; display: flex; gap: 12px; align-items: flex-start; }
+    .alert.red { border: 1px solid #fecaca; background: #fef2f2; color: #dc2626; }
+    .alert.yellow { border: 1px solid #fde68a; background: #fefce8; color: #a16207; }
+
+    /* ── Custom Select Dropdown ── */
+    .form-card { padding: 18px 20px 20px; }
+    .form-grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 18px; }
+    .form-grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin-bottom: 18px; }
+    .field label { display: block; font-size: 13px; font-weight: 700; color: #0f172a; margin-bottom: 8px; }
+
+    .custom-select { position: relative; }
+    .sel-trigger {
+      width: 100%; height: 46px; border: 1px solid var(--line); border-radius: 10px;
+      background: #f8fafc; padding: 0 14px; display: flex; align-items: center;
+      justify-content: space-between; font-size: 14px; color: #111827; font-weight: 600;
+      cursor: pointer; user-select: none; transition: .15s;
     }
+    .sel-trigger:hover { border-color: #94a3b8; }
+    .sel-trigger.open { border-color: var(--blue); background: #fff; box-shadow: 0 0 0 3px rgba(37,99,235,.08); }
+    .sel-trigger .arrow { color: #9ca3af; font-size: 12px; transition: transform .2s; }
+    .sel-trigger.open .arrow { transform: rotate(180deg); }
 
-    .stat-body .big {
-      font-size: 18px;
-      font-weight: 800;
-      color: #0f172a;
-      margin-bottom: 4px;
+    .sel-menu {
+      display: none; position: absolute; top: calc(100% + 6px); left: 0; right: 0;
+      background: #fff; border: 1px solid var(--line); border-radius: 12px;
+      box-shadow: 0 8px 32px rgba(15,23,42,.12); z-index: 100; overflow: hidden;
     }
-
-    .stat-body small {
-      font-size: 13px;
-      color: #74839a;
-      font-weight: 500;
+    .sel-menu.open { display: block; }
+    .sel-item {
+      padding: 11px 16px; font-size: 14px; font-weight: 600; color: #111827;
+      cursor: pointer; display: flex; align-items: center; justify-content: space-between;
     }
+    .sel-item:hover { background: var(--soft-blue); color: var(--blue); }
+    .sel-item.active { background: var(--soft-blue); color: var(--blue); }
+    .sel-item .check { font-size: 12px; }
 
-    .grid-home {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 18px;
-      margin-bottom: 26px;
-    }
-
-    .panel {
-      padding: 20px;
-    }
-
-    .panel-title {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      font-size: 16px;
-      font-weight: 800;
-      color: #0f172a;
-      margin-bottom: 18px;
-    }
-
-    .empty-state {
-      height: 155px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      color: #94a3b8;
-      gap: 10px;
-      text-align: center;
-    }
-
-    .empty-state svg {
-      width: 42px;
-      height: 42px;
-      stroke: #c0c8d4;
-      fill: none;
-      stroke-width: 2;
-    }
-
-    .quick-actions {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    .action-btn {
-      width: 100%;
-      border: 1px solid var(--line);
-      background: white;
-      border-radius: 10px;
-      height: 38px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 0 12px;
-      font-size: 14px;
-      font-weight: 600;
-      color: #0f172a;
-      cursor: pointer;
-    }
-
-    .action-btn.disabled {
-      background: #e5e7eb;
-      color: white;
-      border-color: #e5e7eb;
-      cursor: not-allowed;
-    }
-
-    .warning-note {
-      margin-top: 4px;
-      border: 1px solid #fde68a;
-      background: #fefce8;
-      color: #a16207;
-      border-radius: 10px;
-      padding: 10px 12px;
-      font-size: 12px;
-      line-height: 1.5;
-    }
-
-    .progress-panel {
-      padding: 20px;
-    }
-
-    .progress-panel h3 {
-      font-size: 17px;
-      font-weight: 800;
-      margin-bottom: 18px;
-      color: #0f172a;
-    }
-
-    .progress-list {
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-    }
-
-    .progress-item .row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 8px;
-      font-size: 14px;
-      font-weight: 600;
-      color: #334155;
-    }
-
-    .progress-item .bar {
-      width: 100%;
-      height: 7px;
-      background: #dfe4eb;
-      border-radius: 999px;
-      overflow: hidden;
-    }
-
-    .progress-item .fill {
-      height: 100%;
-      border-radius: 999px;
-      background: #16a34a;
-    }
-
-    .alert {
-      border-radius: 14px;
-      padding: 14px 16px;
-      font-size: 14px;
-      font-weight: 600;
-      line-height: 1.5;
-      margin-bottom: 20px;
-      display: flex;
-      gap: 12px;
-      align-items: flex-start;
-    }
-
-    .alert.red {
-      border: 1px solid #fecaca;
-      background: #fef2f2;
-      color: #dc2626;
-    }
-
-    .alert.yellow {
-      border: 1px solid #fde68a;
-      background: #fefce8;
-      color: #a16207;
-    }
-
-    .form-card {
-      padding: 18px 20px 20px;
-    }
-
-    .form-grid-3, .form-grid-2 {
-      display: grid;
-      gap: 14px;
-      margin-bottom: 18px;
-    }
-
-    .form-grid-3 { grid-template-columns: repeat(3, 1fr); }
-    .form-grid-2 { grid-template-columns: repeat(2, 1fr); }
-
-    .field label {
-      display: block;
-      font-size: 13px;
-      font-weight: 700;
-      color: #0f172a;
-      margin-bottom: 8px;
-    }
-
-    .select {
-      width: 100%;
-      height: 46px;
-      border: 1px solid var(--line);
-      border-radius: 10px;
-      background: #f8fafc;
-      padding: 0 14px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      font-size: 14px;
-      color: #111827;
-      font-weight: 600;
-    }
-
-    .select .arrow {
-      color: #9ca3af;
-      font-size: 14px;
-    }
-
-    .btn {
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
-      font-weight: 700;
-      transition: .15s ease;
-    }
-
+    .btn { border: none; border-radius: 10px; cursor: pointer; font-weight: 700; transition: .15s ease; }
     .btn:hover { transform: translateY(-1px); }
+    .btn-primary { height: 40px; padding: 0 20px; background: var(--blue); color: white; font-size: 14px; display: inline-flex; align-items: center; gap: 8px; }
+    .btn-primary.disabled, .btn-disabled { background: #dfe3e8; color: #9ca3af; cursor: not-allowed; }
+    .btn-primary.disabled:hover, .btn-disabled:hover { transform: none; }
+    .btn-green { background: #16a34a; color: white; height: 40px; padding: 0 18px; font-size: 14px; display: inline-flex; align-items: center; gap: 8px; }
 
-    .btn-primary {
-      height: 40px;
-      padding: 0 16px;
-      background: #8fb0ff;
-      color: white;
-      font-size: 14px;
-    }
+    /* ── Reports ── */
+    .reports-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; margin-bottom: 22px; }
+    .month-tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 6px; }
+    .month-tabs button { border: 1px solid #d8dee6; background: white; color: #111827; padding: 8px 14px; border-radius: 10px; font-weight: 700; font-size: 14px; cursor: pointer; }
+    .month-tabs button.active { background: #020b2d; color: white; border-color: #020b2d; }
 
-    .btn-primary.disabled,
-    .btn-disabled {
-      background: #dfe3e8;
-      color: white;
-      cursor: not-allowed;
-    }
-
-    .reports-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      gap: 16px;
-      margin-bottom: 22px;
-    }
-
-    .month-tabs {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-      margin-top: 6px;
-    }
-
-    .month-tabs button {
-      border: 1px solid #d8dee6;
-      background: white;
-      color: #111827;
-      padding: 8px 14px;
-      border-radius: 10px;
-      font-weight: 700;
-      font-size: 14px;
-      cursor: pointer;
-    }
-
-    .month-tabs button.active {
-      background: #020b2d;
-      color: white;
-      border-color: #020b2d;
-    }
-
-    .reports-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 18px;
-      margin-bottom: 26px;
-    }
-
+    .reports-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-bottom: 26px; }
     .report-card {
-      padding: 20px;
-      min-height: 130px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      gap: 14px;
+      padding: 20px; min-height: 130px; display: flex; flex-direction: column; justify-content: center;
+      gap: 14px; cursor: pointer; transition: .15s; position: relative;
     }
+    .report-card:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(15,23,42,.10); border-color: #b8c8e8; }
+    .report-card h3 { font-size: 15px; font-weight: 800; color: #0b1b45; margin-bottom: 5px; }
+    .report-card p { color: #76859b; font-size: 13px; font-weight: 500; }
+    .report-card .arrow-right { position: absolute; top: 20px; right: 20px; color: #c0c8d8; font-size: 16px; }
 
-    .report-card h3 {
-      font-size: 15px;
-      font-weight: 800;
-      color: #0b1b45;
-      margin-bottom: 5px;
-    }
-
-    .report-card p {
-      color: #76859b;
-      font-size: 13px;
-      font-weight: 500;
-    }
-
-    .info-bar {
-      border: 1px solid #d8e4f4;
-      background: #eef5ff;
-      color: #2d5eea;
-      border-radius: 14px;
-      padding: 14px 16px;
-      font-size: 14px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-
+    .info-bar { border: 1px solid #d8e4f4; background: #eef5ff; color: #2d5eea; border-radius: 14px; padding: 14px 16px; font-size: 14px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
     .bullet { font-weight: 700; }
 
-    .file-empty {
-      height: 210px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      color: #94a3b8;
-      text-align: center;
-      gap: 10px;
+    /* ── Report Detail View ── */
+    .report-detail { display: none; }
+    .report-detail.active { display: block; }
+    .report-back {
+      display: inline-flex; align-items: center; gap: 8px; background: #f1f5f9; border: none;
+      border-radius: 10px; padding: 9px 16px; font-size: 14px; font-weight: 700;
+      color: #334155; cursor: pointer; margin-right: 12px;
     }
+    .report-back:hover { background: #e2e8f0; }
 
-    .file-empty svg {
-      width: 58px;
-      height: 58px;
-      stroke: #c8d0db;
-      fill: none;
-      stroke-width: 2;
+    .report-detail-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 22px; gap: 16px; flex-wrap: wrap;
     }
+    .report-detail-title { font-size: 24px; font-weight: 800; color: #0b1b45; margin-bottom: 3px; }
+    .report-detail-sub { font-size: 14px; color: var(--muted); font-weight: 500; }
 
-    @media (max-width: 1280px) {
-      .stats-4 { grid-template-columns: repeat(2, 1fr); }
-      .reports-grid { grid-template-columns: 1fr; }
+    .pdf-btn {
+      display: inline-flex; align-items: center; gap: 8px; background: #16a34a; color: white;
+      border: none; border-radius: 10px; padding: 10px 18px; font-size: 14px; font-weight: 700;
+      cursor: pointer; transition: .15s;
     }
+    .pdf-btn:hover { background: #15803d; }
 
-    @media (max-width: 1100px) {
-      .grid-home { grid-template-columns: 1fr; }
-      .form-grid-3, .form-grid-2 { grid-template-columns: 1fr; }
+    .summary-cards { display: flex; gap: 16px; margin-bottom: 22px; flex-wrap: wrap; }
+    .summary-card {
+      flex: 1; min-width: 160px; padding: 18px 20px; border-radius: 14px; border: 1px solid var(--line);
+      background: #fff;
     }
+    .summary-card .label { font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: .04em; margin-bottom: 8px; }
+    .summary-card .value { font-size: 22px; font-weight: 800; }
+    .summary-card.blue { border-color: #bfdbfe; background: #eff6ff; }
+    .summary-card.blue .label { color: #2563eb; }
+    .summary-card.blue .value { color: #1d4ed8; }
+    .summary-card.red { border-color: #fecaca; background: #fff1f2; }
+    .summary-card.red .label { color: #dc2626; }
+    .summary-card.red .value { color: #b91c1c; }
+    .summary-card.green { border-color: #bbf7d0; background: #f0fdf4; }
+    .summary-card.green .label { color: #16a34a; }
+    .summary-card.green .value { color: #15803d; }
+    .summary-card.dark { background: #0f172a; border-color: #0f172a; }
+    .summary-card.dark .label { color: #94a3b8; }
+    .summary-card.dark .value { color: #fff; }
 
-    @media (max-width: 900px) {
-      .app { flex-direction: column; }
-      .sidebar { width: 100%; }
-      .content { padding: 20px 16px 24px; }
-      .stats-4 { grid-template-columns: 1fr; }
-      .reports-header, .page-header { flex-direction: column; }
+    .dept-compare-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 20px; }
+    .dept-compare-card {
+      background: #fff; border: 1px solid var(--line); border-radius: 14px; padding: 18px 20px;
+      position: relative;
     }
+    .dept-compare-card .badge {
+      position: absolute; top: 14px; right: 14px; font-size: 12px; font-weight: 700;
+      padding: 3px 8px; border-radius: 999px;
+    }
+    .badge-green { background: #dcfce7; color: #16a34a; }
+    .badge-red { background: #fee2e2; color: #dc2626; }
+    .dept-compare-card h4 { font-size: 15px; font-weight: 800; color: #0b1b45; margin-bottom: 4px; }
+    .dept-compare-card .emp-count { font-size: 13px; color: #76859b; margin-bottom: 12px; }
+    .dept-compare-card .amount { font-size: 20px; font-weight: 800; color: #0f172a; margin-bottom: 4px; }
+    .dept-compare-card .pct { font-size: 13px; color: #94a3b8; }
+
+    .detail-table { width: 100%; border-collapse: collapse; }
+    .detail-table th { padding: 12px 16px; font-size: 12px; text-transform: uppercase; font-weight: 800; color: #64748b; letter-spacing: .04em; border-bottom: 2px solid var(--line); text-align: left; }
+    .detail-table td { padding: 13px 16px; border-bottom: 1px solid var(--line); font-size: 14px; }
+    .detail-table tr:last-child td { border-bottom: none; }
+    .detail-table td:not(:first-child):not(:nth-child(2)) { text-align: right; }
+    .detail-table th:not(:first-child):not(:nth-child(2)) { text-align: right; }
+
+    .breakdown-list { display: flex; flex-direction: column; gap: 0; }
+    .breakdown-row { display: flex; justify-content: space-between; padding: 14px 0; border-bottom: 1px solid var(--line); font-size: 15px; }
+    .breakdown-row:last-child { border-bottom: none; }
+    .breakdown-row .name { color: #334155; font-weight: 500; }
+    .breakdown-row .amt { font-weight: 700; color: #0f172a; }
+
+    .tax-summary-cards { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 22px; }
+    .tax-card { flex: 1; min-width: 180px; background: #fff; border: 1px solid var(--line); border-radius: 14px; padding: 20px; }
+    .tax-card .tc-label { font-size: 12px; font-weight: 800; color: #94a3b8; text-transform: uppercase; letter-spacing: .05em; margin-bottom: 10px; }
+    .tax-card .tc-amount { font-size: 22px; font-weight: 800; color: #0f172a; margin-bottom: 8px; }
+    .tax-card .tc-row { display: flex; justify-content: space-between; font-size: 13px; color: #64748b; margin-bottom: 4px; }
+    .tax-card .tc-row span:last-child { font-weight: 700; color: #334155; }
+
+    .big-tax-banner { background: #0f172a; border-radius: 16px; padding: 22px 28px; margin-bottom: 22px; display: flex; justify-content: space-between; align-items: center; }
+    .big-tax-banner .btb-label { font-size: 14px; color: #94a3b8; margin-bottom: 6px; }
+    .big-tax-banner .btb-value { font-size: 30px; font-weight: 800; color: #fff; }
+    .big-tax-banner .btb-badge { font-size: 13px; font-weight: 700; padding: 5px 12px; border-radius: 999px; background: rgba(74,222,128,.15); color: #4ade80; }
+    .big-tax-banner .btb-prev { font-size: 13px; color: #64748b; margin-top: 4px; }
+
+    /* Bank files */
+    .file-empty { height: 210px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #94a3b8; text-align: center; gap: 10px; }
+    .file-empty svg { width: 58px; height: 58px; stroke: #c8d0db; fill: none; stroke-width: 2; }
+
+    @media (max-width: 1280px) { .stats-4 { grid-template-columns: repeat(2, 1fr); } .reports-grid { grid-template-columns: 1fr 1fr; } .dept-compare-grid { grid-template-columns: 1fr 1fr; } .form-grid-3 { grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 1100px) { .grid-home { grid-template-columns: 1fr; } .summary-cards { flex-direction: column; } }
+    @media (max-width: 900px) { .app { flex-direction: column; } .sidebar { width: 100%; } .content { padding: 20px 16px 24px; } .stats-4 { grid-template-columns: 1fr; } .reports-header, .page-header { flex-direction: column; } .form-grid-2, .form-grid-3 { grid-template-columns: 1fr; } .dept-compare-grid { grid-template-columns: 1fr; } }
   </style>
 </head>
 <body>
@@ -573,7 +270,6 @@
           <h2>Цалин Систем</h2>
           <p>Нягтлан бодогч</p>
         </div>
-
         <div class="nav">
           <button class="nav-link active" data-page="home">
             <svg class="icon" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"></rect><rect x="14" y="3" width="7" height="7" rx="1"></rect><rect x="3" y="14" width="7" height="7" rx="1"></rect><rect x="14" y="14" width="7" height="7" rx="1"></rect></svg>
@@ -593,7 +289,6 @@
           </button>
         </div>
       </div>
-
       <div class="sidebar-bottom">
         <a href="#" class="logout">
           <svg class="icon" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><path d="M16 17l5-5-5-5"></path><path d="M21 12H9"></path></svg>
@@ -603,6 +298,8 @@
     </aside>
 
     <main class="content">
+
+      <!-- ══ HOME ══ -->
       <section class="page active" id="home">
         <div class="page-header">
           <div>
@@ -613,68 +310,27 @@
 
         <div class="stats-4">
           <div class="card stat-card">
-            <div class="stat-top">
-              <div class="stat-icon green-bg">
-                <svg class="icon" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"></path></svg>
-              </div>
-              <div class="pill pill-green">Дууссан</div>
-            </div>
-            <div class="stat-body">
-              <h4>Бодогдсон цалин</h4>
-              <div class="big">0</div>
-              <small>ажилтан</small>
-            </div>
+            <div class="stat-top"><div class="stat-icon green-bg"><svg class="icon" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"></path></svg></div><div class="pill pill-green">Дууссан</div></div>
+            <div class="stat-body"><h4>Бодогдсон цалин</h4><div class="big">0</div><small>ажилтан</small></div>
           </div>
-
           <div class="card stat-card">
-            <div class="stat-top">
-              <div class="stat-icon yellow-bg">
-                <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg>
-              </div>
-              <div class="pill pill-yellow">Хүлээгдэж буй</div>
-            </div>
-            <div class="stat-body">
-              <h4>Хүлээгдэж байгаа</h4>
-              <div class="big">0</div>
-              <small>ажилтан</small>
-            </div>
+            <div class="stat-top"><div class="stat-icon yellow-bg"><svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg></div><div class="pill pill-yellow">Хүлээгдэж буй</div></div>
+            <div class="stat-body"><h4>Хүлээгдэж байгаа</h4><div class="big">0</div><small>ажилтан</small></div>
           </div>
-
           <div class="card stat-card">
-            <div class="stat-top">
-              <div class="stat-icon red-bg">
-                <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
-              </div>
-              <div class="pill pill-red">Хүлээгдэж буй</div>
-            </div>
-            <div class="stat-body">
-              <h4>Цагийн баталгаажуулалт</h4>
-              <div class="big">Хүлээгдэж буй</div>
-              <small>HR баталгаажуулах шаардлагатай</small>
-            </div>
+            <div class="stat-top"><div class="stat-icon red-bg"><svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg></div><div class="pill pill-red">Хүлээгдэж буй</div></div>
+            <div class="stat-body"><h4>Цагийн баталгаажуулалт</h4><div class="big">Хүлээгдэж буй</div><small>HR баталгаажуулах шаардлагатай</small></div>
           </div>
-
           <div class="card stat-card">
-            <div class="stat-top">
-              <div class="stat-icon blue-bg">
-                <svg class="icon" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2"></path><circle cx="9.5" cy="7" r="4"></circle><path d="M20 8v6"></path><path d="M23 11h-6"></path></svg>
-              </div>
-              <div class="pill pill-blue">Нийт</div>
-            </div>
-            <div class="stat-body">
-              <h4>Нийт ажилтан</h4>
-              <div class="big">42</div>
-              <small>идэвхтэй ажилтан</small>
-            </div>
+            <div class="stat-top"><div class="stat-icon blue-bg"><svg class="icon" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2"></path><circle cx="9.5" cy="7" r="4"></circle><path d="M20 8v6"></path><path d="M23 11h-6"></path></svg></div><div class="pill pill-blue">Нийт</div></div>
+            <div class="stat-body"><h4>Нийт ажилтан</h4><div class="big">42</div><small>идэвхтэй ажилтан</small></div>
           </div>
         </div>
 
         <div class="grid-home">
           <div class="card panel">
             <div class="panel-title">
-              <div class="stat-icon violet-bg" style="width:30px;height:30px;border-radius:10px;">
-                <svg class="icon" viewBox="0 0 24 24"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
-              </div>
+              <div class="stat-icon violet-bg" style="width:30px;height:30px;border-radius:10px;"><svg class="icon" viewBox="0 0 24 24"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg></div>
               Системийн мэдэгдэл
             </div>
             <div class="empty-state">
@@ -682,27 +338,15 @@
               <div>Мэдэгдэл байхгүй байна</div>
             </div>
           </div>
-
           <div class="card panel">
             <div class="panel-title">
-              <div class="stat-icon blue-bg" style="width:30px;height:30px;border-radius:10px;">
-                <svg class="icon" viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="2"></rect><path d="M8 7h8"></path><path d="M8 11h8"></path><path d="M8 15h5"></path></svg>
-              </div>
+              <div class="stat-icon blue-bg" style="width:30px;height:30px;border-radius:10px;"><svg class="icon" viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="2"></rect><path d="M8 7h8"></path><path d="M8 11h8"></path><path d="M8 15h5"></path></svg></div>
               Хурдан үйлдлүүд
             </div>
             <div class="quick-actions">
-              <button class="action-btn disabled">
-                <svg class="icon" viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="2"></rect><path d="M8 7h8"></path><path d="M8 11h8"></path><path d="M8 15h5"></path></svg>
-                Цалин бодолт эхлүүлэх
-              </button>
-              <button class="action-btn" data-page-target="reports">
-                <svg class="icon" viewBox="0 0 24 24"><path d="M6 2h9l5 5v15a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z"></path><path d="M14 2v6h6"></path></svg>
-                Тайлан харах
-              </button>
-              <button class="action-btn" data-page-target="bank-files">
-                <svg class="icon" viewBox="0 0 24 24"><path d="M12 1v22"></path><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7H14.5a3.5 3.5 0 0 1 0 7H6"></path></svg>
-                Банкны файл үүсгэх
-              </button>
+              <button class="action-btn disabled"><svg class="icon" viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="2"></rect><path d="M8 7h8"></path><path d="M8 11h8"></path><path d="M8 15h5"></path></svg>Цалин бодолт эхлүүлэх</button>
+              <button class="action-btn" data-page-target="reports"><svg class="icon" viewBox="0 0 24 24"><path d="M6 2h9l5 5v15a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z"></path><path d="M14 2v6h6"></path></svg>Тайлан харах</button>
+              <button class="action-btn" data-page-target="bank-files"><svg class="icon" viewBox="0 0 24 24"><path d="M12 1v22"></path><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7H14.5a3.5 3.5 0 0 1 0 7H6"></path></svg>Банкны файл үүсгэх</button>
             </div>
             <div class="warning-note">Цалин бодолт эхлүүлэхийн тулд HR цагийн бүртгэлийг баталгаажуулах шаардлагатай</div>
           </div>
@@ -711,26 +355,15 @@
         <div class="card progress-panel">
           <h3>Тухайн сарын цалин бодолтын явц</h3>
           <div class="progress-list">
-            <div class="progress-item">
-              <div class="row"><span>Ажилтны бүртгэл</span><span style="color:#16a34a;">100%</span></div>
-              <div class="bar"><div class="fill" style="width:100%"></div></div>
-            </div>
-            <div class="progress-item">
-              <div class="row"><span>Цагийн баталгаажуулалт</span><span style="color:#f59e0b;">0%</span></div>
-              <div class="bar"><div class="fill" style="width:0%; background:#f59e0b;"></div></div>
-            </div>
-            <div class="progress-item">
-              <div class="row"><span>Цалин бодолт</span><span>0%</span></div>
-              <div class="bar"><div class="fill" style="width:0%; background:#cbd5e1;"></div></div>
-            </div>
-            <div class="progress-item">
-              <div class="row"><span>Банкны файл</span><span>0%</span></div>
-              <div class="bar"><div class="fill" style="width:0%; background:#cbd5e1;"></div></div>
-            </div>
+            <div class="progress-item"><div class="row"><span>Ажилтны бүртгэл</span><span style="color:#16a34a;">100%</span></div><div class="bar"><div class="fill" style="width:100%"></div></div></div>
+            <div class="progress-item"><div class="row"><span>Цагийн баталгаажуулалт</span><span style="color:#f59e0b;">0%</span></div><div class="bar"><div class="fill" style="width:0%;background:#f59e0b;"></div></div></div>
+            <div class="progress-item"><div class="row"><span>Цалин бодолт</span><span>0%</span></div><div class="bar"><div class="fill" style="width:0%;background:#cbd5e1;"></div></div></div>
+            <div class="progress-item"><div class="row"><span>Банкны файл</span><span>0%</span></div><div class="bar"><div class="fill" style="width:0%;background:#cbd5e1;"></div></div></div>
           </div>
         </div>
       </section>
 
+      <!-- ══ PAYROLL ══ -->
       <section class="page" id="payroll">
         <div class="page-header">
           <div>
@@ -751,106 +384,331 @@
           <div class="form-grid-3">
             <div class="field">
               <label>Сар сонгох</label>
-              <div class="select">2026 оны 3-р сар <span class="arrow">⌄</span></div>
+              <div class="custom-select" id="cs-month">
+                <div class="sel-trigger" onclick="toggleSel('cs-month')">
+                  <span class="sel-label">2026 оны 3-р сар</span>
+                  <span class="arrow">▼</span>
+                </div>
+                <div class="sel-menu">
+                  <div class="sel-item" onclick="pickSel('cs-month','2026 оны 1-р сар')">2026 оны 1-р сар</div>
+                  <div class="sel-item" onclick="pickSel('cs-month','2026 оны 2-р сар')">2026 оны 2-р сар</div>
+                  <div class="sel-item active" onclick="pickSel('cs-month','2026 оны 3-р сар')">2026 оны 3-р сар <span class="check">✓</span></div>
+                  <div class="sel-item" onclick="pickSel('cs-month','2026 оны 4-р сар')">2026 оны 4-р сар</div>
+                </div>
+              </div>
             </div>
             <div class="field">
               <label>Цалингийн төрөл</label>
-              <div class="select">Урьдчилгаа цалин <span class="arrow">⌄</span></div>
+              <div class="custom-select" id="cs-type">
+                <div class="sel-trigger" onclick="toggleSel('cs-type')">
+                  <span class="sel-label">Урьдчилгаа цалин</span>
+                  <span class="arrow">▼</span>
+                </div>
+                <div class="sel-menu">
+                  <div class="sel-item active" onclick="pickSel('cs-type','Урьдчилгаа цалин')">Урьдчилгаа цалин <span class="check">✓</span></div>
+                  <div class="sel-item" onclick="pickSel('cs-type','Үндсэн цалин')">Үндсэн цалин</div>
+                  <div class="sel-item" onclick="pickSel('cs-type','Бонус')">Бонус</div>
+                </div>
+              </div>
             </div>
             <div class="field">
               <label>Хэлтэс</label>
-              <div class="select">Бүх хэлтэс <span class="arrow">⌄</span></div>
+              <div class="custom-select" id="cs-dept">
+                <div class="sel-trigger" onclick="toggleSel('cs-dept')">
+                  <span class="sel-label">Маркетинг</span>
+                  <span class="arrow">▼</span>
+                </div>
+                <div class="sel-menu">
+                  <div class="sel-item" onclick="pickSel('cs-dept','Бүх хэлтэс')">Бүх хэлтэс</div>
+                  <div class="sel-item" onclick="pickSel('cs-dept','Санхүү')">Санхүү</div>
+                  <div class="sel-item active" onclick="pickSel('cs-dept','Маркетинг')">Маркетинг <span class="check">✓</span></div>
+                  <div class="sel-item" onclick="pickSel('cs-dept','IT')">IT</div>
+                  <div class="sel-item" onclick="pickSel('cs-dept','Борлуулалт')">Борлуулалт</div>
+                  <div class="sel-item" onclick="pickSel('cs-dept','Нягтлан бодох бүртгэл')">Нягтлан бодох бүртгэл</div>
+                  <div class="sel-item" onclick="pickSel('cs-dept','Хүний нөөц')">Хүний нөөц</div>
+                </div>
+              </div>
             </div>
           </div>
           <button class="btn btn-primary disabled">Цалин бодолт эхлүүлэх</button>
         </div>
       </section>
 
+      <!-- ══ REPORTS ══ -->
       <section class="page" id="reports">
-        <div class="reports-header">
-          <div>
-            <h1 class="page-title">Тайлангууд</h1>
-            <p class="page-subtitle">Цалингийн тайлан, татварын тайлан</p>
+
+        <!-- Report List View -->
+        <div id="reportsList">
+          <div class="reports-header">
+            <div>
+              <h1 class="page-title">Тайлангууд</h1>
+              <p class="page-subtitle">Цалингийн тайлан, татварын тайлан</p>
+            </div>
+            <div class="month-tabs">
+              <button class="active">2026/03</button>
+              <button>2026/02</button>
+              <button>2026/01</button>
+            </div>
           </div>
-          <div class="month-tabs">
-            <button class="active">2026/03</button>
-            <button>2026/02</button>
-            <button>2026/01</button>
+
+          <div class="reports-grid">
+            <div class="card report-card" onclick="openReport('dept-compare')">
+              <span class="arrow-right">›</span>
+              <div class="stat-icon blue-bg"><svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l4 0"></path></svg></div>
+              <div><h3>Хэлтсийн цалингийн харьцуулалт</h3><p>Алба бүрийн цалингийн зардлын дэлгэрэнгүй</p></div>
+            </div>
+            <div class="card report-card" onclick="openReport('monthly-total')">
+              <span class="arrow-right">›</span>
+              <div class="stat-icon green-bg"><svg class="icon" viewBox="0 0 24 24"><path d="M4 19h16"></path><path d="M7 16V8"></path><path d="M12 16V5"></path><path d="M17 16v-3"></path></svg></div>
+              <div><h3>Сарын нийт зардлын тайлан</h3><p>Тухайн сарын нийт цалингийн зардал</p></div>
+            </div>
+            <div class="card report-card" onclick="openReport('ndsh')">
+              <span class="arrow-right">›</span>
+              <div class="stat-icon" style="background:#ede9fe;color:#6366f1;"><svg class="icon" viewBox="0 0 24 24"><path d="M12 3l7 4v5c0 5-3.5 7.5-7 9-3.5-1.5-7-4-7-9V7l7-4z"></path><path d="M9.5 12.5l1.8 1.8 3.2-3.6"></path></svg></div>
+              <div><h3>НДШ тайлан</h3><p>Нийгмийн даатгалын шимтгэлийн тайлан</p></div>
+            </div>
+            <div class="card report-card" onclick="openReport('hhoat')">
+              <span class="arrow-right">›</span>
+              <div class="stat-icon" style="background:#fff7ed;color:#ea580c;"><svg class="icon" viewBox="0 0 24 24"><path d="M14 3h-4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V9z"></path><path d="M14 3v6h6"></path><path d="M16 13H10"></path></svg></div>
+              <div><h3>ХХОАТ тайлан</h3><p>Хувь хүний орлогын албан татварын тайлан</p></div>
+            </div>
+            <div class="card report-card" onclick="openReport('overtime')">
+              <span class="arrow-right">›</span>
+              <div class="stat-icon" style="background:#ffe4e6;color:#e11d48;"><svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg></div>
+              <div><h3>Илүү цагийн тайлан</h3><p>Ажилтнуудын илүү цагийн дэлгэрэнгүй</p></div>
+            </div>
+            <div class="card report-card" onclick="openReport('total-tax')">
+              <span class="arrow-right">›</span>
+              <div class="stat-icon violet-bg"><svg class="icon" viewBox="0 0 24 24"><path d="M4 14l4-4 4 4 8-8"></path><path d="M20 10v6h-6"></path></svg></div>
+              <div><h3>Байгууллагын төлсөн нийт татвар</h3><p>НДШ, ХХОАТ болон бусад татваруудын нэгтгэл</p></div>
+            </div>
+          </div>
+
+          <div class="info-bar">
+            <svg class="icon" viewBox="0 0 24 24" style="color:#2563eb;"><circle cx="12" cy="12" r="9"></circle><path d="M12 8h.01"></path><path d="M11 12h1v4h1"></path></svg>
+            <span>Бүх тайлан &lt;30 секундэд үүсгэгдэнэ</span>
+            <span class="bullet">•</span>
+            <span>Тайланг PDF форматаар татах боломжтой</span>
+            <span class="bullet">•</span>
+            <span>Өмнөх саруудын түүхийг харах боломжтой</span>
           </div>
         </div>
 
-        <div class="reports-grid">
-          <div class="card report-card">
-            <div class="stat-icon blue-bg">
-              <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l4 0"></path></svg>
+        <!-- ── Report Detail: Хэлтсийн цалингийн харьцуулалт ── -->
+        <div class="report-detail" id="rd-dept-compare">
+          <div class="report-detail-header">
+            <div style="display:flex;align-items:center;gap:8px;">
+              <button class="report-back" onclick="closeReport()">‹ Буцах</button>
+              <div><div class="report-detail-title">Хэлтсийн цалингийн харьцуулалт</div><div class="report-detail-sub">2026/03</div></div>
             </div>
-            <div>
-              <h3>Хэлтсийн цалингийн харьцуулалт</h3>
-              <p>Алба бүрийн цалингийн зардлын дэлгэрэнгүй</p>
-            </div>
+            <button class="pdf-btn">
+              <svg class="icon" style="stroke:white;" viewBox="0 0 24 24"><path d="M12 3v12"></path><path d="m7 10 5 5 5-5"></path><path d="M5 21h14"></path></svg>
+              PDF татах
+            </button>
           </div>
 
-          <div class="card report-card">
-            <div class="stat-icon green-bg">
-              <svg class="icon" viewBox="0 0 24 24"><path d="M4 19h16"></path><path d="M7 16V8"></path><path d="M12 16V5"></path><path d="M17 16v-3"></path></svg>
-            </div>
-            <div>
-              <h3>Сарын нийт зардлын тайлан</h3>
-              <p>Тухайн сарын нийт цалингийн зардал</p>
-            </div>
+          <div class="dept-compare-grid">
+            <div class="dept-compare-card"><span class="badge badge-green">+5.2%</span><h4>Борлуулалтын алба</h4><div class="emp-count">25 ажилтан</div><div class="amount">68,500,000₮</div><div class="pct">21.5% нийт зардлаас</div></div>
+            <div class="dept-compare-card"><span class="badge badge-green">+3.8%</span><h4>Үйлдвэрлэлийн алба</h4><div class="emp-count">48 ажилтан</div><div class="amount">92,400,000₮</div><div class="pct">29.0% нийт зардлаас</div></div>
+            <div class="dept-compare-card"><span class="badge badge-green">+7.1%</span><h4>Техникийн алба</h4><div class="emp-count">18 ажилтан</div><div class="amount">54,200,000₮</div><div class="pct">17.0% нийт зардлаас</div></div>
+            <div class="dept-compare-card"><span class="badge badge-red">-2.5%</span><h4>Захиргааны алба</h4><div class="emp-count">12 ажилтан</div><div class="amount">32,800,000₮</div><div class="pct">10.3% нийт зардлаас</div></div>
+            <div class="dept-compare-card"><span class="badge badge-green">+6.4%</span><h4>Маркетингийн алба</h4><div class="emp-count">15 ажилтан</div><div class="amount">42,300,000₮</div><div class="pct">13.3% нийт зардлаас</div></div>
+            <div class="dept-compare-card"><span class="badge badge-green">+4.2%</span><h4>Санхүүгийн алба</h4><div class="emp-count">8 ажилтан</div><div class="amount">28,900,000₮</div><div class="pct">9.1% нийт зардлаас</div></div>
           </div>
 
-          <div class="card report-card">
-            <div class="stat-icon" style="background:#ede9fe; color:#6366f1;">
-              <svg class="icon" viewBox="0 0 24 24"><path d="M12 3l7 4v5c0 5-3.5 7.5-7 9-3.5-1.5-7-4-7-9V7l7-4z"></path><path d="M9.5 12.5l1.8 1.8 3.2-3.6"></path></svg>
-            </div>
-            <div>
-              <h3>НДШ тайлан</h3>
-              <p>Нийгмийн даатгалын шимтгэлийн тайлан</p>
-            </div>
-          </div>
-
-          <div class="card report-card">
-            <div class="stat-icon" style="background:#fff7ed; color:#ea580c;">
-              <svg class="icon" viewBox="0 0 24 24"><path d="M14 3h-4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V9z"></path><path d="M14 3v6h6"></path><path d="M16 13H10"></path></svg>
-            </div>
-            <div>
-              <h3>ХХОАТ тайлан</h3>
-              <p>Хувь хүний орлогын албан татварын тайлан</p>
-            </div>
-          </div>
-
-          <div class="card report-card">
-            <div class="stat-icon" style="background:#ffe4e6; color:#e11d48;">
-              <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg>
-            </div>
-            <div>
-              <h3>Илүү цагийн тайлан</h3>
-              <p>Ажилтнуудын илүү цагийн дэлгэрэнгүй</p>
-            </div>
-          </div>
-
-          <div class="card report-card">
-            <div class="stat-icon violet-bg">
-              <svg class="icon" viewBox="0 0 24 24"><path d="M4 14l4-4 4 4 8-8"></path><path d="M20 10v6h-6"></path></svg>
-            </div>
-            <div>
-              <h3>Байгууллагын төлсөн нийт татвар</h3>
-              <p>НДШ, ХХОАТ болон бусад татваруудын нэгтгэл</p>
+          <div class="card" style="padding:20px 24px;">
+            <div class="summary-card dark" style="border-radius:12px; padding:20px 24px;">
+              <div class="label">Нийт зардал</div>
+              <div class="value">319,100,000₮</div>
             </div>
           </div>
         </div>
 
-        <div class="info-bar">
-          <svg class="icon" viewBox="0 0 24 24" style="color:#2563eb;"><circle cx="12" cy="12" r="9"></circle><path d="M12 8h.01"></path><path d="M11 12h1v4h1"></path></svg>
-          <span>Бүх тайлан &lt;30 секундэд үүсгэгдэнэ</span>
-          <span class="bullet">•</span>
-          <span>Тайланг PDF форматаар татах боломжтой</span>
-          <span class="bullet">•</span>
-          <span>Өмнөх саруудын түүхийг харах боломжтой</span>
+        <!-- ── Report Detail: Сарын нийт зардлын тайлан ── -->
+        <div class="report-detail" id="rd-monthly-total">
+          <div class="report-detail-header">
+            <div style="display:flex;align-items:center;gap:8px;">
+              <button class="report-back" onclick="closeReport()">‹ Буцах</button>
+              <div><div class="report-detail-title">Сарын нийт зардлын тайлан</div><div class="report-detail-sub">2026/03</div></div>
+            </div>
+            <button class="pdf-btn"><svg class="icon" style="stroke:white;" viewBox="0 0 24 24"><path d="M12 3v12"></path><path d="m7 10 5 5 5-5"></path><path d="M5 21h14"></path></svg> PDF татах</button>
+          </div>
+
+          <div class="summary-cards" style="margin-bottom:22px;">
+            <div class="summary-card blue"><div class="label">Үндсэн цалин + нэмэгдэл</div><div class="value">319,100,000₮</div></div>
+            <div class="summary-card red"><div class="label">Нийт суутгал</div><div class="value">63,820,000₮</div></div>
+            <div class="summary-card green"><div class="label">Гарт олгох</div><div class="value">255,280,000₮</div></div>
+          </div>
+
+          <div class="card" style="padding:22px 24px;">
+            <h3 style="font-size:16px;font-weight:800;margin-bottom:18px;color:#0f172a;">Зардлын задаргаа</h3>
+            <div class="breakdown-list">
+              <div class="breakdown-row"><span class="name">Үндсэн цалин</span><span class="amt">250,000,000₮</span></div>
+              <div class="breakdown-row"><span class="name">Ур чадварын нэмэгдэл</span><span class="amt">35,000,000₮</span></div>
+              <div class="breakdown-row"><span class="name">Жилийн нэмэгдэл</span><span class="amt">18,500,000₮</span></div>
+              <div class="breakdown-row"><span class="name">Бонус</span><span class="amt">8,200,000₮</span></div>
+              <div class="breakdown-row"><span class="name">Илүү цагийн төлбөр</span><span class="amt">7,400,000₮</span></div>
+            </div>
+          </div>
         </div>
+
+        <!-- ── Report Detail: НДШ тайлан ── -->
+        <div class="report-detail" id="rd-ndsh">
+          <div class="report-detail-header">
+            <div style="display:flex;align-items:center;gap:8px;">
+              <button class="report-back" onclick="closeReport()">‹ Буцах</button>
+              <div><div class="report-detail-title">НДШ тайлан</div><div class="report-detail-sub">2026/03</div></div>
+            </div>
+            <button class="pdf-btn"><svg class="icon" style="stroke:white;" viewBox="0 0 24 24"><path d="M12 3v12"></path><path d="m7 10 5 5 5-5"></path><path d="M5 21h14"></path></svg> PDF татах</button>
+          </div>
+
+          <div class="summary-cards" style="margin-bottom:22px;">
+            <div class="summary-card blue"><div class="label">Ажилтны хувь (10%)</div><div class="value">31,910,000₮</div></div>
+            <div class="summary-card blue" style="border-color:#a5b4fc;background:#eef2ff;"><div class="label" style="color:#4f46e5;">Ажил олгогчийн хувь (12.5%)</div><div class="value" style="color:#4338ca;">39,887,500₮</div></div>
+            <div class="summary-card green"><div class="label">Нийт төлбөр</div><div class="value">71,797,500₮</div></div>
+          </div>
+
+          <div class="card" style="padding:22px 24px;">
+            <table class="detail-table">
+              <thead>
+                <tr><th>Хэлтэс</th><th>Ажилтан</th><th>Үндсэн цалин</th><th>Ажилтны (10%)</th><th>Ажил олгогч</th><th>Нийт</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>Борлуулалтын алба</td><td>25</td><td>68,500,000₮</td><td>6,850,000₮</td><td>8,562,500₮</td><td><strong>15,412,500₮</strong></td></tr>
+                <tr><td>Үйлдвэрлэлийн алба</td><td>48</td><td>92,400,000₮</td><td>9,240,000₮</td><td>11,550,000₮</td><td><strong>20,790,000₮</strong></td></tr>
+                <tr><td>Техникийн алба</td><td>18</td><td>54,200,000₮</td><td>5,420,000₮</td><td>6,775,000₮</td><td><strong>12,195,000₮</strong></td></tr>
+                <tr><td>Захиргааны алба</td><td>12</td><td>32,800,000₮</td><td>3,280,000₮</td><td>4,100,000₮</td><td><strong>7,380,000₮</strong></td></tr>
+                <tr><td>Маркетингийн алба</td><td>15</td><td>42,300,000₮</td><td>4,230,000₮</td><td>5,287,500₮</td><td><strong>9,517,500₮</strong></td></tr>
+                <tr><td>Санхүүгийн алба</td><td>8</td><td>28,900,000₮</td><td>2,890,000₮</td><td>3,612,500₮</td><td><strong>6,502,500₮</strong></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- ── Report Detail: ХХОАТ тайлан ── -->
+        <div class="report-detail" id="rd-hhoat">
+          <div class="report-detail-header">
+            <div style="display:flex;align-items:center;gap:8px;">
+              <button class="report-back" onclick="closeReport()">‹ Буцах</button>
+              <div><div class="report-detail-title">ХХОАТ тайлан</div><div class="report-detail-sub">2026/03</div></div>
+            </div>
+            <button class="pdf-btn"><svg class="icon" style="stroke:white;" viewBox="0 0 24 24"><path d="M12 3v12"></path><path d="m7 10 5 5 5-5"></path><path d="M5 21h14"></path></svg> PDF татах</button>
+          </div>
+
+          <div class="summary-cards" style="margin-bottom:22px;">
+            <div class="summary-card" style="border-color:#e5e7eb;background:#f9fafb;"><div class="label" style="color:#64748b;">Ажилтны хувь (10%)</div><div class="value" style="color:#0f172a;">31,910,000₮</div></div>
+            <div class="summary-card green"><div class="label">Нийт төлбөр</div><div class="value">31,910,000₮</div></div>
+          </div>
+
+          <div class="card" style="padding:22px 24px;">
+            <table class="detail-table">
+              <thead>
+                <tr><th>Хэлтэс</th><th>Ажилтан</th><th>Үндсэн цалин</th><th>Ажилтны хувь (10%)</th><th>Нийт</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>Борлуулалтын алба</td><td>25</td><td>68,500,000₮</td><td>6,850,000₮</td><td><strong>6,850,000₮</strong></td></tr>
+                <tr><td>Үйлдвэрлэлийн алба</td><td>48</td><td>92,400,000₮</td><td>9,240,000₮</td><td><strong>9,240,000₮</strong></td></tr>
+                <tr><td>Техникийн алба</td><td>18</td><td>54,200,000₮</td><td>5,420,000₮</td><td><strong>5,420,000₮</strong></td></tr>
+                <tr><td>Захиргааны алба</td><td>12</td><td>32,800,000₮</td><td>3,280,000₮</td><td><strong>3,280,000₮</strong></td></tr>
+                <tr><td>Маркетингийн алба</td><td>15</td><td>42,300,000₮</td><td>4,230,000₮</td><td><strong>4,230,000₮</strong></td></tr>
+                <tr><td>Санхүүгийн алба</td><td>8</td><td>28,900,000₮</td><td>2,890,000₮</td><td><strong>2,890,000₮</strong></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- ── Report Detail: Илүү цагийн тайлан ── -->
+        <div class="report-detail" id="rd-overtime">
+          <div class="report-detail-header">
+            <div style="display:flex;align-items:center;gap:8px;">
+              <button class="report-back" onclick="closeReport()">‹ Буцах</button>
+              <div><div class="report-detail-title">Илүү цагийн тайлан</div><div class="report-detail-sub">2026/03</div></div>
+            </div>
+            <button class="pdf-btn"><svg class="icon" style="stroke:white;" viewBox="0 0 24 24"><path d="M12 3v12"></path><path d="m7 10 5 5 5-5"></path><path d="M5 21h14"></path></svg> PDF татах</button>
+          </div>
+
+          <div class="summary-cards" style="margin-bottom:22px;">
+            <div class="summary-card blue"><div class="label">Нийт илүү цаг</div><div class="value">250 цаг</div></div>
+            <div class="summary-card" style="border-color:#e5e7eb;background:#f9fafb;"><div class="label" style="color:#64748b;">Коэффициент</div><div class="value" style="color:#0f172a;">1.5x</div></div>
+            <div class="summary-card green"><div class="label">Нийт төлбөр</div><div class="value">7,400,000₮</div></div>
+          </div>
+
+          <div class="card" style="padding:22px 24px;">
+            <table class="detail-table">
+              <thead>
+                <tr><th>Хэлтэс</th><th>Ажилтан</th><th>Нийт илүү цаг</th><th>Дундаж цаг/ажилтан</th><th>Төлбөр</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>Борлуулалтын алба</td><td>25</td><td>45 цаг</td><td>1.8 цаг</td><td><strong>1,350,000₮</strong></td></tr>
+                <tr><td>Үйлдвэрлэлийн алба</td><td>48</td><td>120 цаг</td><td>2.5 цаг</td><td><strong>2,880,000₮</strong></td></tr>
+                <tr><td>Техникийн алба</td><td>18</td><td>42 цаг</td><td>2.3 цаг</td><td><strong>1,260,000₮</strong></td></tr>
+                <tr><td>Захиргааны алба</td><td>12</td><td>18 цаг</td><td>1.5 цаг</td><td><strong>540,000₮</strong></td></tr>
+                <tr><td>Маркетингийн алба</td><td>15</td><td>16 цаг</td><td>1.1 цаг</td><td><strong>960,000₮</strong></td></tr>
+                <tr><td>Санхүүгийн алба</td><td>8</td><td>9 цаг</td><td>1.1 цаг</td><td><strong>410,000₮</strong></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- ── Report Detail: Байгууллагын төлсөн нийт татвар ── -->
+        <div class="report-detail" id="rd-total-tax">
+          <div class="report-detail-header">
+            <div style="display:flex;align-items:center;gap:8px;">
+              <button class="report-back" onclick="closeReport()">‹ Буцах</button>
+              <div><div class="report-detail-title">Байгууллагын төлсөн нийт татвар</div><div class="report-detail-sub">2026/03</div></div>
+            </div>
+            <button class="pdf-btn"><svg class="icon" style="stroke:white;" viewBox="0 0 24 24"><path d="M12 3v12"></path><path d="m7 10 5 5 5-5"></path><path d="M5 21h14"></path></svg> PDF татах</button>
+          </div>
+
+          <div class="big-tax-banner">
+            <div>
+              <div class="btb-label">Нийт татварын зардал</div>
+              <div class="btb-value">106,898,500₮</div>
+              <div class="btb-prev">Өмнөх сар: 103,583,818₮</div>
+            </div>
+            <span class="btb-badge">+3.2%</span>
+          </div>
+
+          <div class="tax-summary-cards">
+            <div class="tax-card">
+              <div class="tc-label">НДШ (Нийгмийн даатгал)</div>
+              <div class="tc-amount">71,797,500₮</div>
+              <div class="tc-row"><span>Ажилтны (10%)</span><span>31,910,000₮</span></div>
+              <div class="tc-row"><span>Ажил олгогчийн (12.5%)</span><span>39,887,500₮</span></div>
+            </div>
+            <div class="tax-card">
+              <div class="tc-label">ХХОАТ (Орлого)</div>
+              <div class="tc-amount">31,910,000₮</div>
+              <div class="tc-row"><span>Ажилтны (10%)</span><span>31,910,000₮</span></div>
+            </div>
+            <div class="tax-card">
+              <div class="tc-label">БНДШ (Байгууллага)</div>
+              <div class="tc-amount">3,191,000₮</div>
+              <div class="tc-row"><span>Байгууллагын (1%)</span><span>3,191,000₮</span></div>
+            </div>
+          </div>
+
+          <div class="card" style="padding:22px 24px;">
+            <h3 style="font-size:16px;font-weight:800;margin-bottom:18px;color:#0f172a;">Хэлтсээр татварын задаргаа</h3>
+            <table class="detail-table">
+              <thead>
+                <tr><th>Хэлтэс</th><th>НДШ (аж)</th><th>НДШ (бг)</th><th>ХХОАТ</th><th>Нийт</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>Борлуулалтын алба</td><td>6,850,000₮</td><td>8,562,500₮</td><td>6,850,000₮</td><td><strong>22,262,500₮</strong></td></tr>
+                <tr><td>Үйлдвэрлэлийн алба</td><td>9,240,000₮</td><td>11,550,000₮</td><td>9,240,000₮</td><td><strong>30,030,000₮</strong></td></tr>
+                <tr><td>Техникийн алба</td><td>5,420,000₮</td><td>6,775,000₮</td><td>5,420,000₮</td><td><strong>17,615,000₮</strong></td></tr>
+                <tr><td>Захиргааны алба</td><td>3,280,000₮</td><td>4,100,000₮</td><td>3,280,000₮</td><td><strong>10,660,000₮</strong></td></tr>
+                <tr><td>Маркетингийн алба</td><td>4,230,000₮</td><td>5,287,500₮</td><td>4,230,000₮</td><td><strong>13,747,500₮</strong></td></tr>
+                <tr><td>Санхүүгийн алба</td><td>2,890,000₮</td><td>3,612,500₮</td><td>2,890,000₮</td><td><strong>9,392,500₮</strong></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
       </section>
 
+      <!-- ══ BANK FILES ══ -->
       <section class="page" id="bank-files">
         <div class="page-header">
           <div>
@@ -872,11 +730,29 @@
           <div class="form-grid-2">
             <div class="field">
               <label>Сар сонгох</label>
-              <div class="select">2026 оны 3-р сар <span class="arrow">⌄</span></div>
+              <div class="custom-select" id="cs-bank-month">
+                <div class="sel-trigger" onclick="toggleSel('cs-bank-month')">
+                  <span class="sel-label">2026 оны 3-р сар</span><span class="arrow">▼</span>
+                </div>
+                <div class="sel-menu">
+                  <div class="sel-item" onclick="pickSel('cs-bank-month','2026 оны 1-р сар')">2026 оны 1-р сар</div>
+                  <div class="sel-item" onclick="pickSel('cs-bank-month','2026 оны 2-р сар')">2026 оны 2-р сар</div>
+                  <div class="sel-item active" onclick="pickSel('cs-bank-month','2026 оны 3-р сар')">2026 оны 3-р сар <span class="check">✓</span></div>
+                </div>
+              </div>
             </div>
             <div class="field">
               <label>Файлын формат</label>
-              <div class="select">CSV формат <span class="arrow">⌄</span></div>
+              <div class="custom-select" id="cs-bank-fmt">
+                <div class="sel-trigger" onclick="toggleSel('cs-bank-fmt')">
+                  <span class="sel-label">CSV формат</span><span class="arrow">▼</span>
+                </div>
+                <div class="sel-menu">
+                  <div class="sel-item active" onclick="pickSel('cs-bank-fmt','CSV формат')">CSV формат <span class="check">✓</span></div>
+                  <div class="sel-item" onclick="pickSel('cs-bank-fmt','XML формат')">XML формат</div>
+                  <div class="sel-item" onclick="pickSel('cs-bank-fmt','Excel формат')">Excel формат</div>
+                </div>
+              </div>
             </div>
           </div>
           <button class="btn btn-disabled" style="width:100%; height:40px;">Банкны файл үүсгэх</button>
@@ -891,13 +767,94 @@
           </div>
         </div>
       </section>
+
     </main>
   </div>
 
-    <script>window.APP_CONFIG = { fileName: "acc.html", defaultPage: "home" };</script>
+  <script>window.APP_CONFIG = { fileName: "acc.html", defaultPage: "home" };</script>
   <script src="demo-users.js"></script>
   <script src="app.js"></script>
+  <script>
+  (function() {
+    /* ── Nav ── */
+    function showPage(id) {
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.nav-link').forEach(b => b.classList.remove('active'));
+      const page = document.getElementById(id);
+      if (page) page.classList.add('active');
+      const btn = document.querySelector(`.nav-link[data-page="${id}"]`);
+      if (btn) btn.classList.add('active');
+      // Always show report list when navigating to reports
+      if (id === 'reports') {
+        document.getElementById('reportsList').style.display = '';
+        document.querySelectorAll('.report-detail').forEach(d => d.classList.remove('active'));
+      }
+    }
+    document.querySelectorAll('.nav-link').forEach(btn => {
+      btn.addEventListener('click', () => showPage(btn.dataset.page));
+    });
+    document.querySelectorAll('[data-page-target]').forEach(el => {
+      el.addEventListener('click', () => showPage(el.dataset.pageTarget));
+    });
 
+    /* ── Month tabs ── */
+    document.querySelectorAll('.month-tabs button').forEach(btn => {
+      btn.addEventListener('click', function() {
+        this.closest('.month-tabs').querySelectorAll('button').forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+      });
+    });
 
+    /* ── Custom Select ── */
+    window.toggleSel = function(id) {
+      const cs = document.getElementById(id);
+      const trigger = cs.querySelector('.sel-trigger');
+      const menu = cs.querySelector('.sel-menu');
+      const isOpen = menu.classList.contains('open');
+      // Close all
+      document.querySelectorAll('.sel-menu').forEach(m => m.classList.remove('open'));
+      document.querySelectorAll('.sel-trigger').forEach(t => t.classList.remove('open'));
+      if (!isOpen) {
+        menu.classList.add('open');
+        trigger.classList.add('open');
+      }
+    };
+    window.pickSel = function(id, value) {
+      const cs = document.getElementById(id);
+      cs.querySelector('.sel-label').textContent = value;
+      cs.querySelector('.sel-menu').classList.remove('open');
+      cs.querySelector('.sel-trigger').classList.remove('open');
+      // Update active item
+      cs.querySelectorAll('.sel-item').forEach(item => {
+        const isActive = item.textContent.replace('✓','').trim() === value;
+        item.classList.toggle('active', isActive);
+        if (isActive && !item.querySelector('.check')) {
+          item.innerHTML = item.textContent.trim() + ' <span class="check">✓</span>';
+        } else if (!isActive) {
+          item.innerHTML = item.textContent.replace('✓','').trim();
+        }
+      });
+    };
+    // Close dropdowns when clicking outside
+    document.addEventListener('click', function(e) {
+      if (!e.target.closest('.custom-select')) {
+        document.querySelectorAll('.sel-menu').forEach(m => m.classList.remove('open'));
+        document.querySelectorAll('.sel-trigger').forEach(t => t.classList.remove('open'));
+      }
+    });
+
+    /* ── Report Navigation ── */
+    window.openReport = function(key) {
+      document.getElementById('reportsList').style.display = 'none';
+      document.querySelectorAll('.report-detail').forEach(d => d.classList.remove('active'));
+      const detail = document.getElementById('rd-' + key);
+      if (detail) detail.classList.add('active');
+    };
+    window.closeReport = function() {
+      document.getElementById('reportsList').style.display = '';
+      document.querySelectorAll('.report-detail').forEach(d => d.classList.remove('active'));
+    };
+  })();
+  </script>
 </body>
 </html>

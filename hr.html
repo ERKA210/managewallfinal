@@ -175,13 +175,60 @@
     .actions .danger { color: #ef4444; }
     .muted-eye { color: #94a3b8; margin-left: 6px; }
 
-    .dept-list { display: flex; flex-direction: column; gap: 12px; }
-    .dept-card {
-      padding: 18px 18px; display: flex; justify-content: space-between; align-items: center; gap: 16px;
+    /* ── Accordion timesheet ── */
+    .ts-list { display: flex; flex-direction: column; gap: 12px; }
+
+    .ts-section { border-radius: var(--radius); border: 1px solid var(--line); background: #fff; box-shadow: var(--shadow); overflow: hidden; }
+    .ts-section.confirmed { border-color: #bbf7d0; background: #f0fdf4; }
+
+    .ts-header {
+      display: flex; align-items: center; gap: 14px; padding: 18px 20px; cursor: pointer;
+      user-select: none;
     }
-    .dept-name { font-size: 17px; font-weight: 800; color: #0f172a; margin-bottom: 6px; }
-    .dept-meta { font-size: 14px; color: #64748b; }
-    .dept-meta .warn { color: #d97706; }
+    .ts-chevron {
+      width: 20px; height: 20px; stroke: #94a3b8; fill: none; stroke-width: 2.5;
+      flex-shrink: 0; transition: transform .25s ease;
+    }
+    .ts-section.open .ts-chevron { transform: rotate(90deg); }
+    .ts-section.confirmed .ts-chevron { stroke: #16a34a; }
+
+    .ts-dept-info { flex: 1; }
+    .ts-dept-name { font-size: 17px; font-weight: 800; color: #0f172a; margin-bottom: 4px; }
+    .ts-section.confirmed .ts-dept-name { color: #15803d; }
+    .ts-dept-meta { font-size: 14px; color: #64748b; }
+    .ts-dept-meta .warn { color: #d97706; font-weight: 700; }
+    .ts-dept-meta .ok { color: #16a34a; font-weight: 700; }
+
+    .dept-confirmed-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: #dcfce7; color: #15803d; border: 1px solid #86efac;
+      border-radius: 999px; padding: 5px 14px; font-size: 13px; font-weight: 700;
+    }
+
+    .ts-body { display: none; border-top: 1px solid var(--line); overflow: auto; }
+    .ts-section.open .ts-body { display: block; }
+
+    .ts-table { width: 100%; border-collapse: collapse; min-width: 900px; }
+    .ts-table th {
+      padding: 10px 14px; font-size: 11px; text-transform: uppercase; font-weight: 800;
+      color: #64748b; letter-spacing: .04em; border-bottom: 1px solid var(--line);
+      background: #f8fafc; text-align: left;
+    }
+    .ts-table td {
+      padding: 11px 14px; border-bottom: 1px solid var(--line); font-size: 13.5px;
+    }
+    .ts-table tr:last-child td { border-bottom: none; }
+
+    .td-green { color: #16a34a; font-weight: 700; }
+    .td-orange { color: #ea580c; font-weight: 700; }
+    .td-blue { color: #2563eb; font-weight: 700; }
+    .td-muted { color: #94a3b8; }
+
+    .status-pill {
+      display: inline-flex; padding: 3px 10px; border-radius: 999px; font-size: 12px; font-weight: 700;
+    }
+    .status-normal { background: #dbeafe; color: #2563eb; }
+    .status-short { background: #fef3c7; color: #d97706; }
 
     @media (max-width: 1280px) {
       .stats-4 { grid-template-columns: repeat(2, 1fr); }
@@ -194,7 +241,6 @@
       .stats-4 { grid-template-columns: 1fr; }
       .page-header, .toolbar { flex-direction: column; align-items: stretch; }
       .search, .select { min-width: 0; width: 100%; }
-      .dept-card { flex-direction: column; align-items: flex-start; }
     }
 
     /* Modal shared */
@@ -245,15 +291,6 @@
     }
     .toast.show { display: flex; }
 
-    /* Timesheet confirmed state */
-    .dept-card.confirmed { border-color: #bbf7d0; background: #f0fdf4; }
-    .dept-card.confirmed .dept-name { color: #15803d; }
-    .dept-confirmed-badge {
-      display: inline-flex; align-items: center; gap: 6px;
-      background: #dcfce7; color: #15803d; border: 1px solid #86efac;
-      border-radius: 999px; padding: 5px 14px; font-size: 13px; font-weight: 700;
-    }
-
     /* Excel drop zone */
     .excel-dropzone {
       border: 2px dashed #93c5fd; border-radius: 14px; padding: 28px 20px;
@@ -299,11 +336,12 @@
     </aside>
 
     <main class="content">
+      <!-- HOME PAGE -->
       <section class="page active" id="home">
         <div class="page-header">
           <div>
             <h1 class="page-title">Нүүр хуудас</h1>
-            <p class="page-subtitle">April 12, 2026</p>
+            <p class="page-subtitle">April 19, 2026</p>
           </div>
         </div>
 
@@ -322,11 +360,11 @@
               <div class="stat-icon blue-bg">
                 <svg class="icon" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
               </div>
-              <div class="pill pill-gray">Хүлээгдэж буй</div>
+              <div class="pill pill-gray" id="payrollStatusPill">Хүлээгдэж буй</div>
             </div>
             <div class="stat-body">
               <h4>Цалингийн төлөв</h4>
-              <div class="big">Хүлээгдэж буй</div>
+              <div class="big" id="payrollStatusText">Хүлээгдэж буй</div>
             </div>
           </div>
 
@@ -335,11 +373,11 @@
               <div class="stat-icon orange-bg">
                 <svg class="icon" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2"></path><circle cx="9.5" cy="7" r="4"></circle><path d="M20 8v6"></path><path d="M23 11h-6"></path></svg>
               </div>
-              <div class="pill pill-yellow">Хүлээгдэж буй</div>
+              <div class="pill pill-yellow" id="unconfirmedPill">Хүлээгдэж буй</div>
             </div>
             <div class="stat-body">
               <h4>Баталгаажаагүй ажилтан</h4>
-              <div class="big">8</div>
+              <div class="big" id="unconfirmedCount">12</div>
               <small>ажилтан</small>
             </div>
           </div>
@@ -349,12 +387,12 @@
               <div class="stat-icon green-bg">
                 <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg>
               </div>
-              <div class="pill pill-yellow">Хүлээгдэж буй</div>
+              <div class="pill pill-yellow" id="tsStatusPill">Хүлээгдэж буй</div>
             </div>
             <div class="stat-body">
               <h4>Цагийн баталгаажуулалт</h4>
-              <div class="big">8 ажилтан</div>
-              <small>Хүлээгдэж буй</small>
+              <div class="big" id="tsStatusText">12 ажилтан</div>
+              <small id="tsStatusSmall">Хүлээгдэж буй</small>
             </div>
           </div>
 
@@ -384,25 +422,26 @@
             <div style="color:#64748b; margin-bottom:16px; font-size:14px;">Цалин бодолт эхлүүлэхийн тулд дараах нөхцлүүдийг хангасан уу.</div>
             <div class="quick-box">
               <div class="check-row"><span class="radio"></span>Цагийн баталгаажуулалт дууссан байх</div>
-              <div class="check-row"><span class="radio"></span>Сарын 5 эсвэл 25-ны өдөр байх (Одоогийн огноо: 12)</div>
-              <div><button class="btn btn-disabled btn-sm">Нөхцөл хангагдаагүй байна</button></div>
+              <div class="check-row"><span class="radio"></span>Сарын 5 эсвэл 25-ны өдөр байх (Одоогийн огноо: 19)</div>
+              <div><button class="btn btn-disabled btn-sm" id="homePayrollBtn">Нөхцөл хангагдаагүй байна</button></div>
             </div>
           </div>
         </div>
       </section>
 
+      <!-- EMPLOYEES PAGE -->
       <section class="page" id="employees">
         <div class="page-header">
           <div>
             <h1 class="page-title">Ажилтны бүртгэл</h1>
-            <p class="page-subtitle">Нийт 42 идэвхтэй ажилтан</p>
+            <p class="page-subtitle" id="empCount">Нийт 42 идэвхтэй ажилтан</p>
           </div>
           <div style="display:flex; gap:10px; flex-wrap:wrap;">
-            <button class="btn btn-blue-outline btn-sm">
+            <button class="btn btn-blue-outline btn-sm" id="openExcelBtn">
               <svg class="icon" viewBox="0 0 24 24"><path d="M12 3v12"></path><path d="m7 10 5 5 5-5"></path><path d="M5 21h14"></path></svg>
               Excel оруулах
             </button>
-            <button class="btn btn-blue btn-sm">
+            <button class="btn btn-blue btn-sm" id="openNewEmpBtn">
               <svg class="icon" viewBox="0 0 24 24" style="stroke:white;"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
               Шинэ ажилтан
             </button>
@@ -421,168 +460,341 @@
           <table>
             <thead>
               <tr>
-                <th>ID</th>
-                <th>АЖИЛТНЫ НЭР</th>
-                <th>РЕГИСТР</th>
-                <th>УТАС</th>
-                <th>АЛБА</th>
-                <th>АЛБАН ТУШААЛ</th>
-                <th>БАНКНЫ ДАНС</th>
-                <th>ТӨРӨЛ</th>
-                <th>ТӨЛӨВ</th>
-                <th>ҮЙЛДЭЛ</th>
+                <th>ID</th><th>АЖИЛТНЫ НЭР</th><th>РЕГИСТР</th><th>УТАС</th>
+                <th>АЛБА</th><th>АЛБАН ТУШААЛ</th><th>БАНКНЫ ДАНС</th>
+                <th>ТӨРӨЛ</th><th>ТӨЛӨВ</th><th>ҮЙЛДЭЛ</th>
               </tr>
             </thead>
-            <tbody>
-              <tr><td><strong>EMP001</strong></td><td>Батбаяр Болд</td><td>********9031 <span class="muted-eye">◉</span></td><td>88000000</td><td>Санхүү</td><td>Ажилтан</td><td>******0000 <span class="muted-eye">◉</span></td><td><span class="mini-pill mini-purple">Цагийн</span></td><td><span class="mini-pill mini-green">Идэвхтэй</span></td><td><div class="actions"><span>✎</span><span class="danger">⌁</span></div></td></tr>
-              <tr><td><strong>EMP002</strong></td><td>Дорж Энхбат</td><td>********5902 <span class="muted-eye">◉</span></td><td>88000001</td><td>Санхүү</td><td>Ажилтан</td><td>******0001 <span class="muted-eye">◉</span></td><td><span class="mini-pill mini-blue">Үндсэн</span></td><td><span class="mini-pill mini-green">Идэвхтэй</span></td><td><div class="actions"><span>✎</span><span class="danger">⌁</span></div></td></tr>
-              <tr><td><strong>EMP003</strong></td><td>Түмэн Баар</td><td>********6874 <span class="muted-eye">◉</span></td><td>88000002</td><td>Санхүү</td><td>Ажилтан</td><td>******0002 <span class="muted-eye">◉</span></td><td><span class="mini-pill mini-blue">Үндсэн</span></td><td><span class="mini-pill mini-green">Идэвхтэй</span></td><td><div class="actions"><span>✎</span><span class="danger">⌁</span></div></td></tr>
+            <tbody id="empTableBody">
+              <tr><td><strong>EMP001</strong></td><td>Батбаяр Болд</td><td>********9031 <span class="muted-eye">◉</span></td><td>88000000</td><td>Санхүү</td><td>Менежер</td><td>******0000 <span class="muted-eye">◉</span></td><td><span class="mini-pill mini-purple">Цагийн</span></td><td><span class="mini-pill mini-green">Идэвхтэй</span></td><td><div class="actions"><span>✎</span><span class="danger">⌁</span></div></td></tr>
+              <tr><td><strong>EMP002</strong></td><td>Дорж Энхбат</td><td>********5902 <span class="muted-eye">◉</span></td><td>88000001</td><td>Санхүү</td><td>Шинжээч</td><td>******0001 <span class="muted-eye">◉</span></td><td><span class="mini-pill mini-blue">Үндсэн</span></td><td><span class="mini-pill mini-green">Идэвхтэй</span></td><td><div class="actions"><span>✎</span><span class="danger">⌁</span></div></td></tr>
+              <tr><td><strong>EMP003</strong></td><td>Түмэн Баар</td><td>********6874 <span class="muted-eye">◉</span></td><td>88000002</td><td>Санхүү</td><td>Касс</td><td>******0002 <span class="muted-eye">◉</span></td><td><span class="mini-pill mini-blue">Үндсэн</span></td><td><span class="mini-pill mini-green">Идэвхтэй</span></td><td><div class="actions"><span>✎</span><span class="danger">⌁</span></div></td></tr>
               <tr><td><strong>EMP004</strong></td><td>Сарнай Сэргэлэн</td><td>********8318 <span class="muted-eye">◉</span></td><td>88000003</td><td>Санхүү</td><td>Ажилтан</td><td>******0003 <span class="muted-eye">◉</span></td><td><span class="mini-pill mini-blue">Үндсэн</span></td><td><span class="mini-pill mini-green">Идэвхтэй</span></td><td><div class="actions"><span>✎</span><span class="danger">⌁</span></div></td></tr>
-              <tr><td><strong>EMP005</strong></td><td>Оюунаа Төгөлдөр</td><td>********0796 <span class="muted-eye">◉</span></td><td>88000004</td><td>Санхүү</td><td>Ажилтан</td><td>******0004 <span class="muted-eye">◉</span></td><td><span class="mini-pill mini-blue">Үндсэн</span></td><td><span class="mini-pill mini-green">Идэвхтэй</span></td><td><div class="actions"><span>✎</span><span class="danger">⌁</span></div></td></tr>
-              <tr><td><strong>EMP006</strong></td><td>Чимэг Мөнх</td><td>********2594 <span class="muted-eye">◉</span></td><td>88000005</td><td>Санхүү</td><td>Ажилтан</td><td>******0005 <span class="muted-eye">◉</span></td><td><span class="mini-pill mini-purple">Цагийн</span></td><td><span class="mini-pill mini-green">Идэвхтэй</span></td><td><div class="actions"><span>✎</span><span class="danger">⌁</span></div></td></tr>
-              <tr><td><strong>EMP007</strong></td><td>Ганболд Эрдэнэ</td><td>********1564 <span class="muted-eye">◉</span></td><td>88000006</td><td>Санхүү</td><td>Ажилтан</td><td>******0006 <span class="muted-eye">◉</span></td><td><span class="mini-pill mini-blue">Үндсэн</span></td><td><span class="mini-pill mini-green">Идэвхтэй</span></td><td><div class="actions"><span>✎</span><span class="danger">⌁</span></div></td></tr>
-              <tr><td><strong>EMP008</strong></td><td>Батбаяр Болд</td><td>********0608 <span class="muted-eye">◉</span></td><td>88000007</td><td>Маркетинг</td><td>Ажилтан</td><td>******0007 <span class="muted-eye">◉</span></td><td><span class="mini-pill mini-blue">Үндсэн</span></td><td><span class="mini-pill mini-green">Идэвхтэй</span></td><td><div class="actions"><span>✎</span><span class="danger">⌁</span></div></td></tr>
-              <tr><td><strong>EMP009</strong></td><td>Дорж Энхбат</td><td>********9954 <span class="muted-eye">◉</span></td><td>88000008</td><td>Маркетинг</td><td>Ажилтан</td><td>******0008 <span class="muted-eye">◉</span></td><td><span class="mini-pill mini-blue">Үндсэн</span></td><td><span class="mini-pill mini-green">Идэвхтэй</span></td><td><div class="actions"><span>✎</span><span class="danger">⌁</span></div></td></tr>
+              <tr><td><strong>EMP005</strong></td><td>Оюунаа Төгөлдөр</td><td>********0796 <span class="muted-eye">◉</span></td><td>88000004</td><td>Санхүү</td><td>Зөвлөх</td><td>******0004 <span class="muted-eye">◉</span></td><td><span class="mini-pill mini-blue">Үндсэн</span></td><td><span class="mini-pill mini-green">Идэвхтэй</span></td><td><div class="actions"><span>✎</span><span class="danger">⌁</span></div></td></tr>
+              <tr><td><strong>EMP006</strong></td><td>Чимэг Мөнх</td><td>********2594 <span class="muted-eye">◉</span></td><td>88000005</td><td>Санхүү</td><td>Эрсдэлийн менежер</td><td>******0005 <span class="muted-eye">◉</span></td><td><span class="mini-pill mini-purple">Цагийн</span></td><td><span class="mini-pill mini-green">Идэвхтэй</span></td><td><div class="actions"><span>✎</span><span class="danger">⌁</span></div></td></tr>
+              <tr><td><strong>EMP007</strong></td><td>Ганболд Эрдэнэ</td><td>********1564 <span class="muted-eye">◉</span></td><td>88000006</td><td>Санхүү</td><td>Ахлах мэргэжилтэн</td><td>******0006 <span class="muted-eye">◉</span></td><td><span class="mini-pill mini-blue">Үндсэн</span></td><td><span class="mini-pill mini-green">Идэвхтэй</span></td><td><div class="actions"><span>✎</span><span class="danger">⌁</span></div></td></tr>
+              <tr><td><strong>EMP008</strong></td><td>Батбаяр Болд</td><td>********0608 <span class="muted-eye">◉</span></td><td>88000007</td><td>Маркетинг</td><td>Менежер</td><td>******0007 <span class="muted-eye">◉</span></td><td><span class="mini-pill mini-blue">Үндсэн</span></td><td><span class="mini-pill mini-green">Идэвхтэй</span></td><td><div class="actions"><span>✎</span><span class="danger">⌁</span></div></td></tr>
+              <tr><td><strong>EMP009</strong></td><td>Дорж Энхбат</td><td>********9954 <span class="muted-eye">◉</span></td><td>88000008</td><td>Маркетинг</td><td>Дизайнер</td><td>******0008 <span class="muted-eye">◉</span></td><td><span class="mini-pill mini-blue">Үндсэн</span></td><td><span class="mini-pill mini-green">Идэвхтэй</span></td><td><div class="actions"><span>✎</span><span class="danger">⌁</span></div></td></tr>
               <tr><td><strong>EMP010</strong></td><td>Түмэн Баар</td><td>********0451 <span class="muted-eye">◉</span></td><td>88000009</td><td>Маркетинг</td><td>Ажилтан</td><td>******0009 <span class="muted-eye">◉</span></td><td><span class="mini-pill mini-blue">Үндсэн</span></td><td><span class="mini-pill mini-green">Идэвхтэй</span></td><td><div class="actions"><span>✎</span><span class="danger">⌁</span></div></td></tr>
-              <tr><td><strong>EMP011</strong></td><td>Сарнай Сэргэлэн</td><td>********6821 <span class="muted-eye">◉</span></td><td>88000010</td><td>Маркетинг</td><td>Ажилтан</td><td>******0010 <span class="muted-eye">◉</span></td><td><span class="mini-pill mini-purple">Цагийн</span></td><td><span class="mini-pill mini-green">Идэвхтэй</span></td><td><div class="actions"><span>✎</span><span class="danger">⌁</span></div></td></tr>
-              <tr><td><strong>EMP012</strong></td><td>Оюунаа Төгөлдөр</td><td>********6650 <span class="muted-eye">◉</span></td><td>88000011</td><td>Маркетинг</td><td>Ажилтан</td><td>******0011 <span class="muted-eye">◉</span></td><td><span class="mini-pill mini-blue">Үндсэн</span></td><td><span class="mini-pill mini-green">Идэвхтэй</span></td><td><div class="actions"><span>✎</span><span class="danger">⌁</span></div></td></tr>
-              <tr><td><strong>EMP013</strong></td><td>Чимэг Мөнх</td><td>********4845 <span class="muted-eye">◉</span></td><td>88000012</td><td>Маркетинг</td><td>Ажилтан</td><td>******0012 <span class="muted-eye">◉</span></td><td><span class="mini-pill mini-blue">Үндсэн</span></td><td><span class="mini-pill mini-green">Идэвхтэй</span></td><td><div class="actions"><span>✎</span><span class="danger">⌁</span></div></td></tr>
-              <tr><td><strong>EMP014</strong></td><td>Ганболд Эрдэнэ</td><td>********9179 <span class="muted-eye">◉</span></td><td>88000013</td><td>Маркетинг</td><td>Ажилтан</td><td>******0013 <span class="muted-eye">◉</span></td><td><span class="mini-pill mini-blue">Үндсэн</span></td><td><span class="mini-pill mini-green">Идэвхтэй</span></td><td><div class="actions"><span>✎</span><span class="danger">⌁</span></div></td></tr>
-              <tr><td><strong>EMP015</strong></td><td>Батбаяр Болд</td><td>********2164 <span class="muted-eye">◉</span></td><td>88000014</td><td>IT</td><td>Ажилтан</td><td>******0014 <span class="muted-eye">◉</span></td><td><span class="mini-pill mini-blue">Үндсэн</span></td><td><span class="mini-pill mini-green">Идэвхтэй</span></td><td><div class="actions"><span>✎</span><span class="danger">⌁</span></div></td></tr>
-              <tr><td><strong>EMP016</strong></td><td>Дорж Энхбат</td><td>********0005 <span class="muted-eye">◉</span></td><td>88000015</td><td>IT</td><td>Ажилтан</td><td>******0015 <span class="muted-eye">◉</span></td><td><span class="mini-pill mini-purple">Цагийн</span></td><td><span class="mini-pill mini-green">Идэвхтэй</span></td><td><div class="actions"><span>✎</span><span class="danger">⌁</span></div></td></tr>
-              <tr><td><strong>EMP017</strong></td><td>Түмэн Баар</td><td>********8672 <span class="muted-eye">◉</span></td><td>88000016</td><td>IT</td><td>Ажилтан</td><td>******0016 <span class="muted-eye">◉</span></td><td><span class="mini-pill mini-blue">Үндсэн</span></td><td><span class="mini-pill mini-green">Идэвхтэй</span></td><td><div class="actions"><span>✎</span><span class="danger">⌁</span></div></td></tr>
-              <tr><td><strong>EMP018</strong></td><td>Сарнай Сэргэлэн</td><td>********4265 <span class="muted-eye">◉</span></td><td>88000017</td><td>IT</td><td>Ажилтан</td><td>******0017 <span class="muted-eye">◉</span></td><td><span class="mini-pill mini-blue">Үндсэн</span></td><td><span class="mini-pill mini-green">Идэвхтэй</span></td><td><div class="actions"><span>✎</span><span class="danger">⌁</span></div></td></tr>
+              <tr><td><strong>EMP011</strong></td><td>Сарнай Сэргэлэн</td><td>********6821 <span class="muted-eye">◉</span></td><td>88000010</td><td>Маркетинг</td><td>Агент</td><td>******0010 <span class="muted-eye">◉</span></td><td><span class="mini-pill mini-purple">Цагийн</span></td><td><span class="mini-pill mini-green">Идэвхтэй</span></td><td><div class="actions"><span>✎</span><span class="danger">⌁</span></div></td></tr>
+              <tr><td><strong>EMP015</strong></td><td>Батбаяр Болд</td><td>********2164 <span class="muted-eye">◉</span></td><td>88000014</td><td>IT</td><td>Хөгжүүлэгч</td><td>******0014 <span class="muted-eye">◉</span></td><td><span class="mini-pill mini-blue">Үндсэн</span></td><td><span class="mini-pill mini-green">Идэвхтэй</span></td><td><div class="actions"><span>✎</span><span class="danger">⌁</span></div></td></tr>
+              <tr><td><strong>EMP016</strong></td><td>Дорж Энхбат</td><td>********0005 <span class="muted-eye">◉</span></td><td>88000015</td><td>IT</td><td>Системийн инженер</td><td>******0015 <span class="muted-eye">◉</span></td><td><span class="mini-pill mini-purple">Цагийн</span></td><td><span class="mini-pill mini-green">Идэвхтэй</span></td><td><div class="actions"><span>✎</span><span class="danger">⌁</span></div></td></tr>
             </tbody>
           </table>
         </div>
       </section>
 
+      <!-- TIMESHEET PAGE -->
       <section class="page" id="timesheet">
         <div class="page-header">
           <div>
             <h1 class="page-title">Цагийн бүртгэл баталгаажуулах</h1>
-            <p class="page-subtitle">2026 оны 3-р сарын цагийн бүртгэл (0/6 алба баталгаажсан)</p>
+            <p class="page-subtitle" id="tsPageSubtitle">2026 оны 3-р сарын цагийн бүртгэл (0/6 алба баталгаажсан)</p>
           </div>
-          <button class="btn btn-blue btn-sm">Бүгдийг баталгаажуулах</button>
+          <button class="btn btn-blue btn-sm" id="confirmAllBtn">Бүгдийг баталгаажуулах</button>
         </div>
 
-        <div class="dept-list">
-          <div class="card dept-card"><div><div class="dept-name">Санхүү</div><div class="dept-meta">7 ажилтан · <span class="warn">2 баталгаажаагүй</span></div></div><button class="btn btn-blue btn-sm">Баталгаажуулах</button></div>
-          <div class="card dept-card"><div><div class="dept-name">Маркетинг</div><div class="dept-meta">7 ажилтан · <span class="warn">2 баталгаажаагүй</span></div></div><button class="btn btn-blue btn-sm">Баталгаажуулах</button></div>
-          <div class="card dept-card"><div><div class="dept-name">IT</div><div class="dept-meta">7 ажилтан · <span class="warn">2 баталгаажаагүй</span></div></div><button class="btn btn-blue btn-sm">Баталгаажуулах</button></div>
-          <div class="card dept-card"><div><div class="dept-name">Борлуулалт</div><div class="dept-meta">7 ажилтан · <span class="warn">2 баталгаажаагүй</span></div></div><button class="btn btn-blue btn-sm">Баталгаажуулах</button></div>
-          <div class="card dept-card"><div><div class="dept-name">Нягтлан бодох бүртгэл</div><div class="dept-meta">7 ажилтан · <span class="warn">2 баталгаажаагүй</span></div></div><button class="btn btn-blue btn-sm">Баталгаажуулах</button></div>
-          <div class="card dept-card"><div><div class="dept-name">Хүний нөөц</div><div class="dept-meta">7 ажилтан · <span class="warn">2 баталгаажаагүй</span></div></div><button class="btn btn-blue btn-sm">Баталгаажуулах</button></div>
-        </div>
+        <div class="ts-list" id="tsList">
+
+          <!-- САНХҮҮ -->
+          <div class="ts-section" data-dept="Санхүү">
+            <div class="ts-header">
+              <svg class="ts-chevron" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg>
+              <div class="ts-dept-info">
+                <div class="ts-dept-name">Санхүү</div>
+                <div class="ts-dept-meta">7 ажилтан · <span class="warn">2 баталгаажаагүй</span></div>
+              </div>
+              <button class="btn btn-blue btn-sm ts-confirm-btn">Баталгаажуулах</button>
+            </div>
+            <div class="ts-body">
+              <table class="ts-table">
+                <thead>
+                  <tr>
+                    <th>ID</th><th>АЖИЛТНЫ НЭР</th><th>АЛБАН ТУШААЛ</th>
+                    <th>АЖИЛЛАХ ЁСТОЙ ХОНОГ</th><th>АЖИЛЛАХ ЁСТОЙ ЦАГ</th>
+                    <th>АЖИЛЛАСАН ХОНОГ</th><th>АЖИЛЛАСАН ЦАГ</th>
+                    <th>НИЙТ ХОНОГ</th><th>НИЙТ ЦАГ</th>
+                    <th>ИЛҮҮ ЦАГ</th><th>ЧӨЛӨӨ</th><th>ТӨЛӨВ</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td><strong>CA001</strong></td><td>Б.Болд</td><td>Санхүүгийн менежер</td><td>22</td><td>176</td><td class="td-green">22</td><td class="td-green">176</td><td class="td-blue">22</td><td class="td-blue">184</td><td>8</td><td class="td-muted">-</td><td><span class="status-pill status-normal">Хэвийн</span></td></tr>
+                  <tr><td><strong>CA002</strong></td><td>Д.Дорж</td><td>Санхүүгийн шинжээч</td><td>22</td><td>176</td><td class="td-green">22</td><td class="td-green">176</td><td class="td-blue">22</td><td class="td-blue">176</td><td class="td-muted">-</td><td class="td-muted">-</td><td><span class="status-pill status-normal">Хэвийн</span></td></tr>
+                  <tr><td><strong>CA003</strong></td><td>Т.Түмэн</td><td>Касс</td><td>22</td><td>176</td><td class="td-green">22</td><td class="td-green">176</td><td class="td-blue">22</td><td class="td-blue">180</td><td>4</td><td class="td-muted">-</td><td><span class="status-pill status-normal">Хэвийн</span></td></tr>
+                  <tr><td><strong>CA004</strong></td><td>С.Сарнай</td><td>Төлбөрийн ажилтан</td><td>22</td><td>176</td><td class="td-green">22</td><td class="td-green">176</td><td class="td-blue">22</td><td class="td-blue">184</td><td>8</td><td class="td-muted">-</td><td><span class="status-pill status-normal">Хэвийн</span></td></tr>
+                  <tr><td><strong>CA005</strong></td><td>О.Оюунаа</td><td>Санхүүгийн зөвлөх</td><td>22</td><td>176</td><td class="td-orange">21</td><td class="td-orange">168</td><td class="td-blue">21</td><td class="td-blue">172</td><td>4</td><td>1</td><td><span class="status-pill status-short">Дутуу</span></td></tr>
+                  <tr><td><strong>CA006</strong></td><td>Ч.Чимэг</td><td>Эрсдэлийн менежер</td><td>22</td><td>176</td><td class="td-green">22</td><td class="td-green">176</td><td class="td-blue">22</td><td class="td-blue">176</td><td class="td-muted">-</td><td class="td-muted">-</td><td><span class="status-pill status-normal">Хэвийн</span></td></tr>
+                  <tr><td><strong>CA007</strong></td><td>Г.Ганболд</td><td>Санхүүгийн ахлах мэргэжилтэн</td><td>22</td><td>176</td><td class="td-orange">20</td><td class="td-orange">160</td><td class="td-blue">20</td><td class="td-blue">168</td><td>8</td><td>2</td><td><span class="status-pill status-short">Дутуу</span></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- МАРКЕТИНГ -->
+          <div class="ts-section" data-dept="Маркетинг">
+            <div class="ts-header">
+              <svg class="ts-chevron" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg>
+              <div class="ts-dept-info">
+                <div class="ts-dept-name">Маркетинг</div>
+                <div class="ts-dept-meta">7 ажилтан · <span class="warn">2 баталгаажаагүй</span></div>
+              </div>
+              <button class="btn btn-blue btn-sm ts-confirm-btn">Баталгаажуулах</button>
+            </div>
+            <div class="ts-body">
+              <table class="ts-table">
+                <thead>
+                  <tr>
+                    <th>ID</th><th>АЖИЛТНЫ НЭР</th><th>АЛБАН ТУШААЛ</th>
+                    <th>АЖИЛЛАХ ЁСТОЙ ХОНОГ</th><th>АЖИЛЛАХ ЁСТОЙ ЦАГ</th>
+                    <th>АЖИЛЛАСАН ХОНОГ</th><th>АЖИЛЛАСАН ЦАГ</th>
+                    <th>НИЙТ ХОНОГ</th><th>НИЙТ ЦАГ</th>
+                    <th>ИЛҮҮ ЦАГ</th><th>ЧӨЛӨӨ</th><th>ТӨЛӨВ</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td><strong>MA001</strong></td><td>Б.Мөнхбаяр</td><td>Маркетингийн менежер</td><td>22</td><td>176</td><td class="td-green">22</td><td class="td-green">176</td><td class="td-blue">22</td><td class="td-blue">188</td><td>12</td><td class="td-muted">-</td><td><span class="status-pill status-normal">Хэвийн</span></td></tr>
+                  <tr><td><strong>MA002</strong></td><td>Э.Энхжаргал</td><td>Бренд менежер</td><td>22</td><td>176</td><td class="td-green">22</td><td class="td-green">176</td><td class="td-blue">22</td><td class="td-blue">180</td><td>4</td><td class="td-muted">-</td><td><span class="status-pill status-normal">Хэвийн</span></td></tr>
+                  <tr><td><strong>MA003</strong></td><td>Д.Дэлгэрмаа</td><td>Дижитал маркетер</td><td>22</td><td>176</td><td class="td-green">22</td><td class="td-green">176</td><td class="td-blue">22</td><td class="td-blue">184</td><td>8</td><td class="td-muted">-</td><td><span class="status-pill status-normal">Хэвийн</span></td></tr>
+                  <tr><td><strong>MA004</strong></td><td>Н.Номин</td><td>Контент бүтээгч</td><td>22</td><td>176</td><td class="td-orange">20</td><td class="td-orange">160</td><td class="td-blue">20</td><td class="td-blue">160</td><td class="td-muted">-</td><td>2</td><td><span class="status-pill status-short">Дутуу</span></td></tr>
+                  <tr><td><strong>MA005</strong></td><td>О.Оюунтөгс</td><td>Дизайнер</td><td>22</td><td>176</td><td class="td-green">22</td><td class="td-green">176</td><td class="td-blue">22</td><td class="td-blue">176</td><td class="td-muted">-</td><td class="td-muted">-</td><td><span class="status-pill status-normal">Хэвийн</span></td></tr>
+                  <tr><td><strong>MA006</strong></td><td>Т.Тунгалаг</td><td>PR мэргэжилтэн</td><td>22</td><td>176</td><td class="td-green">22</td><td class="td-green">176</td><td class="td-blue">22</td><td class="td-blue">182</td><td>6</td><td class="td-muted">-</td><td><span class="status-pill status-normal">Хэвийн</span></td></tr>
+                  <tr><td><strong>MA007</strong></td><td>С.Солонго</td><td>Судалгааны ажилтан</td><td>22</td><td>176</td><td class="td-orange">21</td><td class="td-orange">168</td><td class="td-blue">21</td><td class="td-blue">168</td><td class="td-muted">-</td><td>1</td><td><span class="status-pill status-short">Дутуу</span></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- IT -->
+          <div class="ts-section" data-dept="IT">
+            <div class="ts-header">
+              <svg class="ts-chevron" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg>
+              <div class="ts-dept-info">
+                <div class="ts-dept-name">IT</div>
+                <div class="ts-dept-meta">7 ажилтан · <span class="warn">2 баталгаажаагүй</span></div>
+              </div>
+              <button class="btn btn-blue btn-sm ts-confirm-btn">Баталгаажуулах</button>
+            </div>
+            <div class="ts-body">
+              <table class="ts-table">
+                <thead>
+                  <tr>
+                    <th>ID</th><th>АЖИЛТНЫ НЭР</th><th>АЛБАН ТУШААЛ</th>
+                    <th>АЖИЛЛАХ ЁСТОЙ ХОНОГ</th><th>АЖИЛЛАХ ЁСТОЙ ЦАГ</th>
+                    <th>АЖИЛЛАСАН ХОНОГ</th><th>АЖИЛЛАСАН ЦАГ</th>
+                    <th>НИЙТ ХОНОГ</th><th>НИЙТ ЦАГ</th>
+                    <th>ИЛҮҮ ЦАГ</th><th>ЧӨЛӨӨ</th><th>ТӨЛӨВ</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td><strong>IT001</strong></td><td>А.Амарбаясгалан</td><td>Ахлах хөгжүүлэгч</td><td>22</td><td>176</td><td class="td-green">22</td><td class="td-green">176</td><td class="td-blue">22</td><td class="td-blue">200</td><td>24</td><td class="td-muted">-</td><td><span class="status-pill status-normal">Хэвийн</span></td></tr>
+                  <tr><td><strong>IT002</strong></td><td>Б.Батзориг</td><td>Backend хөгжүүлэгч</td><td>22</td><td>176</td><td class="td-green">22</td><td class="td-green">176</td><td class="td-blue">22</td><td class="td-blue">192</td><td>16</td><td class="td-muted">-</td><td><span class="status-pill status-normal">Хэвийн</span></td></tr>
+                  <tr><td><strong>IT003</strong></td><td>Д.Дорждарь</td><td>Frontend хөгжүүлэгч</td><td>22</td><td>176</td><td class="td-green">22</td><td class="td-green">176</td><td class="td-blue">22</td><td class="td-blue">184</td><td>8</td><td class="td-muted">-</td><td><span class="status-pill status-normal">Хэвийн</span></td></tr>
+                  <tr><td><strong>IT004</strong></td><td>Х.Халиун</td><td>UI/UX дизайнер</td><td>22</td><td>176</td><td class="td-green">22</td><td class="td-green">176</td><td class="td-blue">22</td><td class="td-blue">176</td><td class="td-muted">-</td><td class="td-muted">-</td><td><span class="status-pill status-normal">Хэвийн</span></td></tr>
+                  <tr><td><strong>IT005</strong></td><td>Г.Ганчимэг</td><td>QA инженер</td><td>22</td><td>176</td><td class="td-orange">19</td><td class="td-orange">152</td><td class="td-blue">19</td><td class="td-blue">152</td><td class="td-muted">-</td><td>3</td><td><span class="status-pill status-short">Дутуу</span></td></tr>
+                  <tr><td><strong>IT006</strong></td><td>М.Мөнхбат</td><td>Системийн администратор</td><td>22</td><td>176</td><td class="td-green">22</td><td class="td-green">176</td><td class="td-blue">22</td><td class="td-blue">180</td><td>4</td><td class="td-muted">-</td><td><span class="status-pill status-normal">Хэвийн</span></td></tr>
+                  <tr><td><strong>IT007</strong></td><td>Э.Эрдэнэбаяр</td><td>DevOps инженер</td><td>22</td><td>176</td><td class="td-orange">21</td><td class="td-orange">168</td><td class="td-blue">21</td><td class="td-blue">172</td><td>4</td><td>1</td><td><span class="status-pill status-short">Дутуу</span></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- БОРЛУУЛАЛТ -->
+          <div class="ts-section" data-dept="Борлуулалт">
+            <div class="ts-header">
+              <svg class="ts-chevron" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg>
+              <div class="ts-dept-info">
+                <div class="ts-dept-name">Борлуулалт</div>
+                <div class="ts-dept-meta">7 ажилтан · <span class="warn">2 баталгаажаагүй</span></div>
+              </div>
+              <button class="btn btn-blue btn-sm ts-confirm-btn">Баталгаажуулах</button>
+            </div>
+            <div class="ts-body">
+              <table class="ts-table">
+                <thead>
+                  <tr>
+                    <th>ID</th><th>АЖИЛТНЫ НЭР</th><th>АЛБАН ТУШААЛ</th>
+                    <th>АЖИЛЛАХ ЁСТОЙ ХОНОГ</th><th>АЖИЛЛАХ ЁСТОЙ ЦАГ</th>
+                    <th>АЖИЛЛАСАН ХОНОГ</th><th>АЖИЛЛАСАН ЦАГ</th>
+                    <th>НИЙТ ХОНОГ</th><th>НИЙТ ЦАГ</th>
+                    <th>ИЛҮҮ ЦАГ</th><th>ЧӨЛӨӨ</th><th>ТӨЛӨВ</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td><strong>SA001</strong></td><td>Б.Баярсайхан</td><td>Борлуулалтын менежер</td><td>22</td><td>176</td><td class="td-green">22</td><td class="td-green">176</td><td class="td-blue">22</td><td class="td-blue">190</td><td>14</td><td class="td-muted">-</td><td><span class="status-pill status-normal">Хэвийн</span></td></tr>
+                  <tr><td><strong>SA002</strong></td><td>Д.Даваасүрэн</td><td>Ахлах борлуулагч</td><td>22</td><td>176</td><td class="td-green">22</td><td class="td-green">176</td><td class="td-blue">22</td><td class="td-blue">184</td><td>8</td><td class="td-muted">-</td><td><span class="status-pill status-normal">Хэвийн</span></td></tr>
+                  <tr><td><strong>SA003</strong></td><td>О.Одгэрэл</td><td>Борлуулагч</td><td>22</td><td>176</td><td class="td-green">22</td><td class="td-green">176</td><td class="td-blue">22</td><td class="td-blue">176</td><td class="td-muted">-</td><td class="td-muted">-</td><td><span class="status-pill status-normal">Хэвийн</span></td></tr>
+                  <tr><td><strong>SA004</strong></td><td>Г.Ганзориг</td><td>Борлуулагч</td><td>22</td><td>176</td><td class="td-orange">20</td><td class="td-orange">160</td><td class="td-blue">20</td><td class="td-blue">160</td><td class="td-muted">-</td><td>2</td><td><span class="status-pill status-short">Дутуу</span></td></tr>
+                  <tr><td><strong>SA005</strong></td><td>Н.Нарантуяа</td><td>Харилцагчийн менежер</td><td>22</td><td>176</td><td class="td-green">22</td><td class="td-green">176</td><td class="td-blue">22</td><td class="td-blue">180</td><td>4</td><td class="td-muted">-</td><td><span class="status-pill status-normal">Хэвийн</span></td></tr>
+                  <tr><td><strong>SA006</strong></td><td>Х.Хэрлэн</td><td>Борлуулагч</td><td>22</td><td>176</td><td class="td-green">22</td><td class="td-green">176</td><td class="td-blue">22</td><td class="td-blue">182</td><td>6</td><td class="td-muted">-</td><td><span class="status-pill status-normal">Хэвийн</span></td></tr>
+                  <tr><td><strong>SA007</strong></td><td>Э.Энхбаяр</td><td>Борлуулагч</td><td>22</td><td>176</td><td class="td-orange">21</td><td class="td-orange">168</td><td class="td-blue">21</td><td class="td-blue">168</td><td class="td-muted">-</td><td>1</td><td><span class="status-pill status-short">Дутуу</span></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- НЯГТЛАН БОДОХ БҮРТГЭЛ -->
+          <div class="ts-section" data-dept="Нягтлан бодох бүртгэл">
+            <div class="ts-header">
+              <svg class="ts-chevron" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg>
+              <div class="ts-dept-info">
+                <div class="ts-dept-name">Нягтлан бодох бүртгэл</div>
+                <div class="ts-dept-meta">7 ажилтан · <span class="warn">2 баталгаажаагүй</span></div>
+              </div>
+              <button class="btn btn-blue btn-sm ts-confirm-btn">Баталгаажуулах</button>
+            </div>
+            <div class="ts-body">
+              <table class="ts-table">
+                <thead>
+                  <tr>
+                    <th>ID</th><th>АЖИЛТНЫ НЭР</th><th>АЛБАН ТУШААЛ</th>
+                    <th>АЖИЛЛАХ ЁСТОЙ ХОНОГ</th><th>АЖИЛЛАХ ЁСТОЙ ЦАГ</th>
+                    <th>АЖИЛЛАСАН ХОНОГ</th><th>АЖИЛЛАСАН ЦАГ</th>
+                    <th>НИЙТ ХОНОГ</th><th>НИЙТ ЦАГ</th>
+                    <th>ИЛҮҮ ЦАГ</th><th>ЧӨЛӨӨ</th><th>ТӨЛӨВ</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td><strong>AC001</strong></td><td>Д.Дулмаа</td><td>Ахлах нягтлан</td><td>22</td><td>176</td><td class="td-green">22</td><td class="td-green">176</td><td class="td-blue">22</td><td class="td-blue">184</td><td>8</td><td class="td-muted">-</td><td><span class="status-pill status-normal">Хэвийн</span></td></tr>
+                  <tr><td><strong>AC002</strong></td><td>Н.Нандинцэцэг</td><td>Нягтлан бодогч</td><td>22</td><td>176</td><td class="td-green">22</td><td class="td-green">176</td><td class="td-blue">22</td><td class="td-blue">176</td><td class="td-muted">-</td><td class="td-muted">-</td><td><span class="status-pill status-normal">Хэвийн</span></td></tr>
+                  <tr><td><strong>AC003</strong></td><td>Б.Батцэцэг</td><td>Нягтлан бодогч</td><td>22</td><td>176</td><td class="td-green">22</td><td class="td-green">176</td><td class="td-blue">22</td><td class="td-blue">180</td><td>4</td><td class="td-muted">-</td><td><span class="status-pill status-normal">Хэвийн</span></td></tr>
+                  <tr><td><strong>AC004</strong></td><td>Х.Ханд</td><td>Татварын мэргэжилтэн</td><td>22</td><td>176</td><td class="td-green">22</td><td class="td-green">176</td><td class="td-blue">22</td><td class="td-blue">188</td><td>12</td><td class="td-muted">-</td><td><span class="status-pill status-normal">Хэвийн</span></td></tr>
+                  <tr><td><strong>AC005</strong></td><td>О.Одончимэг</td><td>Тайлан гаргагч</td><td>22</td><td>176</td><td class="td-orange">21</td><td class="td-orange">168</td><td class="td-blue">21</td><td class="td-blue">168</td><td class="td-muted">-</td><td>1</td><td><span class="status-pill status-short">Дутуу</span></td></tr>
+                  <tr><td><strong>AC006</strong></td><td>Г.Гантулга</td><td>Санхүүгийн ажилтан</td><td>22</td><td>176</td><td class="td-green">22</td><td class="td-green">176</td><td class="td-blue">22</td><td class="td-blue">176</td><td class="td-muted">-</td><td class="td-muted">-</td><td><span class="status-pill status-normal">Хэвийн</span></td></tr>
+                  <tr><td><strong>AC007</strong></td><td>М.Мөнхцэцэг</td><td>Бүртгэлийн ажилтан</td><td>22</td><td>176</td><td class="td-orange">20</td><td class="td-orange">160</td><td class="td-blue">20</td><td class="td-blue">164</td><td>4</td><td>2</td><td><span class="status-pill status-short">Дутуу</span></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- ХҮНИЙ НӨӨЦ -->
+          <div class="ts-section" data-dept="Хүний нөөц">
+            <div class="ts-header">
+              <svg class="ts-chevron" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg>
+              <div class="ts-dept-info">
+                <div class="ts-dept-name">Хүний нөөц</div>
+                <div class="ts-dept-meta">7 ажилтан · <span class="warn">2 баталгаажаагүй</span></div>
+              </div>
+              <button class="btn btn-blue btn-sm ts-confirm-btn">Баталгаажуулах</button>
+            </div>
+            <div class="ts-body">
+              <table class="ts-table">
+                <thead>
+                  <tr>
+                    <th>ID</th><th>АЖИЛТНЫ НЭР</th><th>АЛБАН ТУШААЛ</th>
+                    <th>АЖИЛЛАХ ЁСТОЙ ХОНОГ</th><th>АЖИЛЛАХ ЁСТОЙ ЦАГ</th>
+                    <th>АЖИЛЛАСАН ХОНОГ</th><th>АЖИЛЛАСАН ЦАГ</th>
+                    <th>НИЙТ ХОНОГ</th><th>НИЙТ ЦАГ</th>
+                    <th>ИЛҮҮ ЦАГ</th><th>ЧӨЛӨӨ</th><th>ТӨЛӨВ</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td><strong>HR001</strong></td><td>Б.Болормаа</td><td>HR менежер</td><td>22</td><td>176</td><td class="td-green">22</td><td class="td-green">176</td><td class="td-blue">22</td><td class="td-blue">180</td><td>4</td><td class="td-muted">-</td><td><span class="status-pill status-normal">Хэвийн</span></td></tr>
+                  <tr><td><strong>HR002</strong></td><td>Д.Долгорсүрэн</td><td>HR ажилтан</td><td>22</td><td>176</td><td class="td-green">22</td><td class="td-green">176</td><td class="td-blue">22</td><td class="td-blue">176</td><td class="td-muted">-</td><td class="td-muted">-</td><td><span class="status-pill status-normal">Хэвийн</span></td></tr>
+                  <tr><td><strong>HR003</strong></td><td>Н.Наранцэцэг</td><td>Сургалтын менежер</td><td>22</td><td>176</td><td class="td-green">22</td><td class="td-green">176</td><td class="td-blue">22</td><td class="td-blue">184</td><td>8</td><td class="td-muted">-</td><td><span class="status-pill status-normal">Хэвийн</span></td></tr>
+                  <tr><td><strong>HR004</strong></td><td>Т.Тэгшбаяр</td><td>Цалин тооцогч</td><td>22</td><td>176</td><td class="td-green">22</td><td class="td-green">176</td><td class="td-blue">22</td><td class="td-blue">176</td><td class="td-muted">-</td><td class="td-muted">-</td><td><span class="status-pill status-normal">Хэвийн</span></td></tr>
+                  <tr><td><strong>HR005</strong></td><td>С.Сувд</td><td>Бүртгэлийн ажилтан</td><td>22</td><td>176</td><td class="td-orange">21</td><td class="td-orange">168</td><td class="td-blue">21</td><td class="td-blue">168</td><td class="td-muted">-</td><td>1</td><td><span class="status-pill status-short">Дутуу</span></td></tr>
+                  <tr><td><strong>HR006</strong></td><td>Г.Гэрэлмаа</td><td>HR шинжээч</td><td>22</td><td>176</td><td class="td-green">22</td><td class="td-green">176</td><td class="td-blue">22</td><td class="td-blue">180</td><td>4</td><td class="td-muted">-</td><td><span class="status-pill status-normal">Хэвийн</span></td></tr>
+                  <tr><td><strong>HR007</strong></td><td>О.Оюун</td><td>Хөдөлмөрийн харилцааны мэргэжилтэн</td><td>22</td><td>176</td><td class="td-orange">20</td><td class="td-orange">160</td><td class="td-blue">20</td><td class="td-blue">168</td><td>8</td><td>2</td><td><span class="status-pill status-short">Дутуу</span></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+        </div><!-- end ts-list -->
       </section>
     </main>
   </div>
 
-    <!-- New Employee Modal -->
-    <div class="modal-overlay" id="newEmpModal">
-      <div class="modal">
-        <button class="modal-close" id="newEmpClose">✕</button>
-        <h2>Шинэ ажилтан бүртгэх</h2>
-        <p class="modal-sub">Ажилтны бүрэн мэдээллийг оруулна уу</p>
-        <div class="form-grid">
-          <div class="form-group">
-            <label>Овог</label>
-            <input type="text" id="empLastName" placeholder="Болд" />
-          </div>
-          <div class="form-group">
-            <label>Нэр</label>
-            <input type="text" id="empFirstName" placeholder="Батбаяр" />
-          </div>
-          <div class="form-group">
-            <label>Регистрийн дугаар</label>
-            <input type="text" id="empReg" placeholder="УА12345678" maxlength="10" />
-          </div>
-          <div class="form-group">
-            <label>Утасны дугаар</label>
-            <input type="tel" id="empPhone" placeholder="99001122" />
-          </div>
-          <div class="form-group">
-            <label>Алба / Хэлтэс</label>
-            <select id="empDept">
-              <option value="">Сонгох...</option>
-              <option>Санхүү</option>
-              <option>Маркетинг</option>
-              <option>IT</option>
-              <option>Борлуулалт</option>
-              <option>Нягтлан бодох бүртгэл</option>
-              <option>Хүний нөөц</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label>Албан тушаал</label>
-            <input type="text" id="empPosition" placeholder="Ажилтан" />
-          </div>
-          <div class="form-group">
-            <label>Цалингийн төрөл</label>
-            <select id="empSalaryType">
-              <option value="Үндсэн">Үндсэн цалин</option>
-              <option value="Цагийн">Цагийн хөлс</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label>Үндсэн цалин (₮)</label>
-            <input type="number" id="empBaseSalary" placeholder="1,500,000" />
-          </div>
-          <div class="form-group full">
-            <label>Банкны дансны дугаар</label>
-            <input type="text" id="empBank" placeholder="5000XXXXXXXX" />
-          </div>
-          <div class="form-group full">
-            <label>Ажилд орсон огноо</label>
-            <input type="date" id="empStartDate" />
-          </div>
+  <!-- New Employee Modal -->
+  <div class="modal-overlay" id="newEmpModal">
+    <div class="modal">
+      <button class="modal-close" id="newEmpClose">✕</button>
+      <h2>Шинэ ажилтан бүртгэх</h2>
+      <p class="modal-sub">Ажилтны бүрэн мэдээллийг оруулна уу</p>
+      <div class="form-grid">
+        <div class="form-group"><label>Овог</label><input type="text" id="empLastName" placeholder="Болд" /></div>
+        <div class="form-group"><label>Нэр</label><input type="text" id="empFirstName" placeholder="Батбаяр" /></div>
+        <div class="form-group"><label>Регистрийн дугаар</label><input type="text" id="empReg" placeholder="УА12345678" maxlength="10" /></div>
+        <div class="form-group"><label>Утасны дугаар</label><input type="tel" id="empPhone" placeholder="99001122" /></div>
+        <div class="form-group">
+          <label>Алба / Хэлтэс</label>
+          <select id="empDept">
+            <option value="">Сонгох...</option>
+            <option>Санхүү</option><option>Маркетинг</option><option>IT</option>
+            <option>Борлуулалт</option><option>Нягтлан бодох бүртгэл</option><option>Хүний нөөц</option>
+          </select>
         </div>
-        <div class="modal-actions">
-          <button class="btn-modal-cancel" id="newEmpCancelBtn">Цуцлах</button>
-          <button class="btn-modal-save" id="newEmpSaveBtn">Бүртгэх</button>
+        <div class="form-group"><label>Албан тушаал</label><input type="text" id="empPosition" placeholder="Ажилтан" /></div>
+        <div class="form-group">
+          <label>Цалингийн төрөл</label>
+          <select id="empSalaryType">
+            <option value="Үндсэн">Үндсэн цалин</option>
+            <option value="Цагийн">Цагийн хөлс</option>
+          </select>
         </div>
+        <div class="form-group"><label>Үндсэн цалин (₮)</label><input type="number" id="empBaseSalary" placeholder="1,500,000" /></div>
+        <div class="form-group full"><label>Банкны дансны дугаар</label><input type="text" id="empBank" placeholder="5000XXXXXXXX" /></div>
+        <div class="form-group full"><label>Ажилд орсон огноо</label><input type="date" id="empStartDate" /></div>
+      </div>
+      <div class="modal-actions">
+        <button class="btn-modal-cancel" id="newEmpCancelBtn">Цуцлах</button>
+        <button class="btn-modal-save" id="newEmpSaveBtn">Бүртгэх</button>
       </div>
     </div>
+  </div>
 
-    <!-- Excel Import Modal -->
-    <div class="modal-overlay" id="excelModal">
-      <div class="modal" style="max-width:440px;">
-        <button class="modal-close" id="excelClose">✕</button>
-        <h2>Excel файл оруулах</h2>
-        <p class="modal-sub">Ажилтны мэдээллийг Excel (.xlsx, .xls) форматаар оруулна уу</p>
-        <div class="excel-dropzone" id="excelDropzone" onclick="document.getElementById('excelFileInput').click()">
-          <svg style="width:40px;height:40px;stroke:#2563eb;fill:none;stroke-width:1.5;" viewBox="0 0 24 24"><path d="M14 3h-4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V9z"></path><path d="M14 3v6h6"></path><path d="M12 12v6"></path><path d="m9 15 3-3 3 3"></path></svg>
-          <p>Файл сонгох эсвэл чирж оруулах</p>
-          <small>Зөвшөөрөгдөх формат: .xlsx, .xls (дээд тал нь 5MB)</small>
-        </div>
-        <input type="file" id="excelFileInput" accept=".xlsx,.xls,.csv" style="display:none;" />
-        <div id="excelFileName" style="margin-top:12px; font-size:13px; color:#2563eb; font-weight:600; min-height:20px;"></div>
-        <div style="margin-top:14px; padding:12px 14px; background:#f8fafc; border-radius:10px; font-size:13px; color:#64748b; line-height:1.6;">
-          <strong style="color:#374151;">Шаардлагатай баганууд:</strong><br>
-          Овог, Нэр, Регистр, Утас, Алба, Албан тушаал, Цалин, Банкны данс
-        </div>
-        <div class="modal-actions">
-          <button class="btn-modal-cancel" id="excelCancelBtn">Цуцлах</button>
-          <button class="btn-modal-save" id="excelImportBtn" style="background:#16a34a;">Оруулах</button>
-        </div>
+  <!-- Excel Import Modal -->
+  <div class="modal-overlay" id="excelModal">
+    <div class="modal" style="max-width:440px;">
+      <button class="modal-close" id="excelClose">✕</button>
+      <h2>Excel файл оруулах</h2>
+      <p class="modal-sub">Ажилтны мэдээллийг Excel (.xlsx, .xls) форматаар оруулна уу</p>
+      <div class="excel-dropzone" id="excelDropzone" onclick="document.getElementById('excelFileInput').click()">
+        <svg style="width:40px;height:40px;stroke:#2563eb;fill:none;stroke-width:1.5;" viewBox="0 0 24 24"><path d="M14 3h-4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V9z"></path><path d="M14 3v6h6"></path><path d="M12 12v6"></path><path d="m9 15 3-3 3 3"></path></svg>
+        <p>Файл сонгох эсвэл чирж оруулах</p>
+        <small>Зөвшөөрөгдөх формат: .xlsx, .xls (дээд тал нь 5MB)</small>
+      </div>
+      <input type="file" id="excelFileInput" accept=".xlsx,.xls,.csv" style="display:none;" />
+      <div id="excelFileName" style="margin-top:12px; font-size:13px; color:#2563eb; font-weight:600; min-height:20px;"></div>
+      <div style="margin-top:14px; padding:12px 14px; background:#f8fafc; border-radius:10px; font-size:13px; color:#64748b; line-height:1.6;">
+        <strong style="color:#374151;">Шаардлагатай баганууд:</strong><br>
+        Овог, Нэр, Регистр, Утас, Алба, Албан тушаал, Цалин, Банкны данс
+      </div>
+      <div class="modal-actions">
+        <button class="btn-modal-cancel" id="excelCancelBtn">Цуцлах</button>
+        <button class="btn-modal-save" id="excelImportBtn" style="background:#16a34a;">Оруулах</button>
       </div>
     </div>
+  </div>
 
-    <!-- Toast -->
-    <div class="toast" id="hrToast">
-      <svg style="width:16px;height:16px;stroke:#4ade80;fill:none;stroke-width:2;" viewBox="0 0 24 24"><path d="M20 6l-11 11L4 12"></path></svg>
-      <span id="hrToastMsg">Амжилттай!</span>
-    </div>
+  <!-- Toast -->
+  <div class="toast" id="hrToast">
+    <svg style="width:16px;height:16px;stroke:#4ade80;fill:none;stroke-width:2;" viewBox="0 0 24 24"><path d="M20 6l-11 11L4 12"></path></svg>
+    <span id="hrToastMsg">Амжилттай!</span>
+  </div>
 
-    <script>window.APP_CONFIG = { fileName: "hr.html", defaultPage: "home" };</script>
+  <script>window.APP_CONFIG = { fileName: "hr.html", defaultPage: "home" };</script>
   <script src="demo-users.js"></script>
   <script src="app.js"></script>
   <script>
   (function() {
-    // --- Timesheet confirm & disappear ---
-    let confirmedCount = 0;
-    const totalDepts = 6;
+    /* ── Nav ── */
+    function showPage(id) {
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.nav-link').forEach(b => b.classList.remove('active'));
+      const page = document.getElementById(id);
+      if (page) page.classList.add('active');
+      const btn = document.querySelector(`.nav-link[data-page="${id}"]`);
+      if (btn) btn.classList.add('active');
+    }
+    document.querySelectorAll('.nav-link').forEach(btn => {
+      btn.addEventListener('click', () => showPage(btn.dataset.page));
+    });
+    document.querySelectorAll('[data-page-target]').forEach(el => {
+      el.addEventListener('click', () => showPage(el.dataset.pageTarget));
+    });
 
+    /* ── Toast ── */
     function showToast(msg) {
       const t = document.getElementById('hrToast');
       document.getElementById('hrToastMsg').textContent = msg;
@@ -590,81 +802,76 @@
       setTimeout(() => t.classList.remove('show'), 3000);
     }
 
-    function updateTimesheetHeader() {
-      const sub = document.querySelector('#timesheet .page-subtitle');
-      if (sub) sub.textContent = `2026 оны 3-р сарын цагийн бүртгэл (${confirmedCount}/${totalDepts} алба баталгаажсан)`;
-    }
-
-    function checkAllTimesheetDone() {
-      if (confirmedCount >= totalDepts) {
-        // Update home page stats
-        const statPills = document.querySelectorAll('.pill-yellow');
-        statPills.forEach(p => { p.textContent = 'Баталгаажсан'; p.className = 'pill pill-green'; });
-        const bigStatVal = document.querySelector('#home .stat-card:nth-child(3) .big');
-        if (bigStatVal) bigStatVal.textContent = '42 ажилтан';
-        const bigStatSmall = document.querySelector('#home .stat-card:nth-child(3) small');
-        if (bigStatSmall) bigStatSmall.textContent = 'Бүгд баталгаажсан ✓';
-        // Update alert
-        const alert = document.querySelector('#home .alert');
-        if (alert) {
-          alert.style.background = '#f0fdf4';
-          alert.style.border = '1px solid #86efac';
-          alert.style.color = '#15803d';
-          alert.innerHTML = '<svg class="icon" viewBox="0 0 24 24" style="color:#15803d;"><path d="M20 6l-11 11L4 12"></path></svg><div><strong>Цагийн баталгаажуулалт дууссан</strong> Бүх хэлтсийн цагийн бүртгэл амжилттай баталгаажлаа.</div>';
-        }
-        // Enable payroll button
-        const disabledBtn = document.querySelector('.btn-disabled');
-        if (disabledBtn) {
-          disabledBtn.textContent = 'Цалин бодолт эхлүүлэх';
-          disabledBtn.className = 'btn btn-blue btn-sm';
-        }
-        showToast('✓ Бүх хэлтсийн цагийн бүртгэл баталгаажлаа!');
-      }
-    }
-
-    document.addEventListener('click', function(e) {
-      // Timesheet dept confirm buttons
-      const deptCard = e.target.closest('.dept-card');
-      if (deptCard && e.target.classList.contains('btn-blue') && e.target.textContent.includes('Баталгаажуулах')) {
-        e.target.outerHTML = '<span class="dept-confirmed-badge">✓ Баталгаажсан</span>';
-        deptCard.classList.add('confirmed');
-        const warn = deptCard.querySelector('.warn');
-        if (warn) { warn.textContent = 'Бүгд баталгаажсан'; warn.style.color = '#15803d'; }
-        confirmedCount++;
-        updateTimesheetHeader();
-        checkAllTimesheetDone();
-        return;
-      }
-
-      // "Бүгдийг баталгаажуулах" button
-      if (e.target.closest('#timesheet') && e.target.classList.contains('btn-blue') && e.target.textContent.includes('Бүгдийг')) {
-        document.querySelectorAll('.dept-card').forEach(card => {
-          const btn = card.querySelector('.btn-blue');
-          if (btn) btn.outerHTML = '<span class="dept-confirmed-badge">✓ Баталгаажсан</span>';
-          card.classList.add('confirmed');
-          const warn = card.querySelector('.warn');
-          if (warn) { warn.textContent = 'Бүгд баталгаажсан'; warn.style.color = '#15803d'; }
-        });
-        confirmedCount = totalDepts;
-        updateTimesheetHeader();
-        checkAllTimesheetDone();
-        return;
-      }
-
-      // Excel import button
-      if (e.target.textContent.includes('Excel оруулах') || e.target.closest('[class*="btn"]') && e.target.textContent.includes('Excel')) {
-        if (e.target.closest('#employees') || e.target.closest('[data-page="employees"]')) {
-          document.getElementById('excelModal').classList.add('open');
-        }
-      }
-
-      // New employee button
-      if (e.target.textContent.includes('Шинэ ажилтан') && e.target.closest('#employees')) {
-        document.getElementById('newEmpModal').classList.add('open');
-      }
+    /* ── Accordion ── */
+    document.querySelectorAll('.ts-header').forEach(header => {
+      header.addEventListener('click', function(e) {
+        if (e.target.closest('.ts-confirm-btn')) return;
+        const section = this.closest('.ts-section');
+        section.classList.toggle('open');
+      });
     });
 
-    // New employee modal
+    /* ── Timesheet confirm ── */
+    let confirmedCount = 0;
+    const totalDepts = 6;
+
+    function updateTsSubtitle() {
+      const el = document.getElementById('tsPageSubtitle');
+      if (el) el.textContent = `2026 оны 3-р сарын цагийн бүртгэл (${confirmedCount}/${totalDepts} алба баталгаажсан)`;
+    }
+
+    function confirmSection(section) {
+      if (section.classList.contains('confirmed')) return;
+      section.classList.add('confirmed');
+      const btn = section.querySelector('.ts-confirm-btn');
+      if (btn) {
+        const badge = document.createElement('span');
+        badge.className = 'dept-confirmed-badge';
+        badge.innerHTML = '✓ Баталгаажсан';
+        btn.replaceWith(badge);
+      }
+      const warn = section.querySelector('.warn');
+      if (warn) { warn.textContent = 'Бүгд баталгаажсан'; warn.className = 'ok'; }
+      confirmedCount++;
+      updateTsSubtitle();
+      if (confirmedCount >= totalDepts) onAllConfirmed();
+    }
+
+    document.querySelectorAll('.ts-confirm-btn').forEach(btn => {
+      btn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        confirmSection(this.closest('.ts-section'));
+        showToast('✓ Хэлтсийн цагийн бүртгэл баталгаажлаа!');
+      });
+    });
+
+    document.getElementById('confirmAllBtn').addEventListener('click', function() {
+      document.querySelectorAll('.ts-section').forEach(s => confirmSection(s));
+      showToast('✓ Бүх хэлтсийн цагийн бүртгэл баталгаажлаа!');
+    });
+
+    function onAllConfirmed() {
+      const alert = document.querySelector('#home .alert');
+      if (alert) {
+        alert.style.background = '#f0fdf4';
+        alert.style.borderColor = '#86efac';
+        alert.style.color = '#15803d';
+        alert.innerHTML = '<svg class="icon" viewBox="0 0 24 24" style="color:#15803d;"><path d="M20 6l-11 11L4 12"></path></svg><div><strong>Цагийн баталгаажуулалт дууссан</strong> Бүх хэлтсийн цагийн бүртгэл амжилттай баталгаажлаа.</div>';
+      }
+      const payrollBtn = document.getElementById('homePayrollBtn');
+      if (payrollBtn) {
+        payrollBtn.textContent = 'Цалин бодолт эхлүүлэх';
+        payrollBtn.className = 'btn btn-blue btn-sm';
+      }
+      document.querySelectorAll('.pill-yellow').forEach(p => { p.textContent = 'Баталгаажсан'; p.className = 'pill pill-green'; });
+      const tsStatusText = document.getElementById('tsStatusText');
+      if (tsStatusText) tsStatusText.textContent = '42 ажилтан';
+      const tsStatusSmall = document.getElementById('tsStatusSmall');
+      if (tsStatusSmall) tsStatusSmall.textContent = 'Бүгд баталгаажсан ✓';
+    }
+
+    /* ── New Employee Modal ── */
+    document.getElementById('openNewEmpBtn').onclick = () => document.getElementById('newEmpModal').classList.add('open');
     document.getElementById('newEmpClose').onclick = () => document.getElementById('newEmpModal').classList.remove('open');
     document.getElementById('newEmpCancelBtn').onclick = () => document.getElementById('newEmpModal').classList.remove('open');
     document.getElementById('newEmpSaveBtn').onclick = function() {
@@ -674,29 +881,24 @@
       const phone = document.getElementById('empPhone').value.trim();
       const dept = document.getElementById('empDept').value;
       const pos = document.getElementById('empPosition').value.trim();
-      const bank = document.getElementById('empBank').value.trim();
       const stype = document.getElementById('empSalaryType').value;
-      if (!first || !last || !reg || !dept) {
-        alert('Овог, нэр, регистр, алба заавал шаардлагатай!'); return;
-      }
-      // Add row to table
-      const tbody = document.querySelector('#employees table tbody');
+      if (!first || !last || !reg || !dept) { alert('Овог, нэр, регистр, алба заавал шаардлагатай!'); return; }
+      const tbody = document.getElementById('empTableBody');
       const rows = tbody.querySelectorAll('tr').length;
       const newId = 'EMP' + String(rows + 1).padStart(3, '0');
       const tr = document.createElement('tr');
       tr.innerHTML = `<td><strong>${newId}</strong></td><td>${last} ${first}</td><td>${reg.slice(0,-4).replace(/./g,'*')}${reg.slice(-4)} <span class="muted-eye">◉</span></td><td>${phone}</td><td>${dept}</td><td>${pos||'Ажилтан'}</td><td>******0000 <span class="muted-eye">◉</span></td><td><span class="mini-pill ${stype==='Цагийн'?'mini-purple':'mini-blue'}">${stype}</span></td><td><span class="mini-pill mini-green">Идэвхтэй</span></td><td><div class="actions"><span>✎</span><span class="danger">⌁</span></div></td>`;
       tbody.appendChild(tr);
       document.getElementById('newEmpModal').classList.remove('open');
-      // reset form
-      ['empFirstName','empLastName','empReg','empPhone','empPosition','empBaseSalary','empBank','empStartDate'].forEach(id => document.getElementById(id).value = '');
-      document.getElementById('empDept').value = '';
+      ['empFirstName','empLastName','empReg','empPhone','empPosition','empBaseSalary','empBank','empStartDate'].forEach(id => document.getElementById(id).value='');
+      document.getElementById('empDept').value='';
       showToast(`✓ ${last} ${first} амжилттай бүртгэгдлээ!`);
-      // Update count
-      const sub = document.querySelector('#employees .page-subtitle');
+      const sub = document.getElementById('empCount');
       if (sub) sub.textContent = `Нийт ${rows + 1} идэвхтэй ажилтан`;
     };
 
-    // Excel modal
+    /* ── Excel Modal ── */
+    document.getElementById('openExcelBtn').onclick = () => document.getElementById('excelModal').classList.add('open');
     document.getElementById('excelClose').onclick = () => document.getElementById('excelModal').classList.remove('open');
     document.getElementById('excelCancelBtn').onclick = () => document.getElementById('excelModal').classList.remove('open');
     const excelInput = document.getElementById('excelFileInput');
@@ -704,7 +906,6 @@
       const file = this.files[0];
       if (file) document.getElementById('excelFileName').textContent = '📎 ' + file.name;
     });
-    // Drag & drop
     const dz = document.getElementById('excelDropzone');
     dz.addEventListener('dragover', e => { e.preventDefault(); dz.style.borderColor = '#2563eb'; });
     dz.addEventListener('dragleave', () => { dz.style.borderColor = '#93c5fd'; });
@@ -721,18 +922,7 @@
       excelInput.value = '';
       document.getElementById('excelFileName').textContent = '';
     };
-
-    // Wire Excel button in employees section
-    document.addEventListener('click', function(e) {
-      if (e.target.closest('#employees')) {
-        if (e.target.textContent.includes('Excel оруулах')) {
-          document.getElementById('excelModal').classList.add('open');
-        }
-      }
-    }, true);
   })();
   </script>
-
-
 </body>
 </html>
