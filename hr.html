@@ -291,6 +291,21 @@
     }
     .toast.show { display: flex; }
 
+    /* Delete confirm modal */
+    .modal-delete { max-width: 400px !important; text-align: center; padding: 32px 28px 24px !important; }
+    .modal-delete .del-icon {
+      width: 56px; height: 56px; border-radius: 50%; background: #fee2e2;
+      display: flex; align-items: center; justify-content: center; margin: 0 auto 16px;
+    }
+    .modal-delete h2 { font-size: 20px !important; margin-bottom: 8px !important; }
+    .modal-delete p { font-size: 14px; color: #64748b; margin-bottom: 22px; }
+    .btn-red { background: #ef4444 !important; color: white !important; }
+    .btn-red:hover { background: #dc2626 !important; }
+
+    /* Edit modal cursor on action icons */
+    .actions span { cursor: pointer; font-size: 16px; transition: .12s; }
+    .actions span:hover { opacity: 0.7; transform: scale(1.15); }
+
     /* Excel drop zone */
     .excel-dropzone {
       border: 2px dashed #93c5fd; border-radius: 14px; padding: 28px 20px;
@@ -743,6 +758,60 @@
     </div>
   </div>
 
+  <!-- Edit Employee Modal -->
+  <div class="modal-overlay" id="editEmpModal">
+    <div class="modal">
+      <button class="modal-close" id="editEmpClose">✕</button>
+      <h2>Ажилтны мэдээлэл засах</h2>
+      <p class="modal-sub">Мэдээллийг шинэчлэн хадгална уу</p>
+      <div class="form-grid">
+        <div class="form-group"><label>Овог</label><input type="text" id="editLastName" /></div>
+        <div class="form-group"><label>Нэр</label><input type="text" id="editFirstName" /></div>
+        <div class="form-group"><label>Утасны дугаар</label><input type="tel" id="editPhone" /></div>
+        <div class="form-group">
+          <label>Алба / Хэлтэс</label>
+          <select id="editDept">
+            <option value="">Сонгох...</option>
+            <option>Санхүү</option><option>Маркетинг</option><option>IT</option>
+            <option>Борлуулалт</option><option>Нягтлан бодох бүртгэл</option><option>Хүний нөөц</option>
+          </select>
+        </div>
+        <div class="form-group"><label>Албан тушаал</label><input type="text" id="editPosition" /></div>
+        <div class="form-group">
+          <label>Цалингийн төрөл</label>
+          <select id="editSalaryType">
+            <option value="Үндсэн">Үндсэн цалин</option>
+            <option value="Цагийн">Цагийн хөлс</option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button class="btn-modal-cancel" id="editEmpCancelBtn">Цуцлах</button>
+        <button class="btn-modal-save" id="editEmpSaveBtn">Хадгалах</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Delete Confirm Modal -->
+  <div class="modal-overlay" id="deleteEmpModal">
+    <div class="modal modal-delete">
+      <div class="del-icon">
+        <svg style="width:26px;height:26px;stroke:#ef4444;fill:none;stroke-width:2.5;" viewBox="0 0 24 24">
+          <polyline points="3 6 5 6 21 6"></polyline>
+          <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"></path>
+          <path d="M10 11v6"></path><path d="M14 11v6"></path>
+          <path d="M9 6V4h6v2"></path>
+        </svg>
+      </div>
+      <h2>Ажилтан устгах уу?</h2>
+      <p id="deleteEmpName">Энэ ажилтны бүртгэлийг бүрмөсөн устгах гэж байна.<br>Энэ үйлдлийг буцаах боломжгүй.</p>
+      <div class="modal-actions">
+        <button class="btn-modal-cancel" id="deleteEmpCancelBtn">Цуцлах</button>
+        <button class="btn-modal-save btn-red" id="deleteEmpConfirmBtn">Устгах</button>
+      </div>
+    </div>
+  </div>
+
   <!-- Excel Import Modal -->
   <div class="modal-overlay" id="excelModal">
     <div class="modal" style="max-width:440px;">
@@ -897,7 +966,101 @@
       if (sub) sub.textContent = `Нийт ${rows + 1} идэвхтэй ажилтан`;
     };
 
-    /* ── Excel Modal ── */
+    /* ── Edit & Delete Employee ── */
+    let editTargetRow = null;
+    let deleteTargetRow = null;
+
+    function attachRowActions(tbody) {
+      tbody.querySelectorAll('.actions').forEach(function(actions) {
+        const row = actions.closest('tr');
+        const editBtn = actions.querySelector('span:first-child');
+        const delBtn = actions.querySelector('span.danger');
+
+        editBtn.onclick = function(e) {
+          e.stopPropagation();
+          editTargetRow = row;
+          const cells = row.querySelectorAll('td');
+          const nameParts = cells[1].textContent.trim().split(' ');
+          document.getElementById('editLastName').value = nameParts[0] || '';
+          document.getElementById('editFirstName').value = nameParts.slice(1).join(' ') || '';
+          document.getElementById('editPhone').value = cells[3].textContent.trim();
+          const dept = cells[4].textContent.trim();
+          const deptSel = document.getElementById('editDept');
+          for (let i = 0; i < deptSel.options.length; i++) {
+            if (deptSel.options[i].value === dept) { deptSel.selectedIndex = i; break; }
+          }
+          document.getElementById('editPosition').value = cells[5].textContent.trim();
+          const salaryPill = cells[7].querySelector('.mini-pill');
+          document.getElementById('editSalaryType').value = salaryPill && salaryPill.textContent.includes('Цагийн') ? 'Цагийн' : 'Үндсэн';
+          document.getElementById('editEmpModal').classList.add('open');
+        };
+
+        delBtn.onclick = function(e) {
+          e.stopPropagation();
+          deleteTargetRow = row;
+          const name = row.querySelectorAll('td')[1].textContent.trim();
+          document.getElementById('deleteEmpName').innerHTML = '<strong>' + name + '</strong> ажилтны бүртгэлийг бүрмөсөн устгах гэж байна.<br>Энэ үйлдлийг буцаах боломжгүй.';
+          document.getElementById('deleteEmpModal').classList.add('open');
+        };
+      });
+    }
+
+    // Attach to existing rows
+    attachRowActions(document.getElementById('empTableBody'));
+
+    // Edit modal handlers
+    document.getElementById('editEmpClose').onclick = () => document.getElementById('editEmpModal').classList.remove('open');
+    document.getElementById('editEmpCancelBtn').onclick = () => document.getElementById('editEmpModal').classList.remove('open');
+    document.getElementById('editEmpSaveBtn').onclick = function() {
+      if (!editTargetRow) return;
+      const last = document.getElementById('editLastName').value.trim();
+      const first = document.getElementById('editFirstName').value.trim();
+      const phone = document.getElementById('editPhone').value.trim();
+      const dept = document.getElementById('editDept').value;
+      const pos = document.getElementById('editPosition').value.trim();
+      const stype = document.getElementById('editSalaryType').value;
+      if (!last || !first) { alert('Овог, нэр заавал шаардлагатай!'); return; }
+      const cells = editTargetRow.querySelectorAll('td');
+      cells[1].textContent = last + ' ' + first;
+      cells[3].textContent = phone;
+      cells[4].textContent = dept;
+      cells[5].textContent = pos;
+      const pill = cells[7].querySelector('.mini-pill');
+      if (pill) {
+        pill.textContent = stype;
+        pill.className = 'mini-pill ' + (stype === 'Цагийн' ? 'mini-purple' : 'mini-blue');
+      }
+      document.getElementById('editEmpModal').classList.remove('open');
+      showToast('✓ ' + last + ' ' + first + ' мэдээлэл шинэчлэгдлээ!');
+    };
+
+    // Delete modal handlers
+    document.getElementById('deleteEmpCancelBtn').onclick = () => document.getElementById('deleteEmpModal').classList.remove('open');
+    document.getElementById('deleteEmpConfirmBtn').onclick = function() {
+      if (!deleteTargetRow) return;
+      const name = deleteTargetRow.querySelectorAll('td')[1].textContent.trim();
+      deleteTargetRow.remove();
+      document.getElementById('deleteEmpModal').classList.remove('open');
+      // Update count
+      const tbody = document.getElementById('empTableBody');
+      const count = tbody.querySelectorAll('tr').length;
+      const sub = document.getElementById('empCount');
+      if (sub) sub.textContent = 'Нийт ' + count + ' идэвхтэй ажилтан';
+      showToast('✓ ' + name + ' бүртгэлээс хасагдлаа!');
+    };
+
+    // Patch newEmpSaveBtn to also attach actions to newly added rows
+    const origSave = document.getElementById('newEmpSaveBtn').onclick;
+    document.getElementById('newEmpSaveBtn').onclick = function() {
+      origSave && origSave.call(this);
+      // Attach to last added row
+      const tbody = document.getElementById('empTableBody');
+      const lastRow = tbody.querySelector('tr:last-child');
+      if (lastRow) attachRowActions({ querySelectorAll: (sel) => lastRow.querySelectorAll ? [lastRow] : [] });
+      attachRowActions(tbody);
+    };
+
+
     document.getElementById('openExcelBtn').onclick = () => document.getElementById('excelModal').classList.add('open');
     document.getElementById('excelClose').onclick = () => document.getElementById('excelModal').classList.remove('open');
     document.getElementById('excelCancelBtn').onclick = () => document.getElementById('excelModal').classList.remove('open');

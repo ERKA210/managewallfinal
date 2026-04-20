@@ -318,8 +318,8 @@
             <div class="stat-body"><h4>Хүлээгдэж байгаа</h4><div class="big">0</div><small>ажилтан</small></div>
           </div>
           <div class="card stat-card">
-            <div class="stat-top"><div class="stat-icon red-bg"><svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg></div><div class="pill pill-red">Хүлээгдэж буй</div></div>
-            <div class="stat-body"><h4>Цагийн баталгаажуулалт</h4><div class="big">Хүлээгдэж буй</div><small>HR баталгаажуулах шаардлагатай</small></div>
+            <div class="stat-top"><div class="stat-icon red-bg" id="acc-ts-icon"><svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg></div><div class="pill pill-red" id="acc-ts-pill">Хүлээгдэж буй</div></div>
+            <div class="stat-body"><h4>Цагийн баталгаажуулалт</h4><div class="big" id="acc-ts-big">Хүлээгдэж буй</div><small id="acc-ts-small">HR баталгаажуулах шаардлагатай</small></div>
           </div>
           <div class="card stat-card">
             <div class="stat-top"><div class="stat-icon blue-bg"><svg class="icon" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2"></path><circle cx="9.5" cy="7" r="4"></circle><path d="M20 8v6"></path><path d="M23 11h-6"></path></svg></div><div class="pill pill-blue">Нийт</div></div>
@@ -344,11 +344,11 @@
               Хурдан үйлдлүүд
             </div>
             <div class="quick-actions">
-              <button class="action-btn disabled"><svg class="icon" viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="2"></rect><path d="M8 7h8"></path><path d="M8 11h8"></path><path d="M8 15h5"></path></svg>Цалин бодолт эхлүүлэх</button>
+              <button class="action-btn disabled" id="acc-payroll-btn"><svg class="icon" viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="2"></rect><path d="M8 7h8"></path><path d="M8 11h8"></path><path d="M8 15h5"></path></svg>Цалин бодолт эхлүүлэх</button>
               <button class="action-btn" data-page-target="reports"><svg class="icon" viewBox="0 0 24 24"><path d="M6 2h9l5 5v15a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z"></path><path d="M14 2v6h6"></path></svg>Тайлан харах</button>
               <button class="action-btn" data-page-target="bank-files"><svg class="icon" viewBox="0 0 24 24"><path d="M12 1v22"></path><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7H14.5a3.5 3.5 0 0 1 0 7H6"></path></svg>Банкны файл үүсгэх</button>
             </div>
-            <div class="warning-note">Цалин бодолт эхлүүлэхийн тулд HR цагийн бүртгэлийг баталгаажуулах шаардлагатай</div>
+            <div class="warning-note" id="acc-warning-note">Цалин бодолт эхлүүлэхийн тулд HR цагийн бүртгэлийг баталгаажуулах шаардлагатай</div>
           </div>
         </div>
 
@@ -356,7 +356,7 @@
           <h3>Тухайн сарын цалин бодолтын явц</h3>
           <div class="progress-list">
             <div class="progress-item"><div class="row"><span>Ажилтны бүртгэл</span><span style="color:#16a34a;">100%</span></div><div class="bar"><div class="fill" style="width:100%"></div></div></div>
-            <div class="progress-item"><div class="row"><span>Цагийн баталгаажуулалт</span><span style="color:#f59e0b;">0%</span></div><div class="bar"><div class="fill" style="width:0%;background:#f59e0b;"></div></div></div>
+            <div class="progress-item" id="acc-ts-progress"><div class="row"><span>Цагийн баталгаажуулалт</span><span style="color:#f59e0b;" id="acc-ts-pct">0%</span></div><div class="bar"><div class="fill" id="acc-ts-fill" style="width:0%;background:#f59e0b;"></div></div></div>
             <div class="progress-item"><div class="row"><span>Цалин бодолт</span><span>0%</span></div><div class="bar"><div class="fill" style="width:0%;background:#cbd5e1;"></div></div></div>
             <div class="progress-item"><div class="row"><span>Банкны файл</span><span>0%</span></div><div class="bar"><div class="fill" style="width:0%;background:#cbd5e1;"></div></div></div>
           </div>
@@ -372,7 +372,7 @@
           </div>
         </div>
 
-        <div class="alert red">
+        <div class="alert red" id="acc-payroll-alert">
           <svg class="icon" viewBox="0 0 24 24" style="color:#ef4444;"><circle cx="12" cy="12" r="9"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
           <div>
             <div>Цагийн баталгаажуулалт дуусаагүй байна</div>
@@ -855,6 +855,53 @@
       document.querySelectorAll('.report-detail').forEach(d => d.classList.remove('active'));
     };
   })();
+    /* ── Restore HR timesheet confirmation state from localStorage ── */
+    (function restoreHrTsState() {
+      try {
+        const TS_KEY = 'hr_ts_confirmed_2026_03';
+        const saved = JSON.parse(localStorage.getItem(TS_KEY));
+        if (!saved || saved.count <= 0) return;
+
+        const isAllConfirmed = saved.count >= saved.total;
+        const pct = Math.round((saved.count / saved.total) * 100);
+
+        /* Stat card */
+        const icon = document.getElementById('acc-ts-icon');
+        const pill = document.getElementById('acc-ts-pill');
+        const big  = document.getElementById('acc-ts-big');
+        const small = document.getElementById('acc-ts-small');
+        if (icon)  { icon.className = 'stat-icon green-bg'; }
+        if (pill)  { pill.textContent = isAllConfirmed ? 'Баталгаажсан' : 'Хэсэгчлэн'; pill.className = isAllConfirmed ? 'pill pill-green' : 'pill pill-yellow'; }
+        if (big)   { big.textContent  = isAllConfirmed ? 'Баталгаажсан' : `${saved.count}/${saved.total} алба`; }
+        if (small) { small.textContent = isAllConfirmed ? 'Бүх алба баталгаажсан ✓' : 'Баталгаажуулалт үргэлжилж байна'; }
+
+        /* Progress bar */
+        const pctEl = document.getElementById('acc-ts-pct');
+        const fillEl = document.getElementById('acc-ts-fill');
+        if (pctEl)  { pctEl.textContent = pct + '%'; pctEl.style.color = isAllConfirmed ? '#16a34a' : '#f59e0b'; }
+        if (fillEl) { fillEl.style.width = pct + '%'; fillEl.style.background = isAllConfirmed ? '#16a34a' : '#f59e0b'; }
+
+        if (isAllConfirmed) {
+          /* Payroll alert → green success */
+          const alert = document.getElementById('acc-payroll-alert');
+          if (alert) {
+            alert.style.background = '#f0fdf4';
+            alert.style.borderColor = '#86efac';
+            alert.style.color = '#15803d';
+            alert.innerHTML = '<svg class="icon" viewBox="0 0 24 24" style="color:#15803d;"><path d="M20 6l-11 11L4 12"></path></svg><div><strong>Цагийн баталгаажуулалт дууссан</strong> HR бүх хэлтсийн цагийн бүртгэлийг баталгаажуулсан.</div>';
+          }
+
+          /* Enable payroll button */
+          const btn = document.getElementById('acc-payroll-btn');
+          if (btn) { btn.className = 'action-btn'; }
+
+          /* Remove warning note */
+          const warn = document.getElementById('acc-warning-note');
+          if (warn) { warn.style.display = 'none'; }
+        }
+      } catch(e) {}
+    })();
+
   </script>
 </body>
 </html>
